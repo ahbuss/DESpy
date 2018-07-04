@@ -1,0 +1,8 @@
+2018-07-04
+    - Basic functionality
+    - Tested on simple "Pinger" class
+    - No random variate (yet)
+    - Event arguments not tested
+    - Priority enum with int values
+    - Using None as default when scheduling SimEvents
+    - TODO: investigate Python's vararg support

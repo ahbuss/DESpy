@@ -21,7 +21,7 @@ class Priority(IntEnum):
 class SimEvent:
     nextID = 0
 
-    def __init__(self, source, eventName, scheduledTime, arguments=[], priority=Priority.DEFAULT):
+    def __init__(self, source, eventName, scheduledTime, arguments=None, priority=Priority.DEFAULT):
         self.source = source
         self.eventName = eventName
         self.scheduledTime = scheduledTime
@@ -67,7 +67,7 @@ class EventList:
         EventList.eventList.clear()
         for simEntity in EventList.simEntities:
             if hasattr(simEntity, 'doRun'):
-                simEntity.waitDelay('Run', 0.0, [], Priority.HIGHEST)
+                simEntity.waitDelay('Run', 0.0, None, Priority.HIGHEST)
 
     @staticmethod
     def scheduleEvent(simEvent):
@@ -128,7 +128,7 @@ class SimEntityBase:
         methodName = 'do' + simEvent.eventName
         if hasattr(self, methodName):
             method = getattr(self, methodName)
-            if simEvent.arguments:
+            if simEvent.arguments != None:
                 method(simEvent.arguments)
             else:
                 method()
@@ -161,7 +161,7 @@ class SimEntityBase:
             for listener in self.eventListeners:
                 listener.processSimEvent(simEvent)
 
-    def waitDelay(self, eventName, delay, arguments=[], priority=Priority.DEFAULT):
+    def waitDelay(self, eventName, delay, arguments=None, priority=Priority.DEFAULT):
         event = SimEvent(self, eventName, EventList.simTime + delay, arguments, priority)
         EventList.scheduleEvent(event)
         return event;
@@ -171,7 +171,7 @@ class Stopper(SimEntityBase):
         SimEntityBase.__init__(self,'Stopper')
 
     def doRun(self):
-        self.waitDelay('Stop', EventList.stopTime, [], Priority.LOWEST)
+        self.waitDelay('Stop', EventList.stopTime, None, Priority.LOWEST)
 
     def doStop(self):
         EventList.eventList.clear()
