@@ -4,6 +4,8 @@ from enum import IntEnum
 from enum import unique
 from abc import ABC
 from abc import abstractmethod
+from math import nan
+from decimal import Decimal
 from itertools import count
 
 __author__ = "Arnold Buss"
@@ -32,7 +34,11 @@ class SimEvent:
         SimEvent.nextID += 1
 
     def __repr__(self):
-        return str(self.scheduledTime) + ' ' + self.eventName + ' ' + str(self.arguments) + \
+        if self.arguments == None:
+            argstr = ""
+        else:
+            argstr = '(' + str(self.arguments) + ')'
+        return str(round(self.scheduledTime, 4)) + ' ' + self.eventName + ' ' + argstr + \
                ' <' + str(self.source) + '>'
 
     def __eq__(self, other):
@@ -66,6 +72,7 @@ class EventList:
         EventList.simTime = 0.0
         EventList.eventList.clear()
         for simEntity in EventList.simEntities:
+            simEntity.reset()
             if hasattr(simEntity, 'doRun'):
                 simEntity.waitDelay('Run', 0.0, None, Priority.HIGHEST)
 
@@ -99,30 +106,26 @@ class EventList:
             EventList.simTime = EventList.currentEvent.scheduledTime
             EventList.currentEvent.source.processSimEvent(EventList.currentEvent)
             if EventList.verbose:
-                # current = 'Time: ';
-                # current += str(EventList.currentEvent.scheduledTime)
-                # current += ' '
-                # current += EventList.currentEvent.eventName
-                # current += ' '
-                # current += str(EventList.currentEvent.arguments)
-                # print(current)
-                print('simTime: ' + str(EventList.currentEvent))
+                print('CurrentEvent: ' + str(EventList.currentEvent))
                 print(EventList.dump())
 
 class SimEntityBase:
 
-    nextID = 0
+    nextID = 1
 
     def __init__(self, name="SimEntity"):
         self.eventListeners = []
         self.stateChangeListeners = []
-        self.name = name
+        self.name = type(self).__name__
         EventList.simEntities.append(self)
         self.id = SimEntityBase.nextID
         SimEntityBase.nextID += 1
 
     def __repr__(self):
         return self.name + '.' + str(self.id)
+
+    def reset(self):
+        pass
 
     def processSimEvent(self, simEvent):
         methodName = 'do' + simEvent.eventName
@@ -191,5 +194,45 @@ class StateChangeListener(ABC):
     def stateChange(self, stateChangeEvent):
         pass
 
+class Entity:
+    nextID = 1
 
+    def __init__(self, name='Entity'):
+        self.name=name
+        self.id = Entity.nextID
+        self.creationTime = EventList.simTime
+        self.timeStamp = EventList.simTime
+        self.stampTime()
+        Entity.nextID += 1
 
+    def stampTime(self):
+        self.timeStamp = EventList.simTime
+
+    def elapsedTime(self):
+        return EventList.simTime - self.timeStamp
+
+    def age(self):
+        return EventList.simTime - self.creationTime
+
+    def __eq__(self, other):
+        if other == None:
+            return False
+        else:
+            return self.id == other.id
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __lt__(self, other):
+        if self.timeStamp < other.timeStamp:
+            return True
+        elif self.timeStamp > other.timeStamp:
+            return False
+        else:
+            return self.id < other.id
+
+    def __gt__(self, other):
+        return not self.lt(self, other)
+
+    def __repr__(self):
+        return self.name + '.' + str(self.id) + '[' + str(round(self.creationTime,4)) +', ' + str(round(self.timeStamp,4)) + ']'
