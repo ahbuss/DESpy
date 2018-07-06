@@ -1,5 +1,6 @@
 from simkit import SimEntityBase
 from simkit import Entity
+from simkit import Priority
 
 class EntityCreator(SimEntityBase):
 
@@ -12,7 +13,7 @@ class EntityCreator(SimEntityBase):
 
     def doGenerate(self):
         self.waitDelay('Generate', self.generator.generate())
-        self.waitDelay('Arrival', 0.0, Entity())
+        self.waitDelay('Arrival', 0.0, Priority.DEFAULT, Entity())
 
     def doArrival(self, entity):
         pass

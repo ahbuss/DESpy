@@ -23,7 +23,7 @@ class Priority(IntEnum):
 class SimEvent:
     nextID = 0
 
-    def __init__(self, source, eventName, scheduledTime, arguments=None, priority=Priority.DEFAULT):
+    def __init__(self, source, eventName, scheduledTime,  priority=Priority.DEFAULT, *arguments):
         self.source = source
         self.eventName = eventName
         self.scheduledTime = scheduledTime
@@ -74,7 +74,7 @@ class EventList:
         for simEntity in EventList.simEntities:
             simEntity.reset()
             if hasattr(simEntity, 'doRun'):
-                simEntity.waitDelay('Run', 0.0, None, Priority.HIGHEST)
+                simEntity.waitDelay('Run', 0.0, Priority.HIGHEST)
 
     @staticmethod
     def scheduleEvent(simEvent):
@@ -131,10 +131,14 @@ class SimEntityBase:
         methodName = 'do' + simEvent.eventName
         if hasattr(self, methodName):
             method = getattr(self, methodName)
-            if simEvent.arguments != None:
-                method(simEvent.arguments)
+            if (simEvent.arguments.__len__() > 0):
+                method(*simEvent.arguments)
             else:
                 method()
+            # if simEvent.arguments != None:
+            #     method(simEvent.arguments)
+            # else:
+            #     method()
         if simEvent.source == self:
             self.notifySimEventListeners(simEvent)
 
@@ -164,8 +168,8 @@ class SimEntityBase:
             for listener in self.eventListeners:
                 listener.processSimEvent(simEvent)
 
-    def waitDelay(self, eventName, delay, arguments=None, priority=Priority.DEFAULT):
-        event = SimEvent(self, eventName, EventList.simTime + delay, arguments, priority)
+    def waitDelay(self, eventName, delay, priority=Priority.DEFAULT, *arguments):
+        event = SimEvent(self, eventName, EventList.simTime + delay, priority, *arguments)
         EventList.scheduleEvent(event)
         return event;
 
@@ -174,7 +178,7 @@ class Stopper(SimEntityBase):
         SimEntityBase.__init__(self,'Stopper')
 
     def doRun(self):
-        self.waitDelay('Stop', EventList.stopTime, None, Priority.LOWEST)
+        self.waitDelay('Stop', EventList.stopTime, Priority.LOWEST)
 
     def doStop(self):
         EventList.eventList.clear()
