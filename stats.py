@@ -89,4 +89,10 @@ class SimpleStatsTimeVarying(SimpleStatsBase):
         self.lastTime = 0.0
         self.lastValue = nan
 
+class CollectionSizeTimeVarying(SimpleStatsTimeVarying):
 
+    def __init__(self, name='default'):
+        SimpleStatsTimeVarying.__init__(self, name)
+
+    def newObservation(self, q):
+        SimpleStatsTimeVarying.newObservation(self, q.__len__())

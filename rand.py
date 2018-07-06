@@ -11,7 +11,11 @@ class RandomVariate(ABC):
     @staticmethod
     def getInstance(name, module='rand', **kwds):
         clazz = getattr(modules[module],name)
-        return clazz()
+        instance = clazz()
+        for keyword in kwds.keys():
+            if hasattr(instance, keyword):
+                setattr(instance, keyword, kwds[keyword])
+        return instance
 
     def __init__(self):
         self.setRNG(RandomVariate.baseRNG)
@@ -49,3 +53,26 @@ class Exponential(RandomVariate):
 
     def __repr__(self):
         return 'Exponential (' + str(self.mean) + ')'
+
+class Gamma(RandomVariate):
+    def __init__(self, alpha=nan, beta=nan):
+        RandomVariate.__init__(self)
+        self.alpha = alpha
+        self.beta = beta
+
+    def generate(self):
+        return self.baseRNG.gammavariate(self.alpha, self.beta)
+
+    def __repr__(self):
+        return 'Gamma (' + str(self.alpha) +', ' + str(self.beta) + ')'
+
+class Uniform(RandomVariate):
+    def __init__(self, min=nan, max=nan):
+        self.min = min
+        self.max = max
+
+    def generate(self):
+        return self.baseRNG.uniform(self.min, self.max)
+
+    def __repr__(self):
+        return 'Uniform (' + str(self.min) + ',' + str(self.max) + ')'
