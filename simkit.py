@@ -34,10 +34,12 @@ class SimEvent:
         SimEvent.nextID += 1
 
     def __repr__(self):
-        if self.arguments == None:
+        if self.arguments == ():
             argstr = ""
+        elif self.arguments.__len__() == 1:
+            argstr = '(' + str(self.arguments[0]) + ')'
         else:
-            argstr = '(' + str(self.arguments) + ')'
+            argstr =  str(self.arguments)
         return str(round(self.scheduledTime, 4)) + ' ' + self.eventName + ' ' + argstr + \
                ' <' + str(self.source) + '>'
 
@@ -79,6 +81,13 @@ class EventList:
     @staticmethod
     def scheduleEvent(simEvent):
         heappush(EventList.eventList, simEvent)
+
+    @staticmethod
+    def cancelEvent(eventName, *args):
+        for simEvent in EventList.eventList:
+            if  eventName == simEvent.eventName and args == simEvent.arguments:
+                simEvent.cancelled = True
+                break
 
     @staticmethod
     def dump():
@@ -135,10 +144,6 @@ class SimEntityBase:
                 method(*simEvent.arguments)
             else:
                 method()
-            # if simEvent.arguments != None:
-            #     method(simEvent.arguments)
-            # else:
-            #     method()
         if simEvent.source == self:
             self.notifySimEventListeners(simEvent)
 
@@ -172,6 +177,9 @@ class SimEntityBase:
         event = SimEvent(self, eventName, EventList.simTime + delay, priority, *arguments)
         EventList.scheduleEvent(event)
         return event;
+
+    def interrupt(self, eventName, *arguments):
+        EventList.cancelEvent(eventName, *arguments)
 
 class Stopper(SimEntityBase):
     def __init__(self):
