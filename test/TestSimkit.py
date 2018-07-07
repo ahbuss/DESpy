@@ -1,6 +1,6 @@
-from simkit import SimEvent, SimEntityBase, EventList
-from heapq import heappush, heappop
-from simkit import Priority
+from simkit.simkit import SimEvent, SimEntityBase, EventList
+from heapq import heappush
+from simkit.simkit import Priority
 
 class TestSimEntity(SimEntityBase):
 

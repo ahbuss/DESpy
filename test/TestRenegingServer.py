@@ -1,12 +1,9 @@
-from unicodedata import decimal
-
-from serverwithreneges import CustomerCreator
-from serverwithreneges import ServerWithReneges
-from rand import RandomVariate
-from simkit import EventList
-from simutil import SimpleStateChangeDumper
-from stats import SimpleStatsTally
-from stats import CollectionSizeTimeVarying
+from examples.serverwithreneges import CustomerCreator
+from examples.serverwithreneges import ServerWithReneges
+from simkit.rand import RandomVariate
+from simkit.simkit import EventList
+from simkit.stats import SimpleStatsTally
+from simkit.stats import CollectionSizeTimeVarying
 
 interarrivalGenerator = RandomVariate.getInstance('Exponential', mean=1.5)
 renegeGenerator = RandomVariate.getInstance('Uniform', min=2.0, max=6.0)

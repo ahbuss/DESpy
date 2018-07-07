@@ -1,7 +1,7 @@
-from rand import Exponential
-from arrivalprocess import ArrivalProcess
-from simkit import EventList
-from simutil import SimpleStateChangeDumper
+from simkit.rand import Exponential
+from examples.arrivalprocess import ArrivalProcess
+from simkit.simkit import EventList
+from simkit.simutil import SimpleStateChangeDumper
 
 if __name__=="__main__":
     generator = Exponential(1.7)

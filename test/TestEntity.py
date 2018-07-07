@@ -1,15 +1,10 @@
-from math import isnan
-from unittest.mock import seal
-
-from simkit import Entity
-from entityserver import EntityServer
-from rand import Exponential
-from entitycreator import EntityCreator
-from simkit import EventList
-from simutil import SimpleStateChangeDumper
-from heapq import heappush
-from stats import SimpleStatsTally
-from stats import SimpleStatsTimeVarying
+from examples.entityserver import EntityServer
+from simkit.rand import Exponential
+from examples.entitycreator import EntityCreator
+from simkit.simkit import EventList
+from simkit.simutil import SimpleStateChangeDumper
+from simkit.stats import SimpleStatsTally
+from simkit.stats import SimpleStatsTimeVarying
 
 serviceMean = 1.3
 numberServers = 1

@@ -1,5 +1,5 @@
-from stats import SimpleStatsTally
-from rand import Exponential
+from simkit.stats import SimpleStatsTally
+from simkit.rand import Exponential
 
 sst = SimpleStatsTally()
 print(sst)

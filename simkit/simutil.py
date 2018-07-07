@@ -1,5 +1,4 @@
-from simkit import StateChangeEvent
-from simkit import StateChangeListener
+from simkit.simkit import StateChangeListener
 
 class SimpleStateChangeDumper(StateChangeListener):
 

@@ -1,6 +1,6 @@
-from simkit import SimEntityBase
-from simkit import EventList
-from simkit import Priority
+from simkit.simkit import SimEntityBase
+from simkit.simkit import EventList
+from simkit.simkit import Priority
 
 class TestCancelled(SimEntityBase):
 

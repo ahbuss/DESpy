@@ -1,7 +1,4 @@
-from rand import RandomVariate
-from math import nan
-from sys import modules
-from variates import Constant
+from simkit.rand import RandomVariate
 
 if __name__ == '__main__':
     rv = RandomVariate.getInstance('Exponential')

@@ -2,8 +2,8 @@ from abc import abstractmethod
 from math import inf
 from math import nan
 from math import sqrt
-from simkit import StateChangeListener
-from simkit import EventList
+from simkit.simkit import StateChangeListener
+from simkit.simkit import EventList
 
 class SimpleStatsBase(StateChangeListener):
 

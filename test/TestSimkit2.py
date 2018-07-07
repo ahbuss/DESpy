@@ -1,6 +1,6 @@
-from simkit import SimEntityBase
-from simkit import EventList
-from simutil import SimpleStateChangeDumper
+from simkit.simkit import SimEntityBase
+from simkit.simkit import EventList
+from simkit.simutil import SimpleStateChangeDumper
 
 class Pinger(SimEntityBase):
 

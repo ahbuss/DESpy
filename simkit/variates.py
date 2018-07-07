@@ -1,4 +1,4 @@
-from rand import RandomVariate
+from simkit.rand import RandomVariate
 from math import nan
 
 class Constant(RandomVariate):

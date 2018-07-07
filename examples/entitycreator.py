@@ -1,6 +1,6 @@
-from simkit import SimEntityBase
-from simkit import Entity
-from simkit import Priority
+from simkit.simkit import SimEntityBase
+from simkit.simkit import Entity
+from simkit.simkit import Priority
 
 class EntityCreator(SimEntityBase):
 

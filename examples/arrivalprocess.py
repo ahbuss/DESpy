@@ -1,4 +1,4 @@
-from simkit import SimEntityBase
+from simkit.simkit import SimEntityBase
 from math import nan
 
 class ArrivalProcess(SimEntityBase):
