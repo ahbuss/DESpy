@@ -9,7 +9,7 @@ class RandomVariate(ABC):
     baseRNG = Random(12345)
 
     @staticmethod
-    def getInstance(name, module='rand', **kwds):
+    def getInstance(name, module='simkit.rand', **kwds):
         clazz = getattr(modules[module],name)
         instance = clazz()
         for keyword in kwds.keys():
@@ -76,3 +76,23 @@ class Uniform(RandomVariate):
 
     def __repr__(self):
         return 'Uniform (' + str(self.min) + ',' + str(self.max) + ')'
+
+class Constant(RandomVariate):
+
+    def __init__(self):
+        RandomVariate.__init__(self)
+        self.value = nan
+
+    @property
+    def value(self):
+        return self.__value
+
+    @value.setter
+    def value(self, x):
+        self.__value = x
+
+    def __repr__(self):
+        return 'Constant (' + str(self.value) + ')'
+
+    def generate(self):
+        return self.value

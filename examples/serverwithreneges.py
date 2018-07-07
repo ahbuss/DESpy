@@ -12,12 +12,12 @@ class RenegingCustomer(Entity):
         self.renegeTime = renegeTime
 
     def __repr__(self):
-        return Entity.__repr__(self) + '( ' + str(round(self.renegeTime,4)) + ')'
+        return Entity.__repr__(self) + ' (' + str(round(self.renegeTime,4)) + ')'
 
 class CustomerCreator(SimEntityBase):
 
     def __init__(self, interarrivaltimeGenerator, renegeTimeGenerator):
-        SimEntityBase.__init__(self, 'CustomerCreator')
+        SimEntityBase.__init__(self)
         self.interarrivaltimeGenerator = interarrivaltimeGenerator
         self.renegeTimeGenerator = renegeTimeGenerator
 
@@ -35,7 +35,7 @@ class CustomerCreator(SimEntityBase):
 class ServerWithReneges(SimEntityBase):
 
     def __init__(self, totalNumberServers, serviceTimeGenerator):
-        SimEntityBase.__init__(self, 'ServerWithReneges')
+        SimEntityBase.__init__(self)
         self.totalNumberServers = totalNumberServers
         self.serviceTimeGenerator = serviceTimeGenerator
         self.queue = []

@@ -5,8 +5,10 @@ from enum import unique
 from abc import ABC
 from abc import abstractmethod
 from math import nan
+from math import inf
 from decimal import Decimal
-from itertools import count
+from itertools import count, product
+from sched import Event
 
 __author__ = "Arnold Buss"
 
@@ -63,11 +65,25 @@ class EventList:
     verbose = False
     running = False
     currentEvent = None
+    eventCounts = {}
+    stopper = None
+    stopOnEvent = False
+    stopEventName = None
+    stopEventNumber = inf
+    stopEventCount = nan
 
     @staticmethod
     def stopAtTime(time):
         EventList.stopTime = time
-        Stopper()
+        EventList.stopper = Stopper()
+
+    @staticmethod
+    def stopOnEvent(stopEventNumber, stopEventName, *args):
+        EventList.stopOnEvent = True
+        EventList.stopEventNumber = stopEventNumber
+        EventList.stopEventName = stopEventName
+        if not EventList.stopper == None and not EventList.stopper.stopEvent == None:
+            EventList.stopper.stopEvent.cancelled = True
 
     @staticmethod
     def reset():
@@ -77,6 +93,10 @@ class EventList:
             simEntity.reset()
             if hasattr(simEntity, 'doRun'):
                 simEntity.waitDelay('Run', 0.0, Priority.HIGHEST)
+        if EventList.stopOnEvent:
+            EventList.stopEventCount = 0
+            EventList.eventCounts.clear()
+            EventList.eventCounts[EventList.stopEventName] = 0
 
     @staticmethod
     def scheduleEvent(simEvent):
@@ -114,15 +134,26 @@ class EventList:
                 continue
             EventList.simTime = EventList.currentEvent.scheduledTime
             EventList.currentEvent.source.processSimEvent(EventList.currentEvent)
+            if not EventList.eventCounts.keys().__contains__(EventList.currentEvent.eventName):
+                EventList.eventCounts[EventList.currentEvent.eventName] = 1
+            else:
+                EventList.eventCounts[EventList.currentEvent.eventName] +=  1
             if EventList.verbose:
-                print('CurrentEvent: ' + str(EventList.currentEvent))
+                print('CurrentEvent: ' + str(EventList.currentEvent) + ' [' + str(EventList.eventCounts[EventList.currentEvent.eventName]) + ']')
                 print(EventList.dump())
+            if EventList.stopOnEvent:
+                if EventList.eventCounts[EventList.stopEventName] == EventList.stopEventNumber:
+                    EventList.stopSimulation()
+
+    @staticmethod
+    def stopSimulation():
+        EventList.running = False
 
 class SimEntityBase:
 
     nextID = 1
 
-    def __init__(self, name="SimEntity"):
+    def __init__(self):
         self.eventListeners = []
         self.stateChangeListeners = []
         self.name = type(self).__name__
@@ -181,12 +212,21 @@ class SimEntityBase:
     def interrupt(self, eventName, *arguments):
         EventList.cancelEvent(eventName, *arguments)
 
+    def describe(self):
+        description = self.name
+        for property in self.__dict__.keys():
+            if not ['name', 'stateChangeListeners', 'eventListeners'].__contains__(property):
+                value = self.__dict__.get(property)
+                description += '\n\t' + property + " = " + str(value)
+        return description
+
 class Stopper(SimEntityBase):
     def __init__(self):
-        SimEntityBase.__init__(self,'Stopper')
+        SimEntityBase.__init__(self)
+        self.stopEvent = None
 
     def doRun(self):
-        self.waitDelay('Stop', EventList.stopTime, Priority.LOWEST)
+        self.stopEvent = self.waitDelay('Stop', EventList.stopTime, Priority.LOWEST)
 
     def doStop(self):
         EventList.eventList.clear()
@@ -247,4 +287,4 @@ class Entity:
         return not self.lt(self, other)
 
     def __repr__(self):
-        return self.name + '.' + str(self.id) + '[' + str(round(self.creationTime,4)) +', ' + str(round(self.timeStamp,4)) + ']'
+        return self.name + '.' + str(self.id) + ' [' + str(round(self.creationTime,4)) +', ' + str(round(self.timeStamp,4)) + ']'
