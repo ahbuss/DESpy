@@ -14,7 +14,7 @@ if __name__=="__main__":
     dumper = SimpleStateChangeDumper()
     arrivalProcess.addStateChangeListener(dumper)
 
-    EventList.stopAtTime(10.0)
+    EventList.stopAtTime(10000.0)
 
     EventList.verbose = True
 

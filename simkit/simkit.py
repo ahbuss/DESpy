@@ -42,7 +42,7 @@ class SimEvent:
             argstr = '(' + str(self.arguments[0]) + ')'
         else:
             argstr =  str(self.arguments)
-        return str(round(self.scheduledTime, 4)) + ' ' + self.eventName + ' ' + argstr + \
+        return '{0:,.4f}'.format(self.scheduledTime) + ' ' + self.eventName + ' ' + argstr + \
                ' <' + str(self.source) + '>'
 
     def __eq__(self, other):

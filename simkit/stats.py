@@ -35,9 +35,8 @@ class SimpleStatsBase(StateChangeListener):
             self.max = x
 
     def __repr__(self):
-        return str(self.count) + ' ' + str(round(self.min,4)) + ' ' \
-                + str(round(self.max,4)) + ' ' + str(round(self.mean,4)) + ' ' \
-                + str(round(self.variance,4)) + ' ' + str(round(self.stdev,4))
+        return '{name}: {count:,d} {min:,.4f} {max:,.4f} {mean:,.4f} {var:,.4f} {stdev:,.4f}'.\
+            format(name=self.name, count=self.count, min=self.min, max=self.max, mean=self.mean,var=self.variance, stdev=self.stdev)
 
     def stateChange(self, stateChangeEvent):
         if stateChangeEvent.name == self.name:

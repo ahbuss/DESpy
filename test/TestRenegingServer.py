@@ -38,3 +38,5 @@ print('Avg number in queue = ' + str(numberInQueueStat.mean))
 print('There have been ' + str(server.numberReneges) + ' reneges')
 print('There have been ' + str(delayInQueueStat.count) + ' served')
 print('% reneges = ' + str(100 * server.numberReneges/ (server.numberReneges + delayInQueueStat.count)))
+
+print(delayInQueueStat)
