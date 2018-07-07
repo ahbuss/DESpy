@@ -82,8 +82,8 @@ class EventList:
         EventList.stopOnEvent = True
         EventList.stopEventNumber = stopEventNumber
         EventList.stopEventName = stopEventName
-        if not EventList.stopper == None and not EventList.stopper.stopEvent == None:
-            EventList.stopper.stopEvent.cancelled = True
+        if EventList.simEntities.__contains__(EventList.stopper):
+            EventList.simEntities.remove(EventList.stopper)
 
     @staticmethod
     def reset():
@@ -148,6 +148,15 @@ class EventList:
     @staticmethod
     def stopSimulation():
         EventList.running = False
+
+    @staticmethod
+    def coldReset():
+        EventList.reset()
+        EventList.simEntities.clear()
+        SimEntityBase.nextID = 1
+        if not EventList.stopOnEvent:
+            EventList.stopAtTime(EventList.stopTime)
+
 
 class SimEntityBase:
 

@@ -1,5 +1,6 @@
 from simkit.rand import Exponential
 from examples.arrivalprocess import ArrivalProcess
+from examples.arrivalprocess import EntityCreator
 from simkit.simkit import EventList
 from simkit.simutil import SimpleStateChangeDumper
 
@@ -17,5 +18,14 @@ if __name__=="__main__":
 
     EventList.verbose = True
 
+    EventList.reset()
+    EventList.startSimulation()
+
+    EventList.coldReset()
+    EventList.stopOnEvent(10, 'EntityArrival')
+
+    entityCreator = EntityCreator(generator)
+
+    print("With EntityCreator")
     EventList.reset()
     EventList.startSimulation()

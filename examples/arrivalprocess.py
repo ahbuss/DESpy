@@ -1,4 +1,6 @@
 from simkit.simkit import SimEntityBase
+from simkit.simkit import Entity
+from simkit.simkit import Priority
 from math import nan
 
 class ArrivalProcess(SimEntityBase):
@@ -22,5 +24,11 @@ class ArrivalProcess(SimEntityBase):
 
         self.waitDelay('Arrival', self.generator.generate())
 
-    # def __repr__(self):
-    #     return 'ArrivalProcess: ' + str(self.generator);
+class EntityCreator(ArrivalProcess):
+
+    def __int__(self, generator):
+        ArrivalProcess.__init__(self, generator)
+
+    def doArrival(self):
+        ArrivalProcess.doArrival(self)
+        self.waitDelay('EntityArrival', 0.0, Priority.DEFAULT, Entity())
