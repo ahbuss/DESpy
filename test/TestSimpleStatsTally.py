@@ -18,3 +18,11 @@ for x in range(number):
 print('expected: ' + str(rv.mean))
 print(sst)
 print(sst.mean)
+
+print(sst.halfwidth(.995))
+
+sst.reset()
+
+for x in range(200):
+    sst.newObservation(rv.generate())
+    print('{n:d} {hw:.4f}'.format(n=sst.count,hw=sst.halfwidth(0.995)))

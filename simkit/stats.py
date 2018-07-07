@@ -4,6 +4,7 @@ from math import nan
 from math import sqrt
 from simkit.simkit import StateChangeListener
 from simkit.simkit import EventList
+from simkit.quantiles import studentT
 
 class SimpleStatsBase(StateChangeListener):
 
@@ -41,6 +42,13 @@ class SimpleStatsBase(StateChangeListener):
     def stateChange(self, stateChangeEvent):
         if stateChangeEvent.name == self.name:
             self.newObservation(stateChangeEvent.value)
+
+    def halfwidth(self, p):
+        if self.count > 1:
+            quantile = studentT(p, self.count - 1)
+        else:
+            quantile = inf
+        return self.stdev / self.count * quantile
 
 class SimpleStatsTally(SimpleStatsBase):
 
