@@ -13,7 +13,7 @@ entityServer = EntityServer(numberServers, generator)
 
 print(entityServer)
 
-interarrivalMean = 1.7
+interarrivalMean = 2.0
 interarrival = Exponential(interarrivalMean)
 entityCreator = EntityCreator(interarrival)
 print (entityCreator)
@@ -38,14 +38,13 @@ entityServer.addStateChangeListener(numberInQueueStat)
 # print(queue)
 
 expected = (serviceMean * interarrivalMean) / (interarrivalMean -serviceMean)
-print('expected avg delayInQueue: ' + str(expected * serviceMean / interarrivalMean))
-print('expected avg timeInSystem: ' + str(expected))
+print('expected avg timeInSystem: {avg:.4f}'.format(avg=expected))
+print('expected avg delayInQueue: {avg:.4f}'.format( avg=(expected * serviceMean / interarrivalMean)))
 
 EventList.stopAtTime(1000000.0)
 EventList.verbose = False
 
 EventList.reset()
-print(entityServer.numberAvailableServers)
 EventList.startSimulation()
 
 print('Simulation ended at time ' + str(EventList.simTime))
