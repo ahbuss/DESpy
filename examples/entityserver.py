@@ -12,6 +12,8 @@ class EntityServer(SimEntityBase):
         self.generator = generator
         self.numberAvailableServers = nan
         self.queue = []
+        self.delayInQueue = nan
+        self.timeInSystem = nan
 
     @property
     def numberServers(self):
@@ -26,6 +28,8 @@ class EntityServer(SimEntityBase):
     def reset(self):
         self.numberAvailableServers = self.numberServers
         self.queue.clear()
+        self.delayInQueue = nan
+        self.timeInSystem = nan
 
     def doRun(self):
         self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
@@ -45,7 +49,8 @@ class EntityServer(SimEntityBase):
         self.notifyStateChange('queue', self.queue)
         self.notifyStateChange('numberInQueue', self.queue.__len__())
 
-        self.notifyStateChange('delayInQueue', entity.elapsedTime())
+        self.delayInQueue = entity.elapsedTime()
+        self.notifyStateChange('delayInQueue', self.delayInQueue)
 
         self.numberAvailableServers -= 1
         self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
@@ -56,7 +61,8 @@ class EntityServer(SimEntityBase):
         self.numberAvailableServers += 1
         self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
 
-        self.notifyStateChange('timeInSystem', entity.elapsedTime())
+        self.timeInSystem = entity.elapsedTime()
+        self.notifyStateChange('timeInSystem', self.timeInSystem)
 
         if self.queue.__len__() > 0:
             self.waitDelay('StartService', 0.0, Priority.HIGH)

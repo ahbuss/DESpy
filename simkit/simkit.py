@@ -35,6 +35,9 @@ class SimEvent:
         self.cancelled = False
         SimEvent.nextID += 1
 
+    def copy(self):
+        return SimEvent(self.source, self.eventName, self.scheduledTime, self.priority, *self.arguments)
+
     def __repr__(self):
         if self.arguments == ():
             argstr = ""
@@ -90,9 +93,12 @@ class EventList:
         EventList.simTime = 0.0
         EventList.eventList.clear()
         for simEntity in EventList.simEntities:
-            simEntity.reset()
-            if hasattr(simEntity, 'doRun'):
-                simEntity.waitDelay('Run', 0.0, Priority.HIGHEST)
+            if simEntity.persistent:
+                simEntity.reset()
+                if hasattr(simEntity, 'doRun'):
+                    simEntity.waitDelay('Run', 0.0, Priority.HIGHEST)
+            else:
+                EventList.simEntities.remove(simEntity)
         if EventList.stopOnEvent:
             EventList.stopEventCount = 0
             EventList.eventCounts.clear()
@@ -157,6 +163,29 @@ class EventList:
         if not EventList.stopOnEvent:
             EventList.stopAtTime(EventList.stopTime)
 
+class Adapter:
+
+    def __init__(self, sourceEventName, targetEventName):
+        self.sourceEventName = sourceEventName
+        self.targetEventName = targetEventName
+        self.source =None
+        self.target = None
+
+    def connect(self, source, target):
+        self.source = source
+        self.target = target
+        self.source.addSimEventListener(self)
+
+    def disconnect(self, source, target):
+        self.source = None
+        self.target = None
+
+    def processSimEvent(self, simEvent):
+        if simEvent.eventName == self.sourceEventName:
+            newEvent = simEvent.copy()
+            newEvent.eventName = self.targetEventName
+            self.target.processSimEvent(newEvent)
+
 
 class SimEntityBase:
 
@@ -166,8 +195,9 @@ class SimEntityBase:
         self.eventListeners = []
         self.stateChangeListeners = []
         self.name = type(self).__name__
-        EventList.simEntities.append(self)
         self.id = SimEntityBase.nextID
+        self.persistent = True
+        EventList.simEntities.append(self)
         SimEntityBase.nextID += 1
 
     def __repr__(self):
