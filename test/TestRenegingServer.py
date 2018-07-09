@@ -28,15 +28,13 @@ server.addStateChangeListener(numberInQueueStat)
 
 EventList.verbose = False
 EventList.stopAtTime(100000.0)
-EventList.stopOnEvent(10000, 'Renege')
+# EventList.stopOnEvent(10000, 'Renege')
 EventList.reset()
 EventList.startSimulation()
 
-print('Simulation ended at time ' + str(EventList.simTime))
-print('Avg delay in queue = ' + str(delayInQueueStat.mean))
-print('Avg number in queue = ' + str(numberInQueueStat.mean))
-print('There have been ' + str(server.numberReneges) + ' reneges')
-print('There have been ' + str(delayInQueueStat.count) + ' served')
-print('% reneges = ' + str(100 * server.numberReneges/ (server.numberReneges + delayInQueueStat.count)))
-
-print(delayInQueueStat)
+print('Simulation ended at time {time:,.3f}'.format(time=EventList.simTime))
+print('Avg delay in queue = {avg:,.4f}'.format(avg=(delayInQueueStat.mean)))
+print('Avg number in queue = {avg:.4f}'.format(avg=numberInQueueStat.mean))
+print('There have been {num:,d} reneges'.format(num=server.numberReneges))
+print('There have been {num:,d} served'.format(num=delayInQueueStat.count))
+print('{percent:.2f}% reneged'.format(percent=(100 * server.numberReneges/ (server.numberReneges + delayInQueueStat.count))))
