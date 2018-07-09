@@ -32,3 +32,27 @@ class EntityCreator(ArrivalProcess):
     def doArrival(self):
         ArrivalProcess.doArrival(self)
         self.waitDelay('EntityArrival', 0.0, Priority.DEFAULT, Entity())
+
+class BatchArrivalProcess(ArrivalProcess):
+
+    def __init__(self, generator, batchGenerator):
+        ArrivalProcess.__init__(self, generator)
+        self.batchGenerator = batchGenerator
+        self.totalIndividualArrivals = nan
+        self.numberInBatch = nan
+
+    def reset(self):
+        ArrivalProcess.reset(self)
+        self.totalIndividualArrivals = 0
+        self.numberInBatch = nan
+
+    def doArrival(self):
+        ArrivalProcess.doArrival(self)
+
+        self.numberInBatch = round(self.batchGenerator.generate())
+        self.notifyStateChange('numberInBatch', self.numberInBatch)
+
+        for i in range(self.numberInBatch):
+            self.waitDelay('Arrival1', 0.0)
+        self.totalIndividualArrivals += self.numberInBatch
+        self.notifyStateChange('totalIndividualArrivals', self.totalIndividualArrivals)

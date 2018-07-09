@@ -31,7 +31,10 @@ if __name__ == '__main__':
     rv4 = RandomVariate.getInstance('Beta', alpha=2, beta=3)
     print(rv4)
 
-    rv5 = RandomVariate.getInstance('DiscreteInteger', values=[1,2,3,4], frequencies=[10, 20, 30, 40])
+    rv5 = RandomVariate.getInstance('Discrete', values=[1,2,3,4], frequencies=[10, 20, 30, 40])
+    print(rv5)
+
+    rv5 = RandomVariate.getInstance('Discrete', values=[4.0, 3.0, 2.0, 1.0], frequencies=[100, 200, 300, 400])
     print(rv5)
 
     rv6 = RandomVariate.getInstance('Poisson', mean=2.3)
@@ -53,3 +56,15 @@ if __name__ == '__main__':
     for i in range(number):
         sst.newObservation(rv8.generate())
     print(sst)
+
+    rv4.resetState()
+    first = []
+    for i in range(10):
+        first.append(rv4.generate())
+
+    second=[]
+    rv4.resetState()
+    for i in range(10):
+        second.append(rv4.generate())
+
+    print(first == second)

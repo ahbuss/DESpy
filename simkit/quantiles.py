@@ -10,7 +10,7 @@ from math import nan
 
 # Rather than have a dependence on bigger packages, for simple computations of confidence intervals and
 # hypothesis tests for means, the Normal and Student T quantiles only are implemented here.
-# For more extensive statistical actions use an appropriate package or connect to R
+# For more extensive statistical actions use an appropriate package (like scipy) or connect to R
 from unicodedata import name
 
 A0 = 2.50662823884
@@ -62,8 +62,6 @@ def normal(p):
     # Based on Hill, G.W., "Algorithm 396 Student T Quantiles," Communications of the ACM,
     # Vol 13, No. 10, October 1970.
     # Returns nan if df = 0
-
-
 def studentT(p, df):
     if df < 0:
         raise ValueError('df must be > 0: ' + str(df))

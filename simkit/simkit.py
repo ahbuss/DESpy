@@ -63,6 +63,7 @@ class SimEvent:
 class EventList:
     eventList = []
     simEntities = []
+    ignoreOnDump = []
     simTime = 0.0
     stopTime = 0.0
     verbose = False
@@ -124,7 +125,7 @@ class EventList:
         if not queueCopy:
             dumpString += '    <Empty>\n'
         for event in queueCopy:
-            if not event.cancelled:
+            if not event.cancelled and not EventList.ignoreOnDump.__contains__(event.eventName):
                 dumpString += str(event) + '\n'
         return dumpString
 
@@ -144,7 +145,7 @@ class EventList:
                 EventList.eventCounts[EventList.currentEvent.eventName] = 1
             else:
                 EventList.eventCounts[EventList.currentEvent.eventName] +=  1
-            if EventList.verbose:
+            if EventList.verbose and not EventList.ignoreOnDump.__contains__(EventList.currentEvent.eventName):
                 print('CurrentEvent: ' + str(EventList.currentEvent) + ' [' + str(EventList.eventCounts[EventList.currentEvent.eventName]) + ']')
                 print(EventList.dump())
             if EventList.stopOnEvent:

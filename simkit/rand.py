@@ -23,6 +23,7 @@ class RandomVariate(ABC):
 
     def __init__(self):
         self.setRNG(RandomVariate.baseRNG)
+        self.originalState = self.rng.getstate()
 
     @abstractmethod
     def generate(self):
@@ -33,6 +34,9 @@ class RandomVariate(ABC):
 
     def setSeed(self, seed):
         self.rng.seed(seed)
+
+    def resetState(self):
+        self.rng.setstate(self.originalState)
 
 class Exponential(RandomVariate):
 
@@ -198,7 +202,7 @@ class Geometric(RandomVariate):
     def __repr__(self):
         return 'Geormetric: {p:f}'.format(p=self.p)
 
-class DiscreteInteger(RandomVariate):
+class Discrete(RandomVariate):
 
     def __init__(self, values=[], frequencies=[]):
         RandomVariate.__init__(self)
@@ -228,7 +232,7 @@ class DiscreteInteger(RandomVariate):
         return self.values[index]
 
     def __repr__(self):
-        return 'Discrete Integer (' + str(self.values) + '=>' +str(self.probabilities) + ')'
+        return 'Discrete (' + str(self.values) + '=>' +str(self.probabilities) + ')'
 
 
 
