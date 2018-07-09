@@ -29,3 +29,6 @@ if __name__=="__main__":
     print("With EntityCreator")
     EventList.reset()
     EventList.startSimulation()
+
+    # This should throw a ValueError
+    # arrivalProcess.waitDelay('Foo', -.001)

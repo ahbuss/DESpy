@@ -244,6 +244,8 @@ class SimEntityBase:
                 listener.processSimEvent(simEvent)
 
     def waitDelay(self, eventName, delay, priority=Priority.DEFAULT, *arguments):
+        if delay < 0.0:
+            raise ValueError('delay must be \u2265 0.0: {delay:.3f}'.format(delay=delay))
         event = SimEvent(self, eventName, EventList.simTime + delay, priority, *arguments)
         EventList.scheduleEvent(event)
         return event;

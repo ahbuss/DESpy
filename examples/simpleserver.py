@@ -45,6 +45,9 @@ class SimpleServer(SimEntityBase):
         self.numberServed += 1
         self.notifyStateChange('numberServed', self.numberServed)
 
+        if self.numberInQueue > 0:
+            self.waitDelay('StartService', 0.0, Priority.HIGH)
+
 
 # if __name__=='__main__':
 #     simpleServer = SimpleServer(None, None)
