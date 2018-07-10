@@ -2,8 +2,8 @@ from setuptools import setup
 
 setup(
     name='SimPyKit',
-    version='0.0.1',
-    packages=[''],
+    version='0.0.2',
+    packages=['simkit', 'examples'],
     url='https://github.com/ahbuss/SimPyKit',
     license='Apache 2.0 License',
     author='Arnold Buss',

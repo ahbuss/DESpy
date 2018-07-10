@@ -79,7 +79,8 @@ class EventList:
     @staticmethod
     def stopAtTime(time):
         EventList.stopTime = time
-        EventList.stopper = Stopper()
+        if not EventList.stopper:
+            EventList.stopper = Stopper()
 
     @staticmethod
     def stopOnEvent(stopEventNumber, stopEventName, *args):
