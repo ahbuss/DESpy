@@ -68,3 +68,9 @@ if __name__ == '__main__':
         second.append(rv4.generate())
 
     print(first == second)
+
+    rv9 = RandomVariate.getInstance('Normal', mean=-2, stdev=4.5)
+    print(rv9)
+
+    for i in range(10):
+        print(rv9.generate())

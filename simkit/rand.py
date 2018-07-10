@@ -12,6 +12,13 @@ class RandomVariate(ABC):
 
     @staticmethod
     def getInstance(name, module='simkit.rand', **kwds):
+        """
+
+        :param name: The name of the random variate ('Exponential', 'Gamma', etc)
+        :param module: The module it is in (default is 'simkit.rand'
+        :param kwds: named parameters for the random variate class; specifics depend on the class
+        :return: The desired instance of the random variate class
+        """
         clazz = getattr(modules[module],name)
         instance = clazz()
         for keyword in kwds.keys():
@@ -41,6 +48,10 @@ class RandomVariate(ABC):
 class Exponential(RandomVariate):
 
     def __init__(self, mean=nan):
+        """
+
+        :param mean: Mean of the Exponential random variates generated
+        """
         RandomVariate.__init__(self)
         self.__mean = mean
 
@@ -64,6 +75,11 @@ class Exponential(RandomVariate):
 
 class Gamma(RandomVariate):
     def __init__(self, alpha=nan, beta=nan):
+        """
+
+        :param alpha: \u03B1 of the Gamma distribution (shape parameter)
+        :param beta: \u0B32 of the Gamma distribution (scale parameter)
+        """
         RandomVariate.__init__(self)
         self.alpha = alpha
         self.beta = beta
@@ -76,6 +92,11 @@ class Gamma(RandomVariate):
 
 class Beta(RandomVariate):
     def __init__(self,alpha=nan, beta=nan):
+        """
+
+        :param alpha: \u03B1 of the Beta distribution (shape parameter)
+        :param beta: \u0B32 of the Beta distribution (shape parameter)
+        """
         RandomVariate.__init__(self)
         self.alpha = alpha
         self.beta = beta
@@ -88,6 +109,11 @@ class Beta(RandomVariate):
 
 class Uniform(RandomVariate):
     def __init__(self, min=nan, max=nan):
+        """
+
+        :param min: Minimum value
+        :param max: Maximum value
+        """
         RandomVariate.__init__(self)
         self.min = min
         self.max = max
@@ -101,6 +127,10 @@ class Uniform(RandomVariate):
 class Constant(RandomVariate):
 
     def __init__(self, value=nan):
+        """
+
+        :param value: The one value that will always be generated
+        """
         self.value = value
 
     def __repr__(self):
@@ -112,6 +142,12 @@ class Constant(RandomVariate):
 class Triangular(RandomVariate):
 
     def __init__(self, min=nan, mode=nan, max=nan):
+        """
+
+        :param min: Minimum value of triangle
+        :param mode: Mode (point) of triangle
+        :param max: Maximum value of triangle
+        """
         RandomVariate.__init__(self)
         self.min = min
         self.mode = mode
@@ -125,6 +161,11 @@ class Triangular(RandomVariate):
 
 class Normal(RandomVariate):
     def __init__(self, mean=0.0, stdev=1.0):
+        """
+
+        :param mean: \u03BC of Normal distribution (defaults to 0.0)
+        :param stdev: \u03C3 of Normal distribution (defaults to 1.0)
+        """
         RandomVariate.__init__(self)
         self.mean = mean
         self.stdev = stdev
@@ -138,6 +179,11 @@ class Normal(RandomVariate):
 class DiscreteUniform(RandomVariate):
 
     def __init__(self, min=nan, max=nan):
+        """
+
+        :param min: Min value (should be int)
+        :param max: Max value (should be int)
+        """
         RandomVariate.__init__(self)
         self.min = min
         self.max = max
@@ -150,6 +196,10 @@ class DiscreteUniform(RandomVariate):
 
 class Poisson(RandomVariate):
     def __init__(self, mean=nan):
+        """
+
+        :param mean: Mean of the Poisson distribution
+        """
         RandomVariate.__init__(self)
         self.mean = mean
 
@@ -173,6 +223,11 @@ class Poisson(RandomVariate):
 
 class Binomial(RandomVariate):
     def __init__(self, n=nan, p=nan):
+        """
+
+        :param n: Maximum possible value of Binomial
+        :param p: Probability of 'success'
+        """
         RandomVariate.__init__(self)
         self.n = n
         self.p = p
@@ -190,6 +245,10 @@ class Binomial(RandomVariate):
 class Geometric(RandomVariate):
 
     def __init__(self, p=nan):
+        """
+
+        :param p: Probability if 'success' for Geometric distribution
+        """
         RandomVariate.__init__(self)
         self.p = p
 
@@ -205,6 +264,11 @@ class Geometric(RandomVariate):
 class Discrete(RandomVariate):
 
     def __init__(self, values=[], frequencies=[]):
+        """
+
+        :param values: Possible values to be generated
+        :param frequencies: Frequencies of respective values; must be non-negative, but need not sum to 1.0
+        """
         RandomVariate.__init__(self)
         self.values = values
         self.frequencies = frequencies
@@ -213,6 +277,9 @@ class Discrete(RandomVariate):
                              format(v=len(values), f=len(frequencies)))
 
     def normalize(self):
+        """
+        Computes the probabilities and cumulative probabilities based on the passed-in frequencies
+        """
         cumulative = 0.0
         for freq in self.frequencies:
             cumulative += freq
