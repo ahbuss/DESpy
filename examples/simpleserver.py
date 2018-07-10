@@ -17,28 +17,28 @@ class SimpleServer(SimEntityBase):
         self.numberInQueue = 0
         self.numberServed = 0
 
-    def doRun(self):
+    def run(self):
         self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
         self.notifyStateChange('numberInQueue', self.numberInQueue)
         self.notifyStateChange('numberServed', self.numberServed)
 
-    def doArrival(self):
+    def arrival(self):
         self.numberInQueue += 1
         self.notifyStateChange('numberInQueue', self.numberInQueue)
 
         if (self.numberAvailableServers > 0):
-            self.waitDelay('StartService', 0.0, Priority.HIGH)
+            self.waitDelay('startService', 0.0, Priority.HIGH)
 
-    def doStartService(self):
+    def startService(self):
         self.numberInQueue -= 1
         self.notifyStateChange('numberInQueue', self.numberInQueue)
 
         self.numberAvailableServers -= 1
         self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
 
-        self.waitDelay('EndService', self.serviceTimeGenerator.generate())
+        self.waitDelay('endService', self.serviceTimeGenerator.generate())
 
-    def doEndService(self):
+    def endService(self):
         self.numberAvailableServers += 1
         self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
 
@@ -46,7 +46,7 @@ class SimpleServer(SimEntityBase):
         self.notifyStateChange('numberServed', self.numberServed)
 
         if self.numberInQueue > 0:
-            self.waitDelay('StartService', 0.0, Priority.HIGH)
+            self.waitDelay('startService', 0.0, Priority.HIGH)
 
 
 # if __name__=='__main__':

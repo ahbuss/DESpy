@@ -8,12 +8,12 @@ class EntityCreator(SimEntityBase):
         SimEntityBase.__init__(self)
         self.generator = generator
 
-    def doRun(self):
-        self.waitDelay('Generate', self.generator.generate())
+    def run(self):
+        self.waitDelay('generate', self.generator.generate())
 
-    def doGenerate(self):
-        self.waitDelay('Generate', self.generator.generate())
-        self.waitDelay('Arrival', 0.0, Priority.DEFAULT, Entity())
+    def generate(self):
+        self.waitDelay('generate', self.generator.generate())
+        self.waitDelay('arrival', 0.0, Priority.DEFAULT, Entity())
 
     def doArrival(self, entity):
         pass

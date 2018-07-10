@@ -6,11 +6,11 @@ from simkit.simkit import Priority
 
 class Test(SimEntityBase):
 
-    def doRun(self):
-        self.waitDelay('Init', 0.0, Priority.DEFAULT, 0)
+    def run(self):
+        self.waitDelay('init', 0.0, Priority.DEFAULT, 0)
 
-    def doInit(self, i):
-        self.waitDelay('Init', 0.0, Priority.DEFAULT, i + 1)
+    def init(self, i):
+        self.waitDelay('init', 0.0, Priority.DEFAULT, i + 1)
 
 if __name__=='__main__':
 
@@ -20,7 +20,7 @@ if __name__=='__main__':
 
     test = Test()
 
-    EventList.stopOnEvent(10, 'Init')
+    EventList.stopOnEvent(10, 'init')
 
     EventList.verbose = True
     EventList.reset()

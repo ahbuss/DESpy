@@ -21,13 +21,13 @@ class CustomerCreator(SimEntityBase):
         self.interarrivaltimeGenerator = interarrivaltimeGenerator
         self.renegeTimeGenerator = renegeTimeGenerator
 
-    def doRun(self):
-        self.waitDelay('Create', self.interarrivaltimeGenerator.generate())
+    def run(self):
+        self.waitDelay('create', self.interarrivaltimeGenerator.generate())
 
-    def doCreate(self):
+    def create(self):
         customer = RenegingCustomer(self.renegeTimeGenerator.generate())
-        self.waitDelay('Arrival', 0.0, Priority.DEFAULT, customer)
-        self.waitDelay('Create', self.interarrivaltimeGenerator.generate())
+        self.waitDelay('arrival', 0.0, Priority.DEFAULT, customer)
+        self.waitDelay('create', self.interarrivaltimeGenerator.generate())
 
     def __repr__(self):
         return SimEntityBase.__repr__(self) + ' (' + str(self.interarrivaltimeGenerator) +', ' + str(self.renegeTimeGenerator) + ')'
@@ -49,26 +49,26 @@ class ServerWithReneges(SimEntityBase):
         self.numberReneges = 0
         self.numberServed = 0
 
-    def doRun(self):
+    def run(self):
         self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
         self.notifyStateChange('queue', self.queue)
         self.notifyStateChange('numberReneges', self.numberReneges)
         self.notifyStateChange('numberServed', self.numberServed)
 
-    def doArrival(self, customer):
+    def arrival(self, customer):
         customer.stampTime()
         heappush(self.queue, customer)
         self.notifyStateChange('queue', self.queue)
 
         if self.numberAvailableServers > 0:
-            self.waitDelay('StartService', 0.0, Priority.HIGH)
+            self.waitDelay('startService', 0.0, Priority.HIGH)
 
-        self.waitDelay('Renege', customer.renegeTime, Priority.DEFAULT, customer)
+        self.waitDelay('renege', customer.renegeTime, Priority.DEFAULT, customer)
 
-    def doStartService(self):
+    def startService(self):
 
         customer = heappop(self.queue)
-        self.interrupt('Renege', customer)
+        self.interrupt('renege', customer)
 
         self.notifyStateChange('delayInQueue', customer.elapsedTime())
         self.notifyStateChange('queue', self.queue)
@@ -76,9 +76,9 @@ class ServerWithReneges(SimEntityBase):
         self.numberAvailableServers -= 1
         self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
 
-        self.waitDelay('EndService', self.serviceTimeGenerator.generate(), Priority.DEFAULT, customer)
+        self.waitDelay('endService', self.serviceTimeGenerator.generate(), Priority.DEFAULT, customer)
 
-    def doRenege(self, customer):
+    def renege(self, customer):
         self.numberReneges += 1;
         self.notifyStateChange('numberReneges', self.numberReneges)
 
@@ -87,14 +87,14 @@ class ServerWithReneges(SimEntityBase):
         self.queue.remove(customer)
         self.notifyStateChange('queue', self.queue)
 
-    def doEndService(self, customer):
+    def endService(self, customer):
         self.notifyStateChange('timeInSystem', customer.elapsedTime())
 
         self.numberAvailableServers += 1
         self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
 
         if self.queue.__len__() > 0:
-            self.waitDelay('StartService', 0.0, Priority.HIGH)
+            self.waitDelay('startService', 0.0, Priority.HIGH)
 
     @property
     def totalNumberServers(self):

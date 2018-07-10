@@ -8,7 +8,7 @@ from simkit.simkit import Entity
 
 entityCreator = EntityCreator(RandomVariate.getInstance('Constant', value=2.3))
 entityServer = EntityServer(1, RandomVariate.getInstance('Constant', value=2.2))
-adapter = Adapter("EntityArrival", "Arrival")
+adapter = Adapter("entityArrival", "arrival")
 adapter.connect(entityCreator, entityServer)
 
 
@@ -19,7 +19,7 @@ adapter.connect(entityCreator, entityServer)
 # print(copy)
 # print(copy.id)
 
-EventList.stopOnEvent(5, 'StartService')
+EventList.stopOnEvent(5, 'startService')
 EventList.verbose = True
 
 EventList.reset()

@@ -5,31 +5,31 @@ from simkit.simkit import Priority
 class TestSimEntity(SimEntityBase):
 
     def __init__(self, name='TestSimEntity'):
-        SimEntityBase.__init__(self,name)
+        SimEntityBase.__init__(self)
         self.count = 0
 
     def reset(self):
         self.count = 0
 
-    def doRun(self):
+    def run(self):
         self.notifyStateChange("count", self.count)
-        self.waitDelay('Foo', 0.0)
+        self.waitDelay('foo', 0.0)
 
-    def doFoo(self):
+    def foo(self):
         self.count += 1
         self.notifyStateChange('count', self.count)
 
 if __name__=='__main__':
     source = TestSimEntity()
-    name='ASimEvent'
+    name='aSimEvent'
     scheduled=42.0
     args=[]
 
     evt=SimEvent(source, name, scheduled, args)
     scheduled=21.5
     evt2=SimEvent(TestSimEntity('Foo'), name, scheduled, args, Priority.HIGH)
-    evt3=SimEvent(source, 'AnotherSimEvent', 21.5, [], Priority.LOW)
-    evt4=SimEvent(TestSimEntity('Bar'), 'AnEvent', 10.0, [1.0, 'Two'])
+    evt3=SimEvent(source, 'anotherSimEvent', 21.5, [], Priority.LOW)
+    evt4=SimEvent(TestSimEntity('bar'), 'anEvent', 10.0, [1.0, 'Two'])
 
     heap = []
     heappush(heap, evt)
@@ -49,8 +49,8 @@ if __name__=='__main__':
     el = EventList()
 
     evt = source.waitDelay('Foo', 1.0)
-    evt1 = SimEntityBase('Baz').waitDelay('Bar', 2.0, [1])
-    evt2 = SimEntityBase('Foobar').waitDelay('Foo', 2.0, [], Priority.HIGH)
+    evt1 = SimEntityBase().waitDelay('bar', 2.0, [1])
+    evt2 = SimEntityBase().waitDelay('boo', 2.0, [], Priority.HIGH)
 
     print (EventList.dump())
 

@@ -97,8 +97,8 @@ class EventList:
         for simEntity in EventList.simEntities:
             if simEntity.persistent:
                 simEntity.reset()
-                if hasattr(simEntity, 'doRun'):
-                    simEntity.waitDelay('Run', 0.0, Priority.HIGHEST)
+                if hasattr(simEntity, 'run'):
+                    simEntity.waitDelay('run', 0.0, Priority.HIGHEST)
             else:
                 EventList.simEntities.remove(simEntity)
         if EventList.stopOnEvent:
@@ -193,7 +193,7 @@ class SimEntityBase:
 
     nextID = 1
 
-    def __init__(self):
+    def __init__(self, **args):
         self.eventListeners = []
         self.stateChangeListeners = []
         self.name = type(self).__name__
@@ -209,7 +209,7 @@ class SimEntityBase:
         pass
 
     def processSimEvent(self, simEvent):
-        methodName = 'do' + simEvent.eventName
+        methodName = simEvent.eventName
         if hasattr(self, methodName):
             method = getattr(self, methodName)
             if (simEvent.arguments.__len__() > 0):
@@ -268,10 +268,10 @@ class Stopper(SimEntityBase):
         SimEntityBase.__init__(self)
         self.stopEvent = None
 
-    def doRun(self):
-        self.stopEvent = self.waitDelay('Stop', EventList.stopTime, Priority.LOWEST)
+    def run(self):
+        self.stopEvent = self.waitDelay('stop', EventList.stopTime, Priority.LOWEST)
 
-    def doStop(self):
+    def stop(self):
         EventList.eventList.clear()
 
 class StateChangeEvent:

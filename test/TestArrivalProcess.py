@@ -22,7 +22,7 @@ if __name__=="__main__":
     EventList.startSimulation()
 
     EventList.coldReset()
-    EventList.stopOnEvent(10, 'EntityArrival')
+    EventList.stopOnEvent(10, 'entityArrival')
 
     entityCreator = EntityCreator(generator)
 

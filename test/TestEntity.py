@@ -41,7 +41,7 @@ expected = (serviceMean * interarrivalMean) / (interarrivalMean -serviceMean)
 print('expected avg timeInSystem: {avg:.4f}'.format(avg=expected))
 print('expected avg delayInQueue: {avg:.4f}'.format( avg=(expected * serviceMean / interarrivalMean)))
 
-EventList.stopAtTime(1000000.0)
+EventList.stopAtTime(100000.0)
 EventList.verbose = False
 
 EventList.reset()

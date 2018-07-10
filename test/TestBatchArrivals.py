@@ -17,7 +17,7 @@ serviceTimeGenerator = RandomVariate.getInstance('Gamma', alpha=1.2, beta = 2.3)
 simpleServer = SimpleServer(numberServers, serviceTimeGenerator)
 print(simpleServer.describe())
 
-adapter = Adapter('Arrival1', 'Arrival')
+adapter = Adapter('arrival1', 'arrival')
 adapter.connect(batchArrivalProcess, simpleServer)
 
 batchArrivalProcess.addStateChangeListener(SimpleStateChangeDumper())
@@ -27,7 +27,7 @@ stopTime = 20.0
 
 EventList.verbose = True
 EventList.stopAtTime(stopTime)
-EventList.stopOnEvent(10, 'Arrival')
+EventList.stopOnEvent(10, 'arrival')
 
 EventList.reset()
 EventList.startSimulation()

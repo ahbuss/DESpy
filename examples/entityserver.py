@@ -31,20 +31,20 @@ class EntityServer(SimEntityBase):
         self.delayInQueue = nan
         self.timeInSystem = nan
 
-    def doRun(self):
+    def run(self):
         self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
         self.notifyStateChange('queue', self.queue)
 
-    def doArrival(self, entity):
+    def arrival(self, entity):
         entity.stampTime()
         heappush(self.queue, entity)
         self.notifyStateChange('queue', self.queue)
         self.notifyStateChange('numberInQueue', self.queue.__len__())
 
         if (self.numberAvailableServers > 0):
-            self.waitDelay('StartService', 0.0, Priority.HIGH)
+            self.waitDelay('startService', 0.0, Priority.HIGH)
 
-    def doStartService(self):
+    def startService(self):
         entity = heappop(self.queue)
         self.notifyStateChange('queue', self.queue)
         self.notifyStateChange('numberInQueue', self.queue.__len__())
@@ -55,9 +55,9 @@ class EntityServer(SimEntityBase):
         self.numberAvailableServers -= 1
         self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
 
-        self.waitDelay('EndService', self.generator.generate(), Priority.DEFAULT, entity)
+        self.waitDelay('endService', self.generator.generate(), Priority.DEFAULT, entity)
 
-    def doEndService(self, entity):
+    def endService(self, entity):
         self.numberAvailableServers += 1
         self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
 
@@ -65,4 +65,4 @@ class EntityServer(SimEntityBase):
         self.notifyStateChange('timeInSystem', self.timeInSystem)
 
         if self.queue.__len__() > 0:
-            self.waitDelay('StartService', 0.0, Priority.HIGH)
+            self.waitDelay('startService', 0.0, Priority.HIGH)
