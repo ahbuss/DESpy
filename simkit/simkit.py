@@ -240,6 +240,12 @@ class SimEntityBase:
             if hasattr(stateChangeListener, 'stateChange'):
                 stateChangeListener.stateChange(stateChangeEvent)
 
+    def notifyIndexedStateChange(self, index, stateName, stateValue):
+        stateChangeEvent = IndexedStateChangeEvent(index, self, stateName, stateValue)
+        for stateChangeListener in self.stateChangeListeners:
+            if hasattr(stateChangeListener, 'stateChange'):
+                stateChangeListener.stateChange(stateChangeEvent)
+
     def notifySimEventListeners(self, simEvent):
         if simEvent.eventName != 'Run':
             for listener in self.eventListeners:
@@ -282,6 +288,15 @@ class StateChangeEvent:
 
     def __repr__(self):
         return str(self.source) + '> ' + str(self.name) + ': ' + str(self.value)
+
+class IndexedStateChangeEvent(StateChangeEvent):
+    def __init__(self, index, source, stateName, stateValue):
+        StateChangeEvent.__init__(self, source, stateName, stateValue)
+        self.index = index
+
+    def __repr__(self):
+        return '{source}> {name}[{index:d}]: {value}'.\
+            format(source=self.source, name=self.name, index=self.index, value=str(self.value))
 
 class StateChangeListener(ABC):
 
