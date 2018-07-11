@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='SimPyKit',
+    name='DESpy',
     version='0.1.0',
     packages=['simkit', 'examples'],
     url='https://github.com/ahbuss/SimPyKit',
