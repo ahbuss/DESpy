@@ -32,11 +32,11 @@ class Pinger2(SimEntityBase):
         pass
 
     def run(self):
-        self.waitDelay('init', 0.0, Priority.DEFAULT, 0)
+        self.schedule('init', 0.0, 0)
 
     def init(self, i):
         if i < self.number - 1:
-            self.waitDelay('init', 0.0, Priority.DEFAULT, i + 1)
+            self.schedule('init', 0.0,  i + 1)
 
 if __name__=='__main__':
 

@@ -22,7 +22,7 @@ class JobCreator(ArrivalProcess):
 
     def arrival(self):
         ArrivalProcess.arrival(self)
-        self.waitDelay('jobArrival', 0.0, Priority.DEFAULT, Job(), 0)
+        self.schedule('jobArrival', 0.0, Job(), 0)
 
 class TransferLine(SimEntityBase):
     def __init__(self, numberOfStations, numberMachines ,serviceTimes):
@@ -47,7 +47,7 @@ class TransferLine(SimEntityBase):
 
     def run(self):
         if self.numberStations > 0:
-            self.waitDelay('init', 0.0, Priority.DEFAULT, 0)
+            self.schedule('init', 0.0, 0, priority=Priority.HIGHER)
 
     def init(self, station):
         self.queue.append([])
@@ -57,7 +57,7 @@ class TransferLine(SimEntityBase):
         self.notifyIndexedStateChange(station, 'numberAvailableMachines', self.numberAvailableMachines[station])
 
         if station < self.numberStations - 1:
-            self.waitDelay('init', 0.0, Priority.DEFAULT, station + 1)
+            self.schedule('init', 0.0, station + 1, priority=Priority.HIGHER)
 
     def arrival(self, job, station):
         job.stampTime()
@@ -65,7 +65,7 @@ class TransferLine(SimEntityBase):
         self.notifyIndexedStateChange(station, 'queue', self.queue[station])
 
         if self.numberAvailableMachines[station] > 0:
-            self.waitDelay('startProcessing', 0.0, Priority.HIGH, station)
+            self.schedule('startProcessing', 0.0, station, priority=Priority.HIGH)
 
     def startProcessing(self, station):
         job = heappop(self.queue[station])
@@ -75,20 +75,20 @@ class TransferLine(SimEntityBase):
         self.numberAvailableMachines[station] -= 1
         self.notifyIndexedStateChange(station, 'numberAvailableMachines', self.numberAvailableMachines[station])
 
-        self.waitDelay('endProcessing', self.serviceTimes[station].generate(), Priority.DEFAULT, job, station)
+        self.schedule('endProcessing', self.serviceTimes[station].generate(), job, station)
 
     def endProcessing(self, job, station):
         self.numberAvailableMachines[station] += 1
         self.notifyIndexedStateChange(station, 'numberAvailableMachines', self.numberAvailableMachines[station])
 
         if len(self.queue[station]) > 0:
-            self.waitDelay('startProcessing', 0.0, Priority.HIGH, station)
+            self.schedule('startProcessing', 0.0, station, priority=Priority.HIGH)
 
         if station < self.numberStations - 1:
-            self.waitDelay('arrival', 0.0, Priority.HIGH, job, station + 1)
+            self.schedule('arrival', 0.0, job, station + 1)
 
         if (station == self.numberStations - 1):
-            self.waitDelay('jobComplete', 0.0, Priority.DEFAULT, job)
+            self.schedule('jobComplete', 0.0,  job)
 
     def jobComplete(self, job):
         self.notifyStateChange('totalDelayInQueue', job.totalDelayInQueue)

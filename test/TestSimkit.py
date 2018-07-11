@@ -48,9 +48,9 @@ if __name__=='__main__':
 
     el = EventList()
 
-    evt = source.waitDelay('Foo', 1.0)
-    evt1 = SimEntityBase().waitDelay('bar', 2.0, [1])
-    evt2 = SimEntityBase().waitDelay('boo', 2.0, [], Priority.HIGH)
+    evt = source.schedule('Foo', 1.0)
+    evt1 = SimEntityBase().schedule('bar', 2.0, [1])
+    evt2 = SimEntityBase().schedule('boo', 2.0, [], priority=Priority.HIGH)
 
     print (EventList.dump())
 

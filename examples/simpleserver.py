@@ -27,7 +27,7 @@ class SimpleServer(SimEntityBase):
         self.notifyStateChange('numberInQueue', self.numberInQueue)
 
         if (self.numberAvailableServers > 0):
-            self.waitDelay('startService', 0.0, Priority.HIGH)
+            self.schedule('startService', 0.0, priority=Priority.HIGH)
 
     def startService(self):
         self.numberInQueue -= 1
@@ -36,7 +36,7 @@ class SimpleServer(SimEntityBase):
         self.numberAvailableServers -= 1
         self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
 
-        self.waitDelay('endService', self.serviceTimeGenerator.generate())
+        self.schedule('endService', self.serviceTimeGenerator.generate())
 
     def endService(self):
         self.numberAvailableServers += 1
@@ -46,7 +46,7 @@ class SimpleServer(SimEntityBase):
         self.notifyStateChange('numberServed', self.numberServed)
 
         if self.numberInQueue > 0:
-            self.waitDelay('startService', 0.0, Priority.HIGH)
+            self.schedule('startService', 0.0, priority=Priority.HIGH)
 
 
 # if __name__=='__main__':

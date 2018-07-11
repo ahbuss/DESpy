@@ -35,10 +35,10 @@ class FiniteCapacityQueue(SimEntityBase):
         self.notifyStateChange('numberPotentialCustomers', self.numberPotentialCustomers)
 
         if self.numberInQueue < self.queueCapacity or self.numberAvailableServers > 0:
-            self.waitDelay('joinQueue', 0.0)
+            self.schedule('joinQueue', 0.0)
 
         if self.numberInQueue == self.queueCapacity and self.numberAvailableServers == 0:
-            self.waitDelay('balk', 0.0)
+            self.schedule('balk', 0.0)
 
     def balk(self):
         self.numberBalks += 1
@@ -48,7 +48,7 @@ class FiniteCapacityQueue(SimEntityBase):
         self.numberInQueue += 1
 
         if self.numberAvailableServers > 0:
-            self.waitDelay('startService', 0.0, Priority.HIGH)
+            self.schedule('startService', 0.0, priority=Priority.HIGH)
 
     def startService(self):
         self.numberInQueue -= 1
@@ -57,11 +57,11 @@ class FiniteCapacityQueue(SimEntityBase):
         self.numberAvailableServers -= 1
         self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
 
-        self.waitDelay('endService', self.serviceTimeGenerator.generate())
+        self.schedule('endService', self.serviceTimeGenerator.generate())
 
     def endService(self):
         self.numberAvailableServers += 1
         self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
 
         if self.numberInQueue > 0:
-            self.waitDelay('startService', 0.0, Priority.HIGH)
+            self.schedule('startService', 0.0, priority=Priority.HIGH)

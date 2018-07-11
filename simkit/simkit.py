@@ -25,18 +25,21 @@ class Priority(IntEnum):
 class SimEvent:
     nextID = 0
 
-    def __init__(self, source, eventName, scheduledTime,  priority=Priority.DEFAULT, *arguments):
+    def __init__(self, source, eventName, scheduledTime, *arguments, **kwds):
+        if kwds.keys().__contains__('priority'):
+            self.priority = kwds.get('priority')
+        else:
+            self.priority = Priority.DEFAULT
         self.source = source
         self.eventName = eventName
         self.scheduledTime = scheduledTime
         self.arguments = arguments
-        self.priority = priority
         self.id = SimEvent.nextID
         self.cancelled = False
         SimEvent.nextID += 1
 
     def copy(self):
-        return SimEvent(self.source, self.eventName, self.scheduledTime, self.priority, *self.arguments)
+        return SimEvent(self.source, self.eventName, self.scheduledTime, *self.arguments, priority=self.priority)
 
     def __repr__(self):
         if self.arguments == ():
@@ -98,7 +101,7 @@ class EventList:
             if simEntity.persistent:
                 simEntity.reset()
                 if hasattr(simEntity, 'run'):
-                    simEntity.waitDelay('run', 0.0, Priority.HIGHEST)
+                    simEntity.schedule('run', 0.0, priority=Priority.HIGHEST)
             else:
                 EventList.simEntities.remove(simEntity)
         if EventList.stopOnEvent:
@@ -251,14 +254,27 @@ class SimEntityBase:
             for listener in self.eventListeners:
                 listener.processSimEvent(simEvent)
 
-    def waitDelay(self, eventName, delay, priority=Priority.DEFAULT, *arguments):
+    def schedule(self, eventName, delay, *args, **kwds):
         if delay < 0.0:
             raise ValueError('delay must be \u2265 0.0: {delay:.3f}'.format(delay=delay))
-        event = SimEvent(self, eventName, EventList.simTime + delay, priority, *arguments)
+        event = SimEvent(self, eventName, EventList.simTime + delay, *args, **kwds)
         EventList.scheduleEvent(event)
         return event;
 
+    # replaced with schedule()
+    # def waitDelay(self, eventName, delay, priority=Priority.DEFAULT, *arguments):
+    #     if delay < 0.0:
+    #         raise ValueError('delay must be \u2265 0.0: {delay:.3f}'.format(delay=delay))
+    #     event = SimEvent(self, eventName, EventList.simTime + delay, priority, *arguments)
+    #     EventList.scheduleEvent(event)
+    #     return event;
+
+
     def interrupt(self, eventName, *arguments):
+        EventList.cancelEvent(eventName, *arguments)
+
+    # Use cancel() instead pf interrupt()!
+    def cancel(self, eventName, *arguments):
         EventList.cancelEvent(eventName, *arguments)
 
     def describe(self):
@@ -275,7 +291,7 @@ class Stopper(SimEntityBase):
         self.stopEvent = None
 
     def run(self):
-        self.stopEvent = self.waitDelay('stop', EventList.stopTime, Priority.LOWEST)
+        self.stopEvent = self.schedule('stop', EventList.stopTime, priority=Priority.LOWEST)
 
     def stop(self):
         EventList.eventList.clear()
