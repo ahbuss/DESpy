@@ -17,13 +17,18 @@ class RandomVariate(ABC):
         :param name: The name of the random variate ('Exponential', 'Gamma', etc)
         :param module: The module it is in (default is 'simkit.rand'
         :param kwds: named parameters for the random variate class; specifics depend on the class
+                    or a dictionary with the RandomVariate parameters as key=value pairs
         :return: The desired instance of the random variate class
         """
         clazz = getattr(modules[module],name)
         instance = clazz()
-        for keyword in kwds.keys():
+        if kwds.keys().__contains__('params'):
+            params = kwds.get('params').get('params')
+        else:
+            params = kwds
+        for keyword in params.keys():
             if hasattr(instance, keyword):
-                setattr(instance, keyword, kwds[keyword])
+                setattr(instance, keyword, params[keyword])
         if hasattr(instance, 'normalize'):
             getattr(instance, 'normalize')()
         return instance
@@ -91,7 +96,7 @@ class Gamma(RandomVariate):
         return 'Gamma ({alpha:.3f}, {beta:.3f})'.format(alpha=self.alpha, beta=self.beta)
 
 class Beta(RandomVariate):
-    def __init__(self,alpha=nan, beta=nan):
+    def __init__(self,alpha=nan, beta=nan, shift=0.0, scale=1.0):
         """
 
         :param alpha: \u03B1 of the Beta distribution (shape parameter)
@@ -100,12 +105,18 @@ class Beta(RandomVariate):
         RandomVariate.__init__(self)
         self.alpha = alpha
         self.beta = beta
+        self.scale = scale
+        self.shift = shift
 
     def generate(self):
-        return self.rng.betavariate(self.alpha, self.beta)
+        return self. shift + self.scale * self.rng.betavariate(self.alpha, self.beta)
 
     def __repr__(self):
-        return 'Beta ({alpha:.3f}, {beta:.3f})'.format(alpha=self.alpha, beta=self.beta)
+        if self.scale == 1.0 and self.shift == 0.0:
+            return 'Beta ({alpha:.3f}, {beta:.3f})'.format(alpha=self.alpha, beta=self.beta)
+        else:
+            return 'Beta ({alpha:.3f}, {beta:.3f}, {shift:.3f}, {scale:.3f})'.\
+                format(alpha=self.alpha, beta=self.beta, shift=self.shift, scale=self.scale)
 
 class Uniform(RandomVariate):
     def __init__(self, min=nan, max=nan):

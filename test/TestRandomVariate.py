@@ -31,6 +31,15 @@ if __name__ == '__main__':
     rv4 = RandomVariate.getInstance('Beta', alpha=2, beta=3)
     print(rv4)
 
+    rv4 = RandomVariate.getInstance('Beta', alpha=3,beta=4, scale=5)
+    print(rv4)
+
+    rv4 = RandomVariate.getInstance('Beta', alpha=3,beta=4, scale=5, shift=-3)
+    print(rv4)
+
+    rv4 = RandomVariate.getInstance('Beta', params={'alpha':1.2,'beta':3.44})
+    print(rv4)
+
     rv5 = RandomVariate.getInstance('Discrete', values=[1,2,3,4], frequencies=[10, 20, 30, 40])
     print(rv5)
 
