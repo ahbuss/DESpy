@@ -10,7 +10,7 @@ print('original:')
 for i in range(number):
     print(rv.generate())
 
-print('after resetState (should be identical:')
+print('after reset() (should be identical:')
 rv.reset()
 for i in range(number):
     print(rv.generate())

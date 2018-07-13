@@ -6,63 +6,61 @@ from heapq import heappop
 
 class EntityServer(SimEntityBase):
 
-    def __init__(self, numberServers, generator):
+    def __init__(self, number_servers, generator):
         SimEntityBase.__init__(self)
-        self.numberServers = numberServers
+        self.number_servers = number_servers
         self.generator = generator
-        self.numberAvailableServers = nan
+        self.number_available_servers = nan
         self.queue = []
-        self.delayInQueue = nan
-        self.timeInSystem = nan
+        self.delay_in_queue = nan
+        self.time_in_system = nan
 
     @property
-    def numberServers(self):
-        return self.__numberServers
+    def number_servers(self):
+        return self.__number_servers
 
-    @numberServers.setter
-    def numberServers(self, numberServers):
+    @number_servers.setter
+    def number_servers(self, numberServers):
         if numberServers <= 0:
-            raise ValueError('numberServers must be > 0: ' + str(numberServers))
-        self.__numberServers = numberServers
+            raise ValueError('number_servers must be > 0: ' + str(numberServers))
+        self.__number_servers = numberServers
 
     def reset(self):
-        self.numberAvailableServers = self.numberServers
+        self.number_available_servers = self.number_servers
         self.queue.clear()
-        self.delayInQueue = nan
-        self.timeInSystem = nan
+        self.delay_in_queue = nan
+        self.time_in_system = nan
 
     def run(self):
-        self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
-        self.notifyStateChange('queue', self.queue)
+        self.notify_state_change('number_available_servers', self.number_available_servers)
+        self.notify_state_change('queue', self.queue)
 
     def arrival(self, entity):
-        entity.stampTime()
+        entity.stamp_time()
         heappush(self.queue, entity)
-        self.notifyStateChange('queue', self.queue)
-        self.notifyStateChange('numberInQueue', self.queue.__len__())
+        self.notify_state_change('queue', self.queue)
 
-        if (self.numberAvailableServers > 0):
-            self.schedule('startService', 0.0, priority=Priority.HIGH)
+        if (self.number_available_servers > 0):
+            self.schedule('start_service', 0.0, priority=Priority.HIGH)
 
-    def startService(self):
+    def start_service(self):
         entity = heappop(self.queue)
-        self.notifyStateChange('queue', self.queue)
-        self.notifyStateChange('numberInQueue', self.queue.__len__())
+        self.notify_state_change('queue', self.queue)
 
-        self.delayInQueue = entity.elapsedTime()
-        self.notifyStateChange('delayInQueue', self.delayInQueue)
+        self.delay_in_queue = entity.elapsed_time()
+        self.notify_state_change('delay_in_queue', self.delay_in_queue)
 
-        self.numberAvailableServers -= 1
-        self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
+        self.number_available_servers -= 1
+        self.notify_state_change('number_available_servers', self.number_available_servers)
 
-        self.schedule('endService', self.generator.generate(), entity)
+        self.schedule('end_service', self.generator.generate(), entity)
 
-    def endService(self, entity):
-        self.numberAvailableServers += 1
-        self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
+    def end_service(self, entity):
+        self.number_available_servers += 1
+        self.notify_state_change('number_available_servers', self.number_available_servers)
 
-        self.timeInSystem = entity.elapsedTime()
-        self.notifyStateChange('timeInSystem', self.timeInSystem)
+        self.time_in_system = entity.elapsed_time()
+        self.notify_state_change('time_in_system', self.time_in_system)
 
         if self.queue.__len__() > 0:
-            self.schedule('startService', 0.0, priority=Priority.HIGH)
+            self.schedule('start_service', 0.0, priority=Priority.HIGH)

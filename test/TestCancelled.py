@@ -5,24 +5,24 @@ from simkit.simkit import Priority
 class TestCancelled(SimEntityBase):
 
     def run(self):
-        self.waitDelay('q', 1.0, Priority.DEFAULT)
-        self.waitDelay('b', 0.5, Priority.DEFAULT)
-        self.waitDelay('c', 2.0, Priority.DEFAULT, 3)
-        self.waitDelay('c', 1.5, Priority.DEFAULT, 2)
-        self.waitDelay('d', 3.4, Priority.DEFAULT, 1, 2, 3)
-        self.waitDelay('d', 3.4, Priority.HIGH, 1, 2, 4)
+        self.schedule('q', 1.0)
+        self.schedule('b', 0.5)
+        self.schedule('c', 2.0, 3)
+        self.schedule('c', 1.5, 2)
+        self.schedule('d', 3.4, 1, 2, 3)
+        self.schedule('d', 3.4, 1, 2, 4)
 
     def b(self):
         print('In b()!')
-        self.interrupt('a')
-        self.interrupt('c', 3)
+        self.cancel('a')
+        self.cancel('c', 3)
 
     def a(self):
         print('In a()!')
 
     def c(self, i):
         print('In c(): i = ' + str(i))
-        self.interrupt('d', 1, 2, 3)
+        self.cancel('d', 1, 2, 3)
 
     def d(self, x, y, z):
         print('In D: args = (' + str(x) + ',' + str(y) + ',' + str(z) + ')')
@@ -33,5 +33,5 @@ if __name__=='__main__':
     EventList.verbose = True
 
     EventList.reset()
-    EventList.startSimulation()
+    EventList.start_simulation()
 

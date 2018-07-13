@@ -19,33 +19,33 @@ entityCreator = EntityCreator(interarrival)
 print (entityCreator)
 print (entityCreator.generator)
 
-entityCreator.addSimEventListener(entityServer)
+entityCreator.add_sim_event_listener(entityServer)
 
 dumper = SimpleStateChangeDumper()
-# entityServer.addStateChangeListener(dumper)
+# entity_server.add_state_change_listener(dumper)
 
 delayInQueueStat = SimpleStatsTally("delayInQueue")
-entityServer.addStateChangeListener(delayInQueueStat)
+entityServer.add_state_change_listener(delayInQueueStat)
 
-timeInSystemStat = SimpleStatsTally('timeInSystem')
-entityServer.addStateChangeListener(timeInSystemStat)
+timeInSystemStat = SimpleStatsTally('time_in_system')
+entityServer.add_state_change_listener(timeInSystemStat)
 
-numberInQueueStat = SimpleStatsTimeVarying("numberInQueue")
-entityServer.addStateChangeListener(numberInQueueStat)
+numberInQueueStat = SimpleStatsTimeVarying("number_in_queue")
+entityServer.add_state_change_listener(numberInQueueStat)
 # queue = []
 # heappush(queue, Entity() )
 # heappush(queue, Entity() )
 # print(queue)
 
 expected = (serviceMean * interarrivalMean) / (interarrivalMean -serviceMean)
-print('expected avg timeInSystem: {avg:.4f}'.format(avg=expected))
+print('expected avg time_in_system: {avg:.4f}'.format(avg=expected))
 print('expected avg delayInQueue: {avg:.4f}'.format( avg=(expected * serviceMean / interarrivalMean)))
 
-EventList.stopAtTime(100000.0)
+EventList.stop_at_time(100000.0)
 EventList.verbose = False
 
 EventList.reset()
-EventList.startSimulation()
+EventList.start_simulation()
 
 print('Simulation ended at time ' + str(EventList.simtime))
 

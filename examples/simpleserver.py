@@ -4,51 +4,46 @@ from math import nan
 
 class SimpleServer(SimEntityBase):
 
-    def __init__(self, totalNumberServers, serviceTimeGenerator):
+    def __init__(self, total_number_servers, service_time_generator):
         SimEntityBase.__init__(self)
-        self.totalNumberServers = totalNumberServers
-        self.serviceTimeGenerator = serviceTimeGenerator
-        self.numberInQueue = nan
-        self.numberAvailableServers = nan
-        self.numberServed = nan
+        self.total_number_servers = total_number_servers
+        self.service_time_generator = service_time_generator
+        self.number_in_queue = nan
+        self.number_available_servers = nan
+        self.number_served = nan
 
     def reset(self):
-        self.numberAvailableServers = self.totalNumberServers
-        self.numberInQueue = 0
-        self.numberServed = 0
+        self.number_available_servers = self.total_number_servers
+        self.number_in_queue = 0
+        self.number_served = 0
 
     def run(self):
-        self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
-        self.notifyStateChange('numberInQueue', self.numberInQueue)
-        self.notifyStateChange('numberServed', self.numberServed)
+        self.notify_state_change('number_available_servers', self.number_available_servers)
+        self.notify_state_change('number_in_queue', self.number_in_queue)
+        self.notify_state_change('number_served', self.number_served)
 
     def arrival(self):
-        self.numberInQueue += 1
-        self.notifyStateChange('numberInQueue', self.numberInQueue)
+        self.number_in_queue += 1
+        self.notify_state_change('number_in_queue', self.number_in_queue)
 
-        if (self.numberAvailableServers > 0):
-            self.schedule('startService', 0.0, priority=Priority.HIGH)
+        if (self.number_available_servers > 0):
+            self.schedule('start_service', 0.0, priority=Priority.HIGH)
 
-    def startService(self):
-        self.numberInQueue -= 1
-        self.notifyStateChange('numberInQueue', self.numberInQueue)
+    def start_service(self):
+        self.number_in_queue -= 1
+        self.notify_state_change('number_in_queue', self.number_in_queue)
 
-        self.numberAvailableServers -= 1
-        self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
+        self.number_available_servers -= 1
+        self.notify_state_change('number_available_servers', self.number_available_servers)
 
-        self.schedule('endService', self.serviceTimeGenerator.generate())
+        self.schedule('end_service', self.service_time_generator.generate())
 
-    def endService(self):
-        self.numberAvailableServers += 1
-        self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
+    def end_service(self):
+        self.number_available_servers += 1
+        self.notify_state_change('number_available_servers', self.number_available_servers)
 
-        self.numberServed += 1
-        self.notifyStateChange('numberServed', self.numberServed)
+        self.number_served += 1
+        self.notify_state_change('number_served', self.number_served)
 
-        if self.numberInQueue > 0:
-            self.schedule('startService', 0.0, priority=Priority.HIGH)
-
-
-# if __name__=='__main__':
-#     simpleServer = SimpleServer(None, None)
-#     print(type(simpleServer).__name__)
+        if self.number_in_queue > 0:
+            self.schedule('start_service', 0.0, priority=Priority.HIGH)

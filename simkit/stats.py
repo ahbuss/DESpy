@@ -40,7 +40,7 @@ class SimpleStatsBase(StateChangeListener):
         return '{name}: {count:,d} {min:,.4f} {max:,.4f} {mean:,.4f} {var:,.4f} {stdev:,.4f}'.\
             format(name=self.name, count=self.count, min=self.min, max=self.max, mean=self.mean,var=self.variance, stdev=self.stdev)
 
-    def stateChange(self, state_change_event):
+    def state_change(self, state_change_event):
         if state_change_event.name == self.name:
             self.newObservation(state_change_event.value)
 

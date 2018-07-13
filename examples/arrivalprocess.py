@@ -14,13 +14,13 @@ class ArrivalProcess(SimEntityBase):
         self.number_arrivals = 0
 
     def run(self):
-        self.notifyStateChange("numberArrivals", self.number_arrivals)
+        self.notify_state_change("number_arrivals", self.number_arrivals)
 
         self.schedule('arrival', self.generator.generate())
 
     def arrival(self):
         self.number_arrivals += 1
-        self.notifyStateChange("numberArrivals", self.number_arrivals)
+        self.notify_state_change("number_arrivals", self.number_arrivals)
 
         self.schedule('arrival', self.generator.generate())
 
@@ -31,7 +31,7 @@ class EntityCreator(ArrivalProcess):
 
     def arrival(self):
         ArrivalProcess.arrival(self)
-        self.schedule('entityArrival', 0.0, Entity())
+        self.schedule('entity_arrival', 0.0, Entity())
 
 class BatchArrivalProcess(ArrivalProcess):
 
@@ -50,9 +50,9 @@ class BatchArrivalProcess(ArrivalProcess):
         ArrivalProcess.arrival(self)
 
         self.numberInBatch = round(self.batchGenerator.generate())
-        self.notifyStateChange('numberInBatch', self.numberInBatch)
+        self.notify_state_change('number_in_batch', self.numberInBatch)
 
         for i in range(self.numberInBatch):
             self.schedule('arrival1', 0.0)
         self.totalIndividualArrivals += self.numberInBatch
-        self.notifyStateChange('totalIndividualArrivals', self.totalIndividualArrivals)
+        self.notify_state_change('total_individual_arrivals', self.totalIndividualArrivals)
