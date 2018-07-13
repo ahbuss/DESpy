@@ -43,7 +43,7 @@ EventList.startSimulation()
 end = time()
 
 print('\nSimulation took {time:,.3f} sec'.format(time=(end-start)))
-print('Simulation ended at simTime {time:,.0f}\n'.format(time=EventList.simTime))
+print('Simulation ended at simTime {time:,.0f}\n'.format(time=EventList.simtime))
 
 print('Avg time in system = {avg:,.4f}'.format(avg=timeInSystemStat.mean))
 print('Avg delay in queue = {avg:,.4f}'.format(avg=delayInQueueStat.mean))

@@ -31,7 +31,7 @@ EventList.startSimulation()
 end = time()
 
 print('\nSimulation took {time:.4f} sec'.format(time = end - start))
-print('Simulation ended at simTime {time:,.0f}\n'.format(time=EventList.simTime))
+print('Simulation ended at simTime {time:,.0f}\n'.format(time=EventList.simtime))
 print('Avg delay in queue = {avg:,.4f}'.format(avg=(delayInQueueStat.mean)))
 print('Avg number in queue = {avg:.4f}'.format(avg=numberInQueueStat.mean))
 print('There have been {num:,d} reneges'.format(num=server.numberReneges))

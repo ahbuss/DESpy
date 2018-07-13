@@ -24,7 +24,7 @@ transferLine.addStateChangeListener(SimpleStateChangeDumper())
 
 # EventList.stopAtTime(20.0)
 
-EventList.stopOnEvent(10, 'jobComplete')
+EventList.stop_on_event(10, 'jobComplete')
 
 EventList.verbose = True
 EventList.reset()

@@ -8,19 +8,19 @@ class ArrivalProcess(SimEntityBase):
     def __init__(self, generator):
         SimEntityBase.__init__(self)
         self.generator=generator
-        self.numberArrivals = nan
+        self.number_arrivals = nan
 
     def reset(self):
-        self.numberArrivals = 0
+        self.number_arrivals = 0
 
     def run(self):
-        self.notifyStateChange("numberArrivals",self.numberArrivals)
+        self.notifyStateChange("numberArrivals", self.number_arrivals)
 
         self.schedule('arrival', self.generator.generate())
 
     def arrival(self):
-        self.numberArrivals += 1
-        self.notifyStateChange("numberArrivals",self.numberArrivals)
+        self.number_arrivals += 1
+        self.notifyStateChange("numberArrivals", self.number_arrivals)
 
         self.schedule('arrival', self.generator.generate())
 

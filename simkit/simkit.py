@@ -21,23 +21,23 @@ class Priority(IntEnum):
     HIGHEST = -1E10
 
 class SimEvent:
-    nextID = 0
+    next_id = 0
 
-    def __init__(self, source, eventName, scheduledTime, *arguments, **kwds):
+    def __init__(self, source, event_name, scheduled_time, *arguments, **kwds):
         if kwds.keys().__contains__('priority'):
             self.priority = kwds.get('priority')
         else:
             self.priority = Priority.DEFAULT
         self.source = source
-        self.eventName = eventName
-        self.scheduledTime = scheduledTime
+        self.event_name = event_name
+        self.scheduled_time = scheduled_time
         self.arguments = arguments
-        self.id = SimEvent.nextID
+        self.id = SimEvent.next_id
         self.cancelled = False
-        SimEvent.nextID += 1
+        SimEvent.next_id += 1
 
     def copy(self):
-        return SimEvent(self.source, self.eventName, self.scheduledTime, *self.arguments, priority=self.priority)
+        return SimEvent(self.source, self.event_name, self.scheduled_time, *self.arguments, priority=self.priority)
 
     def __repr__(self):
         if self.arguments == ():
@@ -46,90 +46,90 @@ class SimEvent:
             argstr = '(' + str(self.arguments[0]) + ')'
         else:
             argstr =  str(self.arguments)
-        return '{0:,.4f}'.format(self.scheduledTime) + ' ' + self.eventName + ' ' + argstr + \
+        return '{0:,.4f}'.format(self.scheduled_time) + ' ' + self.event_name + ' ' + argstr + \
                ' <' + str(self.source) + '>'
 
     def __eq__(self, other):
-        return (self.scheduledTime, self.priority) == (other.scheduledTime, other.priority)
+        return (self.scheduled_time, self.priority) == (other.scheduled_time, other.priority)
 
     def __ne__(self, other):
-        return (self.scheduledTime, self.priority) != (other.scheduledTime, other.priority)
+        return (self.scheduled_time, self.priority) != (other.scheduled_time, other.priority)
 
     def __lt__(self, other):
-        return (self.scheduledTime, self.priority) < (other.scheduledTime, other.priority)
+        return (self.scheduled_time, self.priority) < (other.scheduled_time, other.priority)
 
     def __gt__(self, other):
         return other.__lt__(self)
 
 class EventList:
-    eventList = []
-    simEntities = []
+    event_list = []
+    sim_entities = []
     ignoreOnDump = []
-    simTime = 0.0
-    stopTime = 0.0
+    simtime = 0.0
+    stop_time = 0.0
     verbose = False
     running = False
-    currentEvent = None
-    eventCounts = {}
+    current_event = None
+    event_counts = {}
     stopper = None
-    stopOnEvent = False
-    stopEventName = None
-    stopEventNumber = inf
-    stopEventCount = nan
+    stop_on_event = False
+    stop_event_name = None
+    stop_event_number = inf
+    stop_event_count = nan
 
     @staticmethod
     def stopAtTime(time):
-        EventList.stopTime = time
+        EventList.stop_time = time
         if not EventList.stopper:
             EventList.stopper = Stopper()
 
     @staticmethod
     def stopOnEvent(stopEventNumber, stopEventName, *args):
-        EventList.stopOnEvent = True
-        EventList.stopEventNumber = stopEventNumber
-        EventList.stopEventName = stopEventName
-        if EventList.simEntities.__contains__(EventList.stopper):
-            EventList.simEntities.remove(EventList.stopper)
+        EventList.stop_on_event = True
+        EventList.stop_event_number = stopEventNumber
+        EventList.stop_event_name = stopEventName
+        if EventList.sim_entities.__contains__(EventList.stopper):
+            EventList.sim_entities.remove(EventList.stopper)
 
     @staticmethod
     def reset():
-        EventList.simTime = 0.0
-        EventList.eventList.clear()
-        for simEntity in EventList.simEntities:
+        EventList.simtime = 0.0
+        EventList.event_list.clear()
+        for simEntity in EventList.sim_entities:
             if simEntity.persistent:
                 simEntity.reset()
                 if hasattr(simEntity, 'run'):
                     simEntity.schedule('run', 0.0, priority=Priority.HIGHEST)
             else:
-                EventList.simEntities.remove(simEntity)
-        if EventList.stopOnEvent:
-            EventList.stopEventCount = 0
-            EventList.eventCounts.clear()
-            EventList.eventCounts[EventList.stopEventName] = 0
+                EventList.sim_entities.remove(simEntity)
+        if EventList.stop_on_event:
+            EventList.stop_event_count = 0
+            EventList.event_counts.clear()
+            EventList.event_counts[EventList.stop_event_name] = 0
 
     @staticmethod
     def scheduleEvent(simEvent):
-        heappush(EventList.eventList, simEvent)
+        heappush(EventList.event_list, simEvent)
 
     @staticmethod
-    def cancelEvent(eventName, *args):
-        for simEvent in EventList.eventList:
-            if  eventName == simEvent.eventName and args == simEvent.arguments:
-                simEvent.cancelled = True
+    def cancelEvent(event_name, *args):
+        for sim_event in EventList.event_list:
+            if  event_name == sim_event.event_name and args == sim_event.arguments:
+                sim_event.cancelled = True
                 break
 
     @staticmethod
     def dump():
-        dumpString = ""
-        dumpString += '*** Event List ***\n'
-        queueCopy = EventList.eventList.copy()
+        dump_string = ""
+        dump_string += '*** Event List ***\n'
+        queueCopy = EventList.event_list.copy()
         queueCopy.sort()
         if not queueCopy:
-            dumpString += '    <Empty>\n'
+            dump_string += '    <Empty>\n'
         for event in queueCopy:
-            if not event.cancelled and not EventList.ignoreOnDump.__contains__(event.eventName):
-                dumpString += str(event) + '\n'
-        return dumpString
+            if not event.cancelled and not EventList.ignoreOnDump.__contains__(event.event_name):
+                dump_string += str(event) + '\n'
+        return dump_string
 
     @staticmethod
     def startSimulation():
@@ -137,21 +137,21 @@ class EventList:
         if EventList.verbose:
             print('Starting Simulation...')
             print(EventList.dump())
-        while EventList.running and EventList.eventList:
-            EventList.currentEvent = heappop(EventList.eventList)
-            if EventList.currentEvent.cancelled:
+        while EventList.running and EventList.event_list:
+            EventList.current_event = heappop(EventList.event_list)
+            if EventList.current_event.cancelled:
                 continue
-            EventList.simTime = EventList.currentEvent.scheduledTime
-            EventList.currentEvent.source.processSimEvent(EventList.currentEvent)
-            if not EventList.eventCounts.keys().__contains__(EventList.currentEvent.eventName):
-                EventList.eventCounts[EventList.currentEvent.eventName] = 1
+            EventList.simtime = EventList.current_event.scheduled_time
+            EventList.current_event.source.processSimEvent(EventList.current_event)
+            if not EventList.event_counts.keys().__contains__(EventList.current_event.event_name):
+                EventList.event_counts[EventList.current_event.event_name] = 1
             else:
-                EventList.eventCounts[EventList.currentEvent.eventName] +=  1
-            if EventList.verbose and not EventList.ignoreOnDump.__contains__(EventList.currentEvent.eventName):
-                print('CurrentEvent: ' + str(EventList.currentEvent) + ' [' + str(EventList.eventCounts[EventList.currentEvent.eventName]) + ']')
+                EventList.event_counts[EventList.current_event.event_name] +=  1
+            if EventList.verbose and not EventList.ignoreOnDump.__contains__(EventList.current_event.event_name):
+                print('CurrentEvent: ' + str(EventList.current_event) + ' [' + str(EventList.event_counts[EventList.current_event.event_name]) + ']')
                 print(EventList.dump())
-            if EventList.stopOnEvent:
-                if EventList.eventCounts[EventList.stopEventName] == EventList.stopEventNumber:
+            if EventList.stop_on_event:
+                if EventList.event_counts[EventList.stop_event_name] == EventList.stop_event_number:
                     EventList.stopSimulation()
 
     @staticmethod
@@ -161,16 +161,16 @@ class EventList:
     @staticmethod
     def coldReset():
         EventList.reset()
-        EventList.simEntities.clear()
-        SimEntityBase.nextID = 1
-        if not EventList.stopOnEvent:
-            EventList.stopAtTime(EventList.stopTime)
+        EventList.sim_entities.clear()
+        SimEntityBase.next_id = 1
+        if not EventList.stop_on_event:
+            EventList.stopAtTime(EventList.stop_time)
 
 class Adapter:
 
-    def __init__(self, sourceEventName, targetEventName):
-        self.sourceEventName = sourceEventName
-        self.targetEventName = targetEventName
+    def __init__(self, source_event_name, target_event_name):
+        self.source_event_name = source_event_name
+        self.target_event_name = target_event_name
         self.source =None
         self.target = None
 
@@ -184,24 +184,24 @@ class Adapter:
         self.target = None
 
     def processSimEvent(self, simEvent):
-        if simEvent.eventName == self.sourceEventName:
-            newEvent = simEvent.copy()
-            newEvent.eventName = self.targetEventName
-            self.target.processSimEvent(newEvent)
+        if simEvent.event_name == self.source_event_name:
+            new_event = simEvent.copy()
+            new_event.eventName = self.target_event_name
+            self.target.processSimEvent(new_event)
 
 
 class SimEntityBase:
 
-    nextID = 1
+    next_id = 1
 
     def __init__(self, **args):
-        self.eventListeners = []
-        self.stateChangeListeners = []
+        self.event_listeners = []
+        self.state_change_listeners = []
         self.name = type(self).__name__
-        self.id = SimEntityBase.nextID
+        self.id = SimEntityBase.next_id
         self.persistent = True
-        EventList.simEntities.append(self)
-        SimEntityBase.nextID += 1
+        EventList.sim_entities.append(self)
+        SimEntityBase.next_id += 1
 
     def __repr__(self):
         return self.name + '.' + str(self.id)
@@ -209,53 +209,53 @@ class SimEntityBase:
     def reset(self):
         pass
 
-    def processSimEvent(self, simEvent):
-        methodName = simEvent.eventName
-        if hasattr(self, methodName):
-            method = getattr(self, methodName)
-            if (simEvent.arguments.__len__() > 0):
-                method(*simEvent.arguments)
+    def processSimEvent(self, sim_event):
+        method_name = sim_event.event_name
+        if hasattr(self, method_name):
+            method = getattr(self, method_name)
+            if (sim_event.arguments.__len__() > 0):
+                method(*sim_event.arguments)
             else:
                 method()
-        if simEvent.source == self:
-            self.notifySimEventListeners(simEvent)
+        if sim_event.source == self:
+            self.notifySimEventListeners(sim_event)
 
-    def addSimEventListener(self, simEventListener):
-        if not simEventListener in self.eventListeners:
-            self.eventListeners.append(simEventListener)
+    def addSimEventListener(self, sim_event_listener):
+        if not sim_event_listener in self.event_listeners:
+            self.event_listeners.append(sim_event_listener)
 
-    def removeSimEventListener(self, simEventListener):
-        self.eventListeners.remove(simEventListener)
+    def removeSimEventListener(self, sim_event_listener):
+        self.event_listeners.remove(sim_event_listener)
 
-    def addStateChangeListener(self, stateChangeListener):
-        if hasattr(stateChangeListener, 'stateChange'):
-            if not stateChangeListener in self.stateChangeListeners:
-                self.stateChangeListeners.append(stateChangeListener)
+    def addStateChangeListener(self, state_change_listener):
+        if hasattr(state_change_listener, 'stateChange'):
+            if not state_change_listener in self.state_change_listeners:
+                self.state_change_listeners.append(state_change_listener)
 
-    def removeStateChangeListener(self, stateChangeListener):
-        self.stateChangeListeners.remove(stateChangeListener)
+    def removeStateChangeListener(self, state_change_listener):
+        self.state_change_listeners.remove(state_change_listener)
 
-    def notifyStateChange(self, stateName, stateValue):
-        stateChangeEvent = StateChangeEvent(self, stateName, stateValue)
-        for stateChangeListener in self.stateChangeListeners:
+    def notifyStateChange(self, state_name, state_value):
+        stateChangeEvent = StateChangeEvent(self, state_name, state_value)
+        for stateChangeListener in self.state_change_listeners:
             if hasattr(stateChangeListener, 'stateChange'):
                 stateChangeListener.stateChange(stateChangeEvent)
 
-    def notifyIndexedStateChange(self, index, stateName, stateValue):
-        stateChangeEvent = IndexedStateChangeEvent(index, self, stateName, stateValue)
-        for stateChangeListener in self.stateChangeListeners:
-            if hasattr(stateChangeListener, 'stateChange'):
-                stateChangeListener.stateChange(stateChangeEvent)
+    def notifyIndexedStateChange(self, index, state_name, state_value):
+        state_change_event = IndexedStateChangeEvent(index, self, state_name, state_value)
+        for state_change_listener in self.state_change_listeners:
+            if hasattr(state_change_listener, 'stateChange'):
+                state_change_listener.stateChange(state_change_event)
 
-    def notifySimEventListeners(self, simEvent):
-        if simEvent.eventName != 'Run':
-            for listener in self.eventListeners:
-                listener.processSimEvent(simEvent)
+    def notifySimEventListeners(self, sim_event):
+        if sim_event.event_name != 'Run':
+            for listener in self.event_listeners:
+                listener.processSimEvent(sim_event)
 
-    def schedule(self, eventName, delay, *args, **kwds):
+    def schedule(self, event_name, delay, *args, **kwds):
         if delay < 0.0:
             raise ValueError('delay must be \u2265 0.0: {delay:.3f}'.format(delay=delay))
-        event = SimEvent(self, eventName, EventList.simTime + delay, *args, **kwds)
+        event = SimEvent(self, event_name, EventList.simtime + delay, *args, **kwds)
         EventList.scheduleEvent(event)
         return event;
 
@@ -268,10 +268,10 @@ class SimEntityBase:
     #     return event;
 
 
-    def interrupt(self, eventName, *arguments):
-        EventList.cancelEvent(eventName, *arguments)
+    # def interrupt(self, eventName, *arguments):
+    #     EventList.cancelEvent(eventName, *arguments)
 
-    # Use cancel() instead pf interrupt()!
+    # Use cancel() instead of interrupt()!
     def cancel(self, eventName, *arguments):
         EventList.cancelEvent(eventName, *arguments)
 
@@ -286,26 +286,26 @@ class SimEntityBase:
 class Stopper(SimEntityBase):
     def __init__(self):
         SimEntityBase.__init__(self)
-        self.stopEvent = None
+        self.stop_event = None
 
     def run(self):
-        self.stopEvent = self.schedule('stop', EventList.stopTime, priority=Priority.LOWEST)
+        self.stop_event = self.schedule('stop', EventList.stop_time, priority=Priority.LOWEST)
 
     def stop(self):
-        EventList.eventList.clear()
+        EventList.event_list.clear()
 
 class StateChangeEvent:
-    def __init__(self, source, stateName, stateValue):
+    def __init__(self, source, state_name, state_value):
         self.source = source
-        self.name = stateName
-        self.value = stateValue
+        self.name = state_name
+        self.value = state_value
 
     def __repr__(self):
         return str(self.source) + '> ' + str(self.name) + ': ' + str(self.value)
 
 class IndexedStateChangeEvent(StateChangeEvent):
-    def __init__(self, index, source, stateName, stateValue):
-        StateChangeEvent.__init__(self, source, stateName, stateValue)
+    def __init__(self, index, source, state_name, state_value):
+        StateChangeEvent.__init__(self, source, state_name, state_value)
         self.index = index
 
     def __repr__(self):
@@ -315,28 +315,28 @@ class IndexedStateChangeEvent(StateChangeEvent):
 class StateChangeListener(ABC):
 
     @abstractmethod
-    def stateChange(self, stateChangeEvent):
+    def stateChange(self, state_change_event):
         pass
 
 class Entity:
-    nextID = 1
+    next_id = 1
 
     def __init__(self, name='Entity'):
         self.name=name
-        self.id = Entity.nextID
-        self.creationTime = EventList.simTime
-        self.timeStamp = EventList.simTime
+        self.id = Entity.next_id
+        self.creation_time = EventList.simtime
+        self.time_stamp = EventList.simtime
         self.stampTime()
-        Entity.nextID += 1
+        Entity.next_id += 1
 
     def stampTime(self):
-        self.timeStamp = EventList.simTime
+        self.time_stamp = EventList.simtime
 
     def elapsedTime(self):
-        return EventList.simTime - self.timeStamp
+        return EventList.simtime - self.time_stamp
 
     def age(self):
-        return EventList.simTime - self.creationTime
+        return EventList.simtime - self.creation_time
 
     def __eq__(self, other):
         if other == None:
@@ -348,9 +348,9 @@ class Entity:
         return not self.__eq__(other)
 
     def __lt__(self, other):
-        if self.timeStamp < other.timeStamp:
+        if self.time_stamp < other.time_stamp:
             return True
-        elif self.timeStamp > other.timeStamp:
+        elif self.time_stamp > other.time_stamp:
             return False
         else:
             return self.id < other.id
@@ -359,4 +359,4 @@ class Entity:
         return not self.lt(self, other)
 
     def __repr__(self):
-        return self.name + '.' + str(self.id) + ' [' + str(round(self.creationTime,4)) +', ' + str(round(self.timeStamp,4)) + ']'
+        return self.name + '.' + str(self.id) + ' [' + str(round(self.creation_time, 4)) + ', ' + str(round(self.time_stamp, 4)) + ']'

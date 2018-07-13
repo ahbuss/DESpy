@@ -20,7 +20,7 @@ if __name__=='__main__':
 
     test = Test()
 
-    EventList.stopOnEvent(10, 'init')
+    EventList.stop_on_event(10, 'init')
 
     EventList.verbose = True
     EventList.reset()

@@ -60,7 +60,7 @@ if __name__=='__main__':
     # print(evt1 < evt2)
     # print(evt1 > evt2)
 
-    copy = EventList.eventList
+    copy = EventList.event_list
     copy.sort()
     for e in copy:
         print(e)

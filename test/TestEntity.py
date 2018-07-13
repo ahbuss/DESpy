@@ -47,7 +47,7 @@ EventList.verbose = False
 EventList.reset()
 EventList.startSimulation()
 
-print('Simulation ended at time ' + str(EventList.simTime))
+print('Simulation ended at time ' + str(EventList.simtime))
 
 print(timeInSystemStat)
 print(delayInQueueStat)

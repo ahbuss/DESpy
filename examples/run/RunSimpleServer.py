@@ -45,7 +45,7 @@ end = time()
 
 elapsed = end - start
 print('Simulation took {time:.3f} sec'.format(time=elapsed))
-print('Simulation ended at simTime {time:,.0f}'.format(time=EventList.simTime))
+print('Simulation ended at simTime {time:,.0f}'.format(time=EventList.simtime))
 utilization = 1.0 - numberAvailableServersStat.mean / simpleServer.totalNumberServers
 print('Avg # in queue = \t{avg:.4f}'.format(avg=numberInQueueStat.mean))
 print('Avg # utilization = {avg:.4f}'.format(avg=utilization))

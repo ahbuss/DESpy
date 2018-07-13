@@ -5,9 +5,9 @@ from inspect import getmembers
 arrivalProcess = ArrivalProcess(RandomVariate.getInstance('Constant', value=3.4))
 print(arrivalProcess.describe())
 
-print(EventList.simEntities)
+print(EventList.sim_entities)
 arrivalProcess.persistent = False
 EventList.reset()
-print(EventList.simEntities)
+print(EventList.sim_entities)
 
 print(getmembers(arrivalProcess))

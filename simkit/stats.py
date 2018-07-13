@@ -40,9 +40,9 @@ class SimpleStatsBase(StateChangeListener):
         return '{name}: {count:,d} {min:,.4f} {max:,.4f} {mean:,.4f} {var:,.4f} {stdev:,.4f}'.\
             format(name=self.name, count=self.count, min=self.min, max=self.max, mean=self.mean,var=self.variance, stdev=self.stdev)
 
-    def stateChange(self, stateChangeEvent):
-        if stateChangeEvent.name == self.name:
-            self.newObservation(stateChangeEvent.value)
+    def stateChange(self, state_change_event):
+        if state_change_event.name == self.name:
+            self.newObservation(state_change_event.value)
 
     def halfwidth(self, p):
         if self.count > 1:
@@ -75,7 +75,7 @@ class SimpleStatsTimeVarying(SimpleStatsBase):
 
     def __init__(self, name='default'):
         SimpleStatsBase.__init__(self, name)
-        self.startTime = EventList.simTime
+        self.startTime = EventList.simtime
         self.reset()
 
     def newObservation(self, x):
@@ -83,12 +83,12 @@ class SimpleStatsTimeVarying(SimpleStatsBase):
         if self.count == 1:
             self.mean = self.diff
             self.variance = 0.0
-        elif EventList.simTime > self.lastTime:
-            factor = 1.0 - (self.lastTime - self.startTime) /(EventList.simTime - self.startTime)
+        elif EventList.simtime > self.lastTime:
+            factor = 1.0 - (self.lastTime - self.startTime) /(EventList.simtime - self.startTime)
             self.mean += self.diff * factor
             self.variance += factor * ((1.0 - factor) * self.diff * self.diff -self.variance)
         self.diff = x - self.mean
-        self.lastTime = EventList.simTime
+        self.lastTime = EventList.simtime
         self.stdev = sqrt(self.variance)
 
     def reset(self):

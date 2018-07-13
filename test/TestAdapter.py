@@ -19,7 +19,7 @@ adapter.connect(entityCreator, entityServer)
 # print(copy)
 # print(copy.id)
 
-EventList.stopOnEvent(5, 'startService')
+EventList.stop_on_event(5, 'startService')
 EventList.verbose = True
 
 EventList.reset()

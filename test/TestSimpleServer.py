@@ -38,12 +38,12 @@ EventList.stopAtTime(stopTime)
 EventList.reset()
 EventList.startSimulation()
 
-print('Simulation ended at time {time:,.2f}'.format(time=EventList.simTime))
+print('Simulation ended at time {time:,.2f}'.format(time=EventList.simtime))
 
 # print(numberInQueueStat)
 # print(numberAvailableServersStat)
 
-print('{num:,d} customers arrived'.format(num=arrivalProcess.numberArrivals))
+print('{num:,d} customers arrived'.format(num=arrivalProcess.number_arrivals))
 print('{num:,d} customers served'.format(num=simpleServer.numberServed))
 
 print('Avg number in queue = {avg:.4f}'.format(avg=numberInQueueStat.mean))
