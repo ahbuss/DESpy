@@ -265,7 +265,7 @@ class SimEntityBase:
     def describe(self):
         description = self.name
         for property in self.__dict__.keys():
-            if not ['name', 'stateChangeListeners', 'eventListeners'].__contains__(property):
+            if not ['name', 'state_change_listeners', 'event_listeners'].__contains__(property):
                 value = self.__dict__.get(property)
                 description += '\n\t' + property + " = " + str(value)
         return description
