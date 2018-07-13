@@ -29,7 +29,7 @@ class SimpleStatsBase(StateChangeListener):
         self.stdev = 0.0
 
     @abstractmethod
-    def newObservation(self, x):
+    def new_observation(self, x):
         self.count += 1
         if x < self.min:
             self.min = x
@@ -42,7 +42,7 @@ class SimpleStatsBase(StateChangeListener):
 
     def state_change(self, state_change_event):
         if state_change_event.name == self.name:
-            self.newObservation(state_change_event.value)
+            self.new_observation(state_change_event.value)
 
     def halfwidth(self, p):
         if self.count > 1:
@@ -57,8 +57,8 @@ class SimpleStatsTally(SimpleStatsBase):
         SimpleStatsBase.__init__(self, name)
         self.reset()
 
-    def newObservation(self, x):
-        SimpleStatsBase.newObservation(self,x)
+    def new_observation(self, x):
+        SimpleStatsBase.new_observation(self, x)
         self.diff = x - self.mean
         self.mean += self.diff / self.count
         if self.count == 1:
@@ -78,8 +78,8 @@ class SimpleStatsTimeVarying(SimpleStatsBase):
         self.startTime = EventList.simtime
         self.reset()
 
-    def newObservation(self, x):
-        SimpleStatsBase.newObservation(self,x)
+    def new_observation(self, x):
+        SimpleStatsBase.new_observation(self, x)
         if self.count == 1:
             self.mean = self.diff
             self.variance = 0.0
@@ -102,8 +102,8 @@ class CollectionSizeTimeVarying(SimpleStatsTimeVarying):
     def __init__(self, name='default'):
         SimpleStatsTimeVarying.__init__(self, name)
 
-    def newObservation(self, q):
-        SimpleStatsTimeVarying.newObservation(self, q.__len__())
+    def new_observation(self, q):
+        SimpleStatsTimeVarying.new_observation(self, q.__len__())
 
 class IndexedSimpleStats():
 
@@ -114,13 +114,13 @@ class IndexedSimpleStats():
     def reset(self):
         self.stats = {}
 
-    def stateChange(self, stateChangeEvent):
+    def state_change(self, stateChangeEvent):
         if isinstance(stateChangeEvent, IndexedStateChangeEvent) and stateChangeEvent.name == self.name:
-            self.newObservation(stateChangeEvent.index, stateChangeEvent.value)
+            self.new_observation(stateChangeEvent.index, stateChangeEvent.value)
 
 
     @abstractmethod
-    def newObservation(self, index, x):
+    def new_observation(self, index, x):
         pass
 
     def mean(self, index):
@@ -171,19 +171,27 @@ class IndexedSimpleStatsTally(IndexedSimpleStats):
     def __init__(self, name='default'):
         IndexedSimpleStats.__init__(self, name)
 
-    def newObservation(self, index, x):
-        if index in self.stats:
-            self.stats[index].newObservation(x)
-        else:
+    def new_observation(self, index, x):
+        if not index in self.stats:
             self.stats[index] = SimpleStatsTally('{name}[{index:d}]'.format(name=self.name, index=index))
+        self.stats[index].new_observation(x)
 
 class IndexedSimpleStatsTimeVarying(IndexedSimpleStats):
 
     def __init__(self, name='default'):
         IndexedSimpleStats.__init__(self, name)
 
-    def newObservation(self, index, x):
-        if index in self.stats:
-            self.stats[index].newObservation(x)
-        else:
+    def new_observation(self, index, x):
+        if not index in self.stats:
             self.stats[index] = SimpleStatsTimeVarying('{name}[{index:d}]'.format(name=self.name, index=index))
+        self.stats[index].new_observation(x)
+
+class IndexedCollectionSizeTimeVaryingStat(IndexedSimpleStats):
+
+    def __int__(self,name='default'):
+        IndexedSimpleStatsTally.__init__(self)
+
+    def new_observation(self, index, x):
+        if not index in self.stats:
+            self.stats[index] = CollectionSizeTimeVarying('{name}[{index:d}]'.format(name=self.name, index=index))
+        self.stats[index].new_observation(x)

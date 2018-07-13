@@ -69,7 +69,7 @@ class TransferLine(SimEntityBase):
 
     def start_processing(self, station):
         job = heappop(self.queue[station])
-        self.notify_indexed_state_change(station, 'delayInQueue', job.elapsed_time())
+        self.notify_indexed_state_change(station, 'delay_in_queue', job.elapsed_time())
         job.updateDelayInQueue()
 
         self.number_available_machines[station] -= 1
@@ -81,6 +81,8 @@ class TransferLine(SimEntityBase):
         self.number_available_machines[station] += 1
         self.notify_indexed_state_change(station, 'number_available_machines', self.number_available_machines[station])
 
+        self.notify_indexed_state_change(station, 'time_at_station', job.elapsed_time())
+
         if len(self.queue[station]) > 0:
             self.schedule('start_processing', 0.0, station, priority=Priority.HIGH)
 
@@ -88,8 +90,8 @@ class TransferLine(SimEntityBase):
             self.schedule('arrival', 0.0, job, station + 1)
 
         if (station == self.number_stations - 1):
-            self.schedule('jobComplete', 0.0,  job)
+            self.schedule('job_complete', 0.0,  job)
 
-    def jobComplete(self, job):
-        self.notify_state_change('total_delay_in_queue', job.totalDelayInQueue)
+    def job_complete(self, job):
+        self.notify_state_change('total_delay_in_queue', job.total_delay_in_queue)
         self.notify_state_change('time_in_system', job.age())

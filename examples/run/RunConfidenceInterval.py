@@ -43,8 +43,8 @@ for rep in range(numberReps):
     inner_delay_in_queue_stat.reset()
     inner_number_in_queue_stat.reset()
     EventList.start_simulation()
-    outer_delay_in_queue_stat.newObservation(inner_delay_in_queue_stat.mean)
-    outer_number_in_queue_stat.newObservation(inner_number_in_queue_stat.mean)
+    outer_delay_in_queue_stat.new_observation(inner_delay_in_queue_stat.mean)
+    outer_number_in_queue_stat.new_observation(inner_number_in_queue_stat.mean)
 end = time()
 elapsed = end-start
 print('\n{reps:d} replications of length {runtime:,.1f} took {time:,.4f} sec'.format(reps=numberReps,runtime=runtime, time=elapsed))

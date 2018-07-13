@@ -51,19 +51,19 @@ if __name__ == '__main__':
     number = 1000000
     sst = SimpleStatsTally(str(rv6))
     for i in range(number):
-        sst.newObservation(rv6.generate())
+        sst.new_observation(rv6.generate())
     print(sst)
 
     rv7 = RandomVariate.instance('Binomial', n=20, p=0.3)
     sst = SimpleStatsTally(str(rv7))
     for i in range(number):
-        sst.newObservation(rv7.generate())
+        sst.new_observation(rv7.generate())
     print(sst)
 
     rv8 = RandomVariate.instance('Uniform', min=0.9, max=2.2)
     sst=SimpleStatsTally(str(rv8))
     for i in range(number):
-        sst.newObservation(rv8.generate())
+        sst.new_observation(rv8.generate())
     print(sst)
 
     rv4.reset()

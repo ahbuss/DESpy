@@ -13,6 +13,6 @@ stats = IndexedSimpleStatsTally(name)
 for i in range(1000):
     for j in range(4):
         event = IndexedStateChangeEvent(j, source, name, rv.generate())
-        stats.stateChange(event)
+        stats.state_change(event)
 
 print(stats)
