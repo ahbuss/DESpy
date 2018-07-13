@@ -6,8 +6,8 @@ from simkit.simkit import Adapter
 from simkit.simkit import Priority
 from simkit.simkit import Entity
 
-entityCreator = EntityCreator(RandomVariate.getInstance('Constant', value=2.3))
-entityServer = EntityServer(1, RandomVariate.getInstance('Constant', value=2.2))
+entityCreator = EntityCreator(RandomVariate.instance('Constant', value=2.3))
+entityServer = EntityServer(1, RandomVariate.instance('Constant', value=2.2))
 adapter = Adapter("entityArrival", "arrival")
 adapter.connect(entityCreator, entityServer)
 

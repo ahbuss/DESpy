@@ -11,7 +11,7 @@ class RandomVariate(ABC):
     baseRNG = Random(12345)
 
     @staticmethod
-    def getInstance(name, module='simkit.rand', **kwds):
+    def instance(name, module='simkit.rand', **kwds):
         """
 
         :param name: The name of the random variate ('Exponential', 'Gamma', etc)
@@ -34,20 +34,20 @@ class RandomVariate(ABC):
         return instance
 
     def __init__(self):
-        self.setRNG(RandomVariate.baseRNG)
+        self.rng(RandomVariate.baseRNG)
         self.originalState = self.rng.getstate()
 
     @abstractmethod
     def generate(self):
         pass
 
-    def setRNG(self, rng):
+    def rng(self, rng):
         self.rng = rng
 
-    def setSeed(self, seed):
+    def seed(self, seed):
         self.rng.seed(seed)
 
-    def resetState(self):
+    def reset(self):
         self.rng.setstate(self.originalState)
 
 class Exponential(RandomVariate):

@@ -1,5 +1,5 @@
 from simkit.quantiles import normal
-from simkit.quantiles import studentT
+from simkit.quantiles import student_t
 
 p = 0.0
 # print('Normal quantiles:')
@@ -14,4 +14,4 @@ p = 0.005
 p = 1-p
 print('p={p:.3f}'.format(p=p))
 for df in range(100):
-    print(str(df) + '\t' + str(studentT(p, df)) )
+    print(str(df) + '\t' + str(student_t(p, df)))

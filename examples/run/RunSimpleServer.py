@@ -15,11 +15,11 @@ from simkit.stats import SimpleStatsTimeVarying
 from simkit.simutil import SimpleStateChangeDumper
 from time import time
 
-interarrivalTimeGenerator = RandomVariate.getInstance('Exponential', mean=1.7)
+interarrivalTimeGenerator = RandomVariate.instance('Exponential', mean=1.7)
 arrivalProcess = ArrivalProcess(interarrivalTimeGenerator)
 
 numberServers = 2;
-serviceTimeGenerator = RandomVariate.getInstance('Gamma', alpha=1.7, beta=1.8)
+serviceTimeGenerator = RandomVariate.instance('Gamma', alpha=1.7, beta=1.8)
 simpleServer = SimpleServer(numberServers, serviceTimeGenerator)
 
 arrivalProcess.addSimEventListener(simpleServer)

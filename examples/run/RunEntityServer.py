@@ -8,14 +8,14 @@ from simkit.stats import SimpleStatsTimeVarying
 from time import time
 
 interarrivalMean = 1.7
-interarrival = RandomVariate.getInstance('Exponential',mean=interarrivalMean)
+interarrival = RandomVariate.instance('Exponential', mean=interarrivalMean)
 entityCreator = EntityCreator(interarrival)
 print (entityCreator.describe())
 
 alpha = 1.7
 beta = 1.8
 numberServers = 2
-generator = RandomVariate.getInstance('Gamma', alpha=alpha, beta=beta)
+generator = RandomVariate.instance('Gamma', alpha=alpha, beta=beta)
 entityServer = EntityServer(numberServers, generator)
 
 print(entityServer.describe())

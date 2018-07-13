@@ -5,7 +5,7 @@ from math import sqrt
 from simkit.simkit import StateChangeListener
 from simkit.simkit import EventList
 from simkit.simkit import IndexedStateChangeEvent
-from simkit.quantiles import studentT
+from simkit.quantiles import student_t
 
 class SimpleStatsBase(StateChangeListener):
 
@@ -46,7 +46,7 @@ class SimpleStatsBase(StateChangeListener):
 
     def halfwidth(self, p):
         if self.count > 1:
-            quantile = studentT(p, self.count - 1)
+            quantile = student_t(p, self.count - 1)
         else:
             quantile = inf
         return self.stdev / self.count * quantile

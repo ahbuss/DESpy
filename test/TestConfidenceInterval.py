@@ -8,12 +8,12 @@ from simkit.rand import RandomVariate
 from simkit.simkit import EventList, SimEntityBase
 from time import time
 
-interarrivalTimeGenerator = RandomVariate.getInstance('Uniform',min=0.9, max=2.2)
+interarrivalTimeGenerator = RandomVariate.instance('Uniform', min=0.9, max=2.2)
 entityCreator = EntityCreator(interarrivalTimeGenerator)
 print(entityCreator.describe())
 
 totalNumberServers=2
-serviceTimeGenerator = RandomVariate.getInstance('Gamma', alpha=1.7, beta=1.8)
+serviceTimeGenerator = RandomVariate.instance('Gamma', alpha=1.7, beta=1.8)
 entityServer = EntityServer(totalNumberServers, serviceTimeGenerator)
 print(entityServer.describe())
 

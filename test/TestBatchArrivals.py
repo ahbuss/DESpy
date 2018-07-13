@@ -6,14 +6,14 @@ from simkit.simutil import SimpleStateChangeDumper
 from examples.arrivalprocess import BatchArrivalProcess
 from examples.simpleserver import SimpleServer
 
-interarrivalTimeGenerator = RandomVariate.getInstance('Exponential', mean=2.5)
-batchGenerator = RandomVariate.getInstance('Discrete', values=[1,2,3,4,5],\
-                                           frequencies=[20, 30, 40, 50, 60])
+interarrivalTimeGenerator = RandomVariate.instance('Exponential', mean=2.5)
+batchGenerator = RandomVariate.instance('Discrete', values=[1, 2, 3, 4, 5], \
+                                        frequencies=[20, 30, 40, 50, 60])
 batchArrivalProcess = BatchArrivalProcess(interarrivalTimeGenerator, batchGenerator)
 print(batchArrivalProcess.describe())
 
 numberServers = 1
-serviceTimeGenerator = RandomVariate.getInstance('Gamma', alpha=1.2, beta = 2.3)
+serviceTimeGenerator = RandomVariate.instance('Gamma', alpha=1.2, beta = 2.3)
 simpleServer = SimpleServer(numberServers, serviceTimeGenerator)
 print(simpleServer.describe())
 
