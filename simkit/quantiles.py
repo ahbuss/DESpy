@@ -62,7 +62,7 @@ def normal(p):
     # Based on Hill, G.W., "Algorithm 396 Student T Quantiles," Communications of the ACM,
     # Vol 13, No. 10, October 1970.
     # Returns nan if df = 0
-def studentT(p, df):
+def student_t(p, df):
     if df < 0:
         raise ValueError('df must be > 0: ' + str(df))
     if p < 0.0 or p > 1.0:

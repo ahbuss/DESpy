@@ -28,7 +28,7 @@ Each Event Graph component corresponds to a specific element in a DESpy model
 |State variable| attribute initialized to ``nan`` or ``[]``|
 |Run Event| ``reset()`` method and ``run()`` method|
 |Other Events|method of same name, first letter lower-case|
-|State transition|assignment to state variable followed by ``notifyStateChange()``|
+|State transition|assignment to state variable followed by ``notify_state_change()``|
 |Schedule event|call ``schedule(<event name>, <delay>, [<optional parameters>])``|
 |Cancel event|call ``cancel(<event name>, [<optional arguments>]`` |
 

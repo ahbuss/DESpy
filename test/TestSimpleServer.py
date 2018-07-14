@@ -5,28 +5,28 @@ from simkit.stats import SimpleStatsTimeVarying
 from simkit.simkit import EventList
 from simkit.simutil import SimpleStateChangeDumper
 
-interarrivalTimeGenerator = RandomVariate.getInstance('Uniform', min=0.9, max=2.2)
-arrivalProcess = ArrivalProcess(interarrivalTimeGenerator)
-print(arrivalProcess.describe())
+interarrival_time_generator = RandomVariate.instance('Uniform', min=0.9, max=2.2)
+arrival_process = ArrivalProcess(interarrival_time_generator)
+print(arrival_process.describe())
 
-numberServers = 3
-serviceTimeGenerator = RandomVariate.getInstance('Gamma', alpha=2, beta=2.2)
-simpleServer = SimpleServer(numberServers, serviceTimeGenerator)
-print(simpleServer.describe())
+number_servers = 3
+service_time_generator = RandomVariate.instance('Gamma', alpha=2, beta=2.2)
+simple_server = SimpleServer(number_servers, service_time_generator)
+print(simple_server.describe())
 
-arrivalProcess.addSimEventListener(simpleServer)
+arrival_process.add_sim_event_listener(simple_server)
 
-numberInQueueStat = SimpleStatsTimeVarying('numberInQueue')
-numberAvailableServersStat = SimpleStatsTimeVarying('numberAvailableServers')
+number_in_queue_stat = SimpleStatsTimeVarying('number_in_queue')
+number_available_servers_stat = SimpleStatsTimeVarying('number_available_servers')
 
-simpleServer.addStateChangeListener(numberInQueueStat)
-simpleServer.addStateChangeListener(numberAvailableServersStat)
+simple_server.add_state_change_listener(number_in_queue_stat)
+simple_server.add_state_change_listener(number_available_servers_stat)
 
-# simpleServer.addStateChangeListener(SimpleStateChangeDumper())
+# simple_server.add_state_change_listener(SimpleStateChangeDumper())
 
-serviceMean = simpleServer.serviceTimeGenerator.alpha * simpleServer.serviceTimeGenerator.beta
-arrivalMean = (arrivalProcess.generator.min + arrivalProcess.generator.max) * 0.5
-intensity = serviceMean / (simpleServer.totalNumberServers * arrivalMean)
+service_mean = simple_server.service_time_generator.alpha * simple_server.service_time_generator.beta
+arrival_mean = (arrival_process.generator.min + arrival_process.generator.max) * 0.5
+intensity = service_mean / (simple_server.total_number_servers * arrival_mean)
 
 print('traffic intensity = {rho:.4f}'.format(rho = intensity))
 
@@ -34,18 +34,18 @@ stopTime = 100000
 # stopTime = 50
 # EventList.verbose = True
 
-EventList.stopAtTime(stopTime)
+EventList.stop_at_time(stopTime)
 EventList.reset()
-EventList.startSimulation()
+EventList.start_simulation()
 
-print('Simulation ended at time {time:,.2f}'.format(time=EventList.simtime))
+print('\nSimulation ended at simtime {time:,.2f}'.format(time=EventList.simtime))
 
-# print(numberInQueueStat)
-# print(numberAvailableServersStat)
+# print(number_in_queue_stat)
+# print(number_available_servers_stat)
 
-print('{num:,d} customers arrived'.format(num=arrivalProcess.number_arrivals))
-print('{num:,d} customers served'.format(num=simpleServer.numberServed))
+print('{num:,d} customers arrived'.format(num=arrival_process.number_arrivals))
+print('{num:,d} customers served'.format(num=simple_server.number_served))
 
-print('Avg number in queue = {avg:.4f}'.format(avg=numberInQueueStat.mean))
-utilization = 1.0 - numberAvailableServersStat.mean / simpleServer.totalNumberServers
+print('Avg number in queue = {avg:.4f}'.format(avg=number_in_queue_stat.mean))
+utilization = 1.0 - number_available_servers_stat.mean / simple_server.total_number_servers
 print("Avg utilization = {avg:.4f}".format(avg=utilization))

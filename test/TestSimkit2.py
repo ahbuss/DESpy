@@ -13,13 +13,13 @@ class Pinger(SimEntityBase):
         self.count = 0
 
     def run(self):
-        self.notifyStateChange("count", self.count)
-        self.waitDelay('ping', 1.1)
+        self.notify_state_change("count", self.count)
+        self.schedule('ping', 1.1)
 
     def ping(self):
         self.count = self.count + 1
-        self.notifyStateChange('count', self.count)
-        self.waitDelay('ping', 1.2)
+        self.notify_state_change('count', self.count)
+        self.schedule('ping', 1.2)
 
 class Pinger2(SimEntityBase):
 
@@ -42,14 +42,14 @@ if __name__=='__main__':
 
     pinger = Pinger()
     dumper = SimpleStateChangeDumper()
-    pinger.addStateChangeListener(dumper)
+    pinger.add_state_change_listener(dumper)
 
     pinger2 = Pinger2(4)
 
     EventList.verbose = True
-    EventList.stopAtTime(5.0)
+    EventList.stop_at_time(5.0)
 
     EventList.reset()
-    EventList.startSimulation()
+    EventList.start_simulation()
 
 

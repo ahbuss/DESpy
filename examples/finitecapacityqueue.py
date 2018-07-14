@@ -4,64 +4,64 @@ from math import nan
 
 class FiniteCapacityQueue(SimEntityBase):
 
-    def __init__(self, totalNumberServers, serviceTimeGenerator, queueCapacity):
+    def __init__(self, total_number_servers, service_time_generator, queue_capacity):
         SimEntityBase.__init__(self)
-        self.totalNumberServers = totalNumberServers
-        self.serviceTimeGenerator = serviceTimeGenerator
-        self.queueCapacity = queueCapacity
-        self.numberInQueue = nan
-        self.numberAvailableServers = nan
-        self.numberBalks = nan
-        self.numberPotentialCustomers = nan
+        self.total_number_servers = total_number_servers
+        self.service_time_generator = service_time_generator
+        self.queue_capacity = queue_capacity
+        self.number_in_queue = nan
+        self.number_available_servers = nan
+        self.number_balks = nan
+        self.number_potential_customers = nan
 
-        if (self.queueCapacity < 0):
-            raise ValueError('queueCapacity must be \u2265 0: {cap:%d}'.format(cap=self.queueCapacity))
+        if (self.queue_capacity < 0):
+            raise ValueError('queue_capacity must be \u2265 0: {cap:%d}'.format(cap=self.queue_capacity))
 
     def reset(self):
         SimEntityBase.reset(self)
-        self.numberInQueue = 0
-        self.numberAvailableServers = self.totalNumberServers
-        self.numberBalks = 0
-        self.numberPotentialCustomers = 0
+        self.number_in_queue = 0
+        self.number_available_servers = self.total_number_servers
+        self.number_balks = 0
+        self.number_potential_customers = 0
 
     def run(self):
-        self.notifyStateChange('numberInQueue', self.numberInQueue)
-        self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
-        self.notifyStateChange('numberBalks', self.numberBalks)
-        self.notifyStateChange('numberPotentialCustomers', self.numberPotentialCustomers)
+        self.notify_state_change('number_in_queue', self.number_in_queue)
+        self.notify_state_change('number_available_servers', self.number_available_servers)
+        self.notify_state_change('number_balks', self.number_balks)
+        self.notify_state_change('number_potential_customers', self.number_potential_customers)
 
     def arrival(self):
-        self.numberPotentialCustomers += 1
-        self.notifyStateChange('numberPotentialCustomers', self.numberPotentialCustomers)
+        self.number_potential_customers += 1
+        self.notify_state_change('number_potential_customers', self.number_potential_customers)
 
-        if self.numberInQueue < self.queueCapacity or self.numberAvailableServers > 0:
-            self.schedule('joinQueue', 0.0)
+        if self.number_in_queue < self.queue_capacity or self.number_available_servers > 0:
+            self.schedule('join_queue', 0.0)
 
-        if self.numberInQueue == self.queueCapacity and self.numberAvailableServers == 0:
+        if self.number_in_queue == self.queue_capacity and self.number_available_servers == 0:
             self.schedule('balk', 0.0)
 
     def balk(self):
-        self.numberBalks += 1
-        self.notifyStateChange('numberBalks', self.numberBalks)
+        self.number_balks += 1
+        self.notify_state_change('number_balks', self.number_balks)
 
-    def joinQueue(self):
-        self.numberInQueue += 1
+    def join_queue(self):
+        self.number_in_queue += 1
 
-        if self.numberAvailableServers > 0:
-            self.schedule('startService', 0.0, priority=Priority.HIGH)
+        if self.number_available_servers > 0:
+            self.schedule('start_service', 0.0, priority=Priority.HIGH)
 
-    def startService(self):
-        self.numberInQueue -= 1
-        self.notifyStateChange('numberInQueue', self.numberInQueue)
+    def start_service(self):
+        self.number_in_queue -= 1
+        self.notify_state_change('number_in_queue', self.number_in_queue)
 
-        self.numberAvailableServers -= 1
-        self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
+        self.number_available_servers -= 1
+        self.notify_state_change('number_available_servers', self.number_available_servers)
 
-        self.schedule('endService', self.serviceTimeGenerator.generate())
+        self.schedule('end_service', self.service_time_generator.generate())
 
-    def endService(self):
-        self.numberAvailableServers += 1
-        self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
+    def end_service(self):
+        self.number_available_servers += 1
+        self.notify_state_change('number_available_servers', self.number_available_servers)
 
-        if self.numberInQueue > 0:
-            self.schedule('startService', 0.0, priority=Priority.HIGH)
+        if self.number_in_queue > 0:
+            self.schedule('start_service', 0.0, priority=Priority.HIGH)

@@ -6,21 +6,21 @@ from simkit.simkit import Adapter
 from simkit.simkit import Priority
 from simkit.simkit import Entity
 
-entityCreator = EntityCreator(RandomVariate.getInstance('Constant', value=2.3))
-entityServer = EntityServer(1, RandomVariate.getInstance('Constant', value=2.2))
-adapter = Adapter("entityArrival", "arrival")
-adapter.connect(entityCreator, entityServer)
+entity_creator = EntityCreator(RandomVariate.instance('Constant', value=2.3))
+entity_server = EntityServer(1, RandomVariate.instance('Constant', value=2.2))
+adapter = Adapter("entity_arrival", "arrival")
+adapter.connect(entity_creator, entity_server)
 
 
-# simEvent = entityCreator.waitDelay('Foo', 1.2, Priority.HIGH, Entity())
+# simEvent = entity_creator.waitDelay('Foo', 1.2, Priority.HIGH, Entity())
 # print(simEvent)
 # print(simEvent.id)
 # copy = simEvent.copy()
 # print(copy)
 # print(copy.id)
 
-EventList.stop_on_event(5, 'startService')
+EventList.stop_on_event(5, 'start_service')
 EventList.verbose = True
 
 EventList.reset()
-EventList.startSimulation()
+EventList.start_simulation()

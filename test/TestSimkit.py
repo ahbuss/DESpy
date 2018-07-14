@@ -12,12 +12,12 @@ class TestSimEntity(SimEntityBase):
         self.count = 0
 
     def run(self):
-        self.notifyStateChange("count", self.count)
+        self.notify_state_change("count", self.count)
         self.waitDelay('foo', 0.0)
 
     def foo(self):
         self.count += 1
-        self.notifyStateChange('count', self.count)
+        self.notify_state_change('count', self.count)
 
 if __name__=='__main__':
     source = TestSimEntity()
@@ -67,6 +67,6 @@ if __name__=='__main__':
 
     print(evt1.__gt__(evt2))
 
-    print (getattr(source, 'processSimEvent'))
-    method = getattr(source, 'processSimEvent')
+    print (getattr(source, 'process_sim_event'))
+    method = getattr(source, 'process_sim_event')
     method(evt)

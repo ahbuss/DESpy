@@ -12,16 +12,16 @@ class TestIndexedStateChange(SimEntityBase):
         self.schedule('init', 0.0,  0)
 
     def init(self, i):
-        self.notifyIndexedStateChange(i, 'foo', i)
+        self.notify_indexed_state_change(i, 'foo', i)
         if i < self.number - 1:
             self.schedule('init', 0.0,  i+1)
 
 if __name__=="__main__":
     test = TestIndexedStateChange(4)
-    test.addStateChangeListener(SimpleStateChangeDumper())
+    test.add_state_change_listener(SimpleStateChangeDumper())
 
     EventList.verbose = True
 
     EventList.reset()
-    EventList.startSimulation()
+    EventList.start_simulation()
 

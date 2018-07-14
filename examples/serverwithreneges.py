@@ -34,76 +34,76 @@ class CustomerCreator(SimEntityBase):
 
 class ServerWithReneges(SimEntityBase):
 
-    def __init__(self, totalNumberServers, serviceTimeGenerator):
+    def __init__(self, total_number_servers, service_time_generator):
         SimEntityBase.__init__(self)
-        self.totalNumberServers = totalNumberServers
-        self.serviceTimeGenerator = serviceTimeGenerator
+        self.total_number_servers = total_number_servers
+        self.service_time_generator = service_time_generator
         self.queue = []
-        self.numberAvailableServers = nan
-        self.numberReneges = nan
-        self.numberServed = nan
+        self.number_available_servers = nan
+        self.number_reneges = nan
+        self.number_served = nan
 
     def reset(self):
         self.queue.clear()
-        self.numberAvailableServers = self.totalNumberServers
-        self.numberReneges = 0
-        self.numberServed = 0
+        self.number_available_servers = self.total_number_servers
+        self.number_reneges = 0
+        self.number_served = 0
 
     def run(self):
-        self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
-        self.notifyStateChange('queue', self.queue)
-        self.notifyStateChange('numberReneges', self.numberReneges)
-        self.notifyStateChange('numberServed', self.numberServed)
+        self.notify_state_change('number_available_servers', self.number_available_servers)
+        self.notify_state_change('queue', self.queue)
+        self.notify_state_change('number_reneges', self.number_reneges)
+        self.notify_state_change('number_served', self.number_served)
 
     def arrival(self, customer):
-        customer.stampTime()
+        customer.stamp_time()
         heappush(self.queue, customer)
-        self.notifyStateChange('queue', self.queue)
+        self.notify_state_change('queue', self.queue)
 
-        if self.numberAvailableServers > 0:
-            self.schedule('startService', 0.0, priority=Priority.HIGH)
+        if self.number_available_servers > 0:
+            self.schedule('start_service', 0.0, priority=Priority.HIGH)
 
         self.schedule('renege', customer.renegeTime, customer)
 
-    def startService(self):
+    def start_service(self):
 
         customer = heappop(self.queue)
         self.cancel('renege', customer)
 
-        self.notifyStateChange('delayInQueue', customer.elapsedTime())
-        self.notifyStateChange('queue', self.queue)
+        self.notify_state_change('delay_in_queue', customer.elapsed_time())
+        self.notify_state_change('queue', self.queue)
 
-        self.numberAvailableServers -= 1
-        self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
+        self.number_available_servers -= 1
+        self.notify_state_change('number_available_servers', self.number_available_servers)
 
-        self.schedule('endService', self.serviceTimeGenerator.generate(), customer)
+        self.schedule('end_service', self.service_time_generator.generate(), customer)
 
     def renege(self, customer):
-        self.numberReneges += 1;
-        self.notifyStateChange('numberReneges', self.numberReneges)
+        self.number_reneges += 1;
+        self.notify_state_change('number_reneges', self.number_reneges)
 
-        self.notifyStateChange('delayInQueueReneged', customer.elapsedTime())
+        self.notify_state_change('delay_in_queue_reneged', customer.elapsed_time())
 
         self.queue.remove(customer)
-        self.notifyStateChange('queue', self.queue)
+        self.notify_state_change('queue', self.queue)
 
-    def endService(self, customer):
-        self.notifyStateChange('timeInSystem', customer.elapsedTime())
+    def end_service(self, customer):
+        self.notify_state_change('time_in_system', customer.elapsed_time())
 
-        self.numberAvailableServers += 1
-        self.notifyStateChange('numberAvailableServers', self.numberAvailableServers)
+        self.number_available_servers += 1
+        self.notify_state_change('number_available_servers', self.number_available_servers)
 
         if self.queue.__len__() > 0:
-            self.schedule('startService', 0.0, priority=Priority.HIGH)
+            self.schedule('start_service', 0.0, priority=Priority.HIGH)
 
     @property
-    def totalNumberServers(self):
+    def total_number_servers(self):
         return self.__totalNumberServers
 
-    @totalNumberServers.setter
-    def totalNumberServers(self, totalNumberServers):
+    @total_number_servers.setter
+    def total_number_servers(self, totalNumberServers):
         if totalNumberServers <= 0:
-            raise ValueError('totalNumberServers must be > 0: ' + str(totalNumberServers))
+            raise ValueError('total_number_servers must be > 0: ' + str(totalNumberServers))
         self.__totalNumberServers = totalNumberServers
 
 

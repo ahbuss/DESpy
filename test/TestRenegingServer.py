@@ -6,35 +6,35 @@ from simkit.stats import SimpleStatsTally
 from simkit.stats import CollectionSizeTimeVarying
 from simkit.simutil import SimpleStateChangeDumper
 
-interarrivalGenerator = RandomVariate.getInstance('Exponential', mean=1.5)
-renegeGenerator = RandomVariate.getInstance('Uniform', min=2.0, max=6.0)
-creator = CustomerCreator(interarrivalGenerator, renegeGenerator)
+interarrival_generator = RandomVariate.instance('Exponential', mean=1.5)
+renege_generator = RandomVariate.instance('Uniform', min=2.0, max=6.0)
+creator = CustomerCreator(interarrival_generator, renege_generator)
 print(creator.describe())
 
-totalNumberServers = 2
-serviceTimeGenerator = RandomVariate.getInstance('Gamma', alpha=2.5, beta=1.2)
-server = ServerWithReneges(totalNumberServers, serviceTimeGenerator)
+total_number_servers = 2
+service_time_generator = RandomVariate.instance('Gamma', alpha=2.5, beta=1.2)
+server = ServerWithReneges(total_number_servers, service_time_generator)
 print (server.describe())
 
-creator.addSimEventListener(server)
+creator.add_sim_event_listener(server)
 
-# server.addStateChangeListener(SimpleStateChangeDumper())
+# server.add_state_change_listener(SimpleStateChangeDumper())
 
-delayInQueueStat = SimpleStatsTally('delayInQueue')
-server.addStateChangeListener(delayInQueueStat)
+delay_in_queue_stat = SimpleStatsTally('delay_in_queue')
+server.add_state_change_listener(delay_in_queue_stat)
 
-numberInQueueStat = CollectionSizeTimeVarying('queue')
-server.addStateChangeListener(numberInQueueStat)
+number_in_queue_stat = CollectionSizeTimeVarying('queue')
+server.add_state_change_listener(number_in_queue_stat)
 
 EventList.verbose = False
-EventList.stopAtTime(100000.0)
+EventList.stop_at_time(100000.0)
 # EventList.stopOnEvent(10000, 'Renege')
 EventList.reset()
-EventList.startSimulation()
+EventList.start_simulation()
 
-print('Simulation ended at time {time:,.3f}'.format(time=EventList.simtime))
-print('Avg delay in queue = {avg:,.4f}'.format(avg=(delayInQueueStat.mean)))
-print('Avg number in queue = {avg:.4f}'.format(avg=numberInQueueStat.mean))
-print('There have been {num:,d} reneges'.format(num=server.numberReneges))
-print('There have been {num:,d} served'.format(num=delayInQueueStat.count))
-print('{percent:.2f}% reneged'.format(percent=(100 * server.numberReneges/ (server.numberReneges + delayInQueueStat.count))))
+print('\nSimulation ended at simtime {time:,.3f}'.format(time=EventList.simtime))
+print('Avg delay in queue = {avg:,.4f}'.format(avg=(delay_in_queue_stat.mean)))
+print('Avg number in queue = {avg:.4f}'.format(avg=number_in_queue_stat.mean))
+print('There have been {num:,d} reneges'.format(num=server.number_reneges))
+print('There have been {num:,d} served'.format(num=delay_in_queue_stat.count))
+print('{percent:.2f}% reneged'.format(percent=(100 * server.number_reneges / (server.number_reneges + delay_in_queue_stat.count))))

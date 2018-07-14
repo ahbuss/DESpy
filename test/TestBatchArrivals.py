@@ -6,28 +6,28 @@ from simkit.simutil import SimpleStateChangeDumper
 from examples.arrivalprocess import BatchArrivalProcess
 from examples.simpleserver import SimpleServer
 
-interarrivalTimeGenerator = RandomVariate.getInstance('Exponential', mean=2.5)
-batchGenerator = RandomVariate.getInstance('Discrete', values=[1,2,3,4,5],\
-                                           frequencies=[20, 30, 40, 50, 60])
-batchArrivalProcess = BatchArrivalProcess(interarrivalTimeGenerator, batchGenerator)
-print(batchArrivalProcess.describe())
+interarrival_time_generator = RandomVariate.instance('Exponential', mean=2.5)
+batch_generator = RandomVariate.instance('Discrete', values=[1, 2, 3, 4, 5], \
+                                         frequencies=[20, 30, 40, 50, 60])
+batch_arrival_process = BatchArrivalProcess(interarrival_time_generator, batch_generator)
+print(batch_arrival_process.describe())
 
-numberServers = 1
-serviceTimeGenerator = RandomVariate.getInstance('Gamma', alpha=1.2, beta = 2.3)
-simpleServer = SimpleServer(numberServers, serviceTimeGenerator)
-print(simpleServer.describe())
+number_servers = 1
+service_time_generator = RandomVariate.instance('Gamma', alpha=1.2, beta = 2.3)
+simple_server = SimpleServer(number_servers, service_time_generator)
+print(simple_server.describe())
 
 adapter = Adapter('arrival1', 'arrival')
-adapter.connect(batchArrivalProcess, simpleServer)
+adapter.connect(batch_arrival_process, simple_server)
 
-batchArrivalProcess.addStateChangeListener(SimpleStateChangeDumper())
-simpleServer.addStateChangeListener(SimpleStateChangeDumper())
+batch_arrival_process.add_state_change_listener(SimpleStateChangeDumper())
+simple_server.add_state_change_listener(SimpleStateChangeDumper())
 
 stopTime = 20.0
 
 EventList.verbose = True
-EventList.stopAtTime(stopTime)
-EventList.stopOnEvent(10, 'arrival')
+EventList.stop_at_time(stopTime)
+EventList.stop_on_event(10, 'arrival')
 
 EventList.reset()
-EventList.startSimulation()
+EventList.start_simulation()

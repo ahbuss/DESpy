@@ -6,29 +6,29 @@ from simkit.simutil import SimpleStateChangeDumper
 
 if __name__=="__main__":
     generator = Exponential(1.7)
-    arrivalProcess = ArrivalProcess(generator)
-    print(arrivalProcess)
+    arrival_process = ArrivalProcess(generator)
+    print(arrival_process)
 
-    print(type(arrivalProcess))
+    print(type(arrival_process))
 
     dumper = SimpleStateChangeDumper()
-    arrivalProcess.addStateChangeListener(dumper)
+    arrival_process.add_state_change_listener(dumper)
 
-    EventList.stopAtTime(100.0)
+    EventList.stop_at_time(100.0)
 
     EventList.verbose = True
 
     EventList.reset()
-    EventList.startSimulation()
+    EventList.start_simulation()
 
-    EventList.coldReset()
-    EventList.stop_on_event(10, 'entityArrival')
+    EventList.cold_reset()
+    EventList.stop_on_event(10, 'entity_arrival')
 
     entityCreator = EntityCreator(generator)
 
     print("With EntityCreator")
     EventList.reset()
-    EventList.startSimulation()
+    EventList.start_simulation()
 
     # This should throw a ValueError
-    # arrivalProcess.waitDelay('Foo', -.001)
+    # arrival_process.waitDelay('Foo', -.001)

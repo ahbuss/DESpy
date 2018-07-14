@@ -14,9 +14,9 @@ class Test(SimEntityBase):
 
 if __name__=='__main__':
 
-    # interarrivalTimeGenerator = RandomVariate.getInstance('Exponential', mean=3.0)
-    # arrivalProcess = ArrivalProcess(interarrivalTimeGenerator)
-    # print(arrivalProcess.describe())
+    # interarrival_time_generator = RandomVariate.getInstance('Exponential', mean=3.0)
+    # arrival_process = ArrivalProcess(interarrival_time_generator)
+    # print(arrival_process.describe())
 
     test = Test()
 
@@ -24,4 +24,4 @@ if __name__=='__main__':
 
     EventList.verbose = True
     EventList.reset()
-    EventList.startSimulation()
+    EventList.start_simulation()
