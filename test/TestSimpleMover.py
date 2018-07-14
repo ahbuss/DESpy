@@ -1,5 +1,6 @@
 from examples.mover.simplemover import SimpleMover
 from examples.mover.simplemover import Point
+from examples.mover.simplemover import SimplePathMoverManager
 from simkit.simkit import EventList
 from simkit.simutil import SimpleStateChangeDumper
 
@@ -11,7 +12,14 @@ simple_mover.add_state_change_listener(SimpleStateChangeDumper())
 
 print(simple_mover.describe())
 
+path = []
+path.append(Point(25.0, -20.0))
+path.append(Point(50.0, 10.0))
+path.append(Point(-100.0, -30.0))
+
+simple_path_mover_manager = SimplePathMoverManager(simple_mover, path, True)
+print(simple_path_mover_manager.describe())
+
 EventList.verbose = True
 EventList.reset()
-simple_mover.schedule('move_to', 0.0, Point(40.0, 50.0))
 EventList.start_simulation()
