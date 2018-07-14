@@ -45,7 +45,7 @@ Each Event Graph component corresponds to a specific element in a DESpy model
 ## Running Multiple Replications
 
 ```
-for replication in range(numberReplications):
+for replication in range(number_replications):
     EventList.reset()
     EventList.startSimulation()
     ```
