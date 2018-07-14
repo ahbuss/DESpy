@@ -37,10 +37,10 @@ Each Event Graph component corresponds to a specific element in a DESpy model
 |Action|EventList call|
 |------|--------------|
 |Run verbose mode|``EventList.verbose=True``|
-|Run for xxx simTime units|``EventList.stopAtTime(xxx)``|
-|Run for n Foo events|``EventList.stopOnEvent(n, 'Foo')``
+|Run for xxx simTime units|``EventList.stop_at_time(xxx)``|
+|Run for n Foo events|``EventList.stop_on_event(n, 'Foo')``
 |Prepare for running model|``EventList.reset()``|
-|Run Model|``EventList.startSimulation()``|
+|Run Model|``EventList.start_simulation()``|
 
 ## Running Multiple Replications
 
