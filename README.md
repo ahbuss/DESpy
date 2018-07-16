@@ -47,7 +47,7 @@ Each Event Graph component corresponds to a specific element in a DESpy model
 ```
 for replication in range(number_replications):
     EventList.reset()
-    EventList.startSimulation()
+    EventList.start_simulation()
     ```
 
 * Inner vs outer stats

@@ -70,6 +70,7 @@ class TransferLine(SimEntityBase):
     def start_processing(self, station):
         job = heappop(self.queue[station])
         self.notify_indexed_state_change(station, 'delay_in_queue', job.elapsed_time())
+        self.notify_indexed_state_change(station, 'queue', self.queue)
         job.updateDelayInQueue()
 
         self.number_available_machines[station] -= 1
