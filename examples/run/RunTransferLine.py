@@ -69,8 +69,8 @@ for station in range(transfer_line.number_stations):
             transfer_line.number_machines[station] - transfer_line.number_available_machines[station]
     arrival_rate_to_station = number_arrivals_to_station / EventList.simtime
     print('   {station:d}\t   {delay:,.3f}\t   {time:,.3f}'.format(station=station,\
-                        delay=(number_in_queue_stat.mean(station)/arrival_rate_to_station),\
+                        delay=(number_in_queue_stat.mean(station)/arrival_rate),\
                         time = ((number_in_queue_stat.mean(station) + transfer_line.number_machines[station] - \
-                                number_available_machines_stat.mean(station))/arrival_rate_to_station)))
+                                number_available_machines_stat.mean(station))/arrival_rate)))
 
 # print(number_available_machines_stat)
