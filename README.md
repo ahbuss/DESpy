@@ -37,22 +37,39 @@ Each Event Graph component corresponds to a specific element in a DESpy model
 |Action|EventList call|
 |------|--------------|
 |Run verbose mode|``EventList.verbose=True``|
-|Run for xxx simTime units|``EventList.stop_at_time(xxx)``|
+|Run for xxx simtime units|``EventList.stop_at_time(xxx)``|
 |Run for n Foo events|``EventList.stop_on_event(n, 'Foo')``
 |Prepare for running model|``EventList.reset()``|
 |Run Model|``EventList.start_simulation()``|
 
 ## Running Multiple Replications
 
-```
-for replication in range(number_replications):
-    EventList.reset()
-    EventList.start_simulation()
-    ```
+The most straightforward way to estimate confidence intervals is by running
+multiple independent replications. 
+To run multiple replications, wrap the ``reset()`` and ``start_simulation()``
+calls in a ``for`` loop. Collecting statistics, however, needs to be different
+for the "inner" statistics objects and "outer" ones.
+   
+Statistics objects are ``StateChangeListeners`` that implement the ``stateChange()`` method
+to update their counters. The two main types are "tally" and "time-varying."
+They are typically used in tow different ways: "inner" and "outer." 
 
-* Inner vs outer stats
+An **Inner** statistics object uses state trajectories from a single replication to 
+produce a value - typically a mean - for that replication. Since simulation data
+are tyically auto-correlated, estimates of the variance can be extremely biased.
+Thus, the usual expression for a confidence interval cannot be applied.
+It is important to `clear()` each inner statistics object
+before each replication in order to ensure independence between replications.
 
-## Parameters vs State Variables
+An **Outer** statistics object is typically used to collect data from the inner
+statistics objects. After each replication, a value from an inner statistics
+object (often the mean) is passed to the outer object. 
+
+In this manner, regardless of the value passed, the outer statistics object
+can then (with sufficient quantity of replications) produce a confidence interval for the 
+value in question (with all the "usual" assumptions about the central limit theorem). 
+
+### Parameters vs State Variables
 
 ### Defining Events
 
