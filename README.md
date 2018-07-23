@@ -42,6 +42,49 @@ Each Event Graph component corresponds to a specific element in a DESpy model
 |Prepare for running model|``EventList.reset()``|
 |Run Model|``EventList.start_simulation()``|
 
+## Example: SimpleServer
+
+The `SimpleServer` component is the most basic implementation of a multiple
+server queue. Its state representation consists of integers representing the
+number of customers in queue (`number_in_queue`) and the number of available
+servers (`number_available_servers`). It is not a stand-alone model, but must be 
+set up to "listen" to another component that periodically schedules an `Arrival` event.
+The most basic such component is the `ArrivalProcess`.
+
+```
+# Instantiate ArrivalProcess component with interarrival times Exponential(1.7)
+interarrival_time_generator = RandomVariate.instance('Exponential', mean=1.7)
+arrival_process = ArrivalProcess(interarrival_time_generator)
+
+# Instantiate SimpleServer component with 2 servers and service times Gamma(1.7, 1.8)
+number_servers = 2;
+service_time_generator = RandomVariate.instance('Gamma', alpha=1.7, beta=1.8)
+simple_server = SimpleServer(number_servers, service_time_generator)
+
+# Add the SimpleServer instance to the ArrivalProcess instance as a
+# SimEventListener
+arrival_process.add_sim_event_listener(simple_server)
+
+# These statistics objects will collect the time-varying number_in_queue
+# and number_available_servers of the SimpleServer instance
+number_in_queue_stat = SimpleStatsTimeVarying('number_in_queue')
+number_available_servers_stat = SimpleStatsTimeVarying('number_available_servers')
+
+# Add the statistics objects as StateChangeListeners
+simple_server.add_state_change_listener(number_in_queue_stat)
+simple_server.add_state_change_listener(number_available_servers_stat)
+
+# Execute the model for 100,000 time units
+stopTime = 100000;
+EventList.stop_at_time(stopTime)
+
+# Initialize the EventList and put all Run events on the EventList
+EventList.reset()
+
+# Execute the simulation
+EventList.start_simulation()
+```
+
 ## Running Multiple Replications
 
 The most straightforward way to estimate confidence intervals is by running
@@ -70,6 +113,30 @@ can then (with sufficient quantity of replications) produce a confidence interva
 value in question (with all the "usual" assumptions about the central limit theorem). 
 
 ### Parameters vs State Variables
+
+## Parameters
+
+Parameters are variables in a component that do not change during a given replication of
+the simulation. These are inputs to the simulation and, as such, must be 
+passed in via the `__init()__` method. Parameters may be scalars, such as the
+total number of servers, or RandomVariates which generate different values
+on each call, such as the service time generator. In such cases, while the generated values may be different,
+the distribution itself remains the same.
+
+## State Variables
+
+State variables _do_ change within a given replication of a model. The full
+definition of a state variable must include its initial value, since that 
+is set in the `reset()` method of each component. Only event methods are
+permitted to change the value of a state variable, since events are identified with state transitions. Thus, the value of a given
+state at any point in simulated time is completely determinded by its 
+initial value and the subsequent state transitions.
+
+Every state transition must be accompanied by a `notify_state_change()` call, which 
+notifies StateChangeListsners that the given state has changed. This allows
+components to be written to the dynamics of the model only and not be concerned with
+collecting statistics, since that can be done with the appropriate statistical
+objects, which are StateChanegListsners.
 
 ### Defining Events
 

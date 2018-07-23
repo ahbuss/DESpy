@@ -24,6 +24,15 @@ class SimEvent:
     NEXT_ID = 0
 
     def __init__(self, source, event_name, scheduled_time, *arguments, **kwds):
+        """
+
+        :param source: Object that scheduled this SimEvent
+        :param event_name: Name of event method
+        :param scheduled_time: Time this SimEvent is scheduled to occur; should be \u2265 EventList.simtime
+        :param arguments: optional arguments to be passed to the scheduled event
+        :param kwds: optional keywords - currently if a Priority other tha DEFAULT is desired use the priority value;
+                     e.g. priority=Priority.HIGH
+        """
         if kwds.keys().__contains__('priority'):
             self.priority = kwds.get('priority')
         else:
@@ -37,6 +46,7 @@ class SimEvent:
         SimEvent.NEXT_ID += 1
 
     def copy(self):
+        """:return copy of this SimEvent"""
         return SimEvent(self.source, self.event_name, self.scheduled_time, *self.arguments, priority=self.priority)
 
     def __repr__(self):
@@ -79,20 +89,32 @@ class EventList:
 
     @staticmethod
     def stop_at_time(time):
+        """:param time: Given time to stop simulation and clear event list """
         EventList.stop_time = time
         if not EventList.stopper:
             EventList.stopper = Stopper()
 
     @staticmethod
-    def stop_on_event(stopEventNumber, stopEventName, *args):
+    def stop_on_event(number_events, stop_event_name, *args):
+        """
+
+        :param number_events: Stop after this many stop_event_name events have occurred
+        :param stop_event_name: Given event to stop after
+        :param args: unused
+        """
         EventList.stop_on_event = True
-        EventList.stop_event_number = stopEventNumber
-        EventList.stop_event_name = stopEventName
+        EventList.stop_event_number = number_events
+        EventList.stop_event_name = stop_event_name
         if EventList.sim_entities.__contains__(EventList.stopper):
             EventList.sim_entities.remove(EventList.stopper)
 
     @staticmethod
     def reset():
+        """
+        Sets simtime to 0.0
+
+
+        """
         EventList.simtime = 0.0
         EventList.event_list.clear()
         for simEntity in EventList.sim_entities:
