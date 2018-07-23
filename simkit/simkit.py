@@ -274,6 +274,8 @@ class Stopper(SimEntityBase):
     def __init__(self):
         SimEntityBase.__init__(self)
         self.stop_event = None
+        self.id = 0
+        SimEntityBase.NEXT_ID -= 1;
 
     def run(self):
         self.stop_event = self.schedule('stop', EventList.stop_time, priority=Priority.LOWEST)
