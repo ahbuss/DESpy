@@ -219,10 +219,9 @@ class TruncatingSimpleStatsTally(SimpleStatsTally):
     def __repr__(self):
         return SimpleStatsTally.__repr__(self) + " [{tp:,d}]".format(tp=self.truncation_point)
 
-# NOTE: This class has not yet been tested & verified.
 class TruncatingSimpleStatsTimeVarying(SimpleStatsTimeVarying):
 
-    def __init__(self, name='default', truncation_point=0):
+    def __init__(self, truncation_point, name='default'):
         SimpleStatsTimeVarying.__init__(self, name)
         self.truncation_point = truncation_point
         if truncation_point < 0.0:
