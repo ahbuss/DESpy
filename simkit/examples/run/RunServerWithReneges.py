@@ -1,5 +1,5 @@
-from examples.serverwithreneges import CustomerCreator
-from examples.serverwithreneges import ServerWithReneges
+from simkit.examples.serverwithreneges import CustomerCreator
+from simkit.examples.serverwithreneges import ServerWithReneges
 from simkit.rand import RandomVariate
 from simkit.simkit import EventList
 from simkit.stats import SimpleStatsTally

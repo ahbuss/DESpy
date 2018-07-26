@@ -1,11 +1,9 @@
-from pip._vendor.pyparsing import infixNotation
-
-from examples.entitycreator import EntityCreator
-from examples.entityserver import EntityServer
+from simkit.examples.entitycreator import EntityCreator
+from simkit.examples.entityserver import EntityServer
 from simkit.stats import SimpleStatsTally
 from simkit.stats import CollectionSizeTimeVarying
 from simkit.rand import RandomVariate
-from simkit.simkit import EventList, SimEntityBase
+from simkit.simkit import EventList
 from time import time
 
 interarrival_time_generator = RandomVariate.instance('Uniform', min=0.9, max=2.2)

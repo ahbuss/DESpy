@@ -1,7 +1,6 @@
-from examples.arrivalprocess import ArrivalProcess
-from examples.simpleserver import SimpleServer
+from simkit.examples.arrivalprocess import ArrivalProcess
+from simkit.examples.simpleserver import SimpleServer
 from simkit.rand import RandomVariate
-from simkit.stats import SimpleStatsTimeVarying, TruncatingSimpleStatsTimeVarying, TruncatingSimpleStatsTally
 from simkit.stats import TruncatingSimpleStatsTimeVarying
 from simkit.simkit import EventList
 

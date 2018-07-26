@@ -1,6 +1,6 @@
-from examples.mover.simplemover import SimpleMover
-from examples.mover.simplemover import Point
-from examples.mover.simplemover import SimplePathMoverManager
+from simkit.examples.mover.simplemover import SimpleMover
+from simkit.examples.mover.simplemover import Point
+from simkit.examples.mover.simplemover import SimplePathMoverManager
 from simkit.simkit import EventList
 from simkit.simutil import SimpleStateChangeDumper
 

@@ -1,6 +1,6 @@
-from examples.entitycreator import EntityCreator
-from examples.entityserver import EntityServer
-from simkit.stats import SimpleStatsTally, TruncatingSimpleStatsTally, TruncatingSimpleStatsTimeVarying
+from simkit.examples.entitycreator import EntityCreator
+from simkit.examples.entityserver import EntityServer
+from simkit.stats import SimpleStatsTally, TruncatingSimpleStatsTally
 from simkit.stats import CollectionSizeTimeVarying
 from simkit.rand import RandomVariate
 from simkit.simkit import EventList

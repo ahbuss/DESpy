@@ -1,8 +1,7 @@
 from simkit.simkit import SimEntityBase
 from simkit.simkit import Priority
 from simkit.simkit import Entity
-from examples.arrivalprocess import ArrivalProcess
-from math import nan
+from simkit.examples.arrivalprocess import ArrivalProcess
 from heapq import heappush
 from heapq import heappop
 

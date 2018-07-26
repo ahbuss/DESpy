@@ -1,4 +1,4 @@
-from examples.arrivalprocess import ArrivalProcess
+from simkit.examples.arrivalprocess import ArrivalProcess
 from simkit.rand import RandomVariate
 from simkit.simkit import EventList
 from inspect import getmembers

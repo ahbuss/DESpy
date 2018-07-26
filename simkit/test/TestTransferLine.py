@@ -2,9 +2,8 @@ from simkit.simkit import EventList
 from simkit.rand import RandomVariate
 from simkit.simutil import SimpleStateChangeDumper
 from simkit.simkit import Adapter
-from examples.transferline import TransferLine
-from examples.transferline import JobCreator
-from examples.transferline import JobCreator
+from simkit.examples.transferline import TransferLine
+from simkit.examples.transferline import JobCreator
 
 job_creator = JobCreator(RandomVariate.instance('Exponential', mean=1.7))
 print(job_creator.describe())

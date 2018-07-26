@@ -1,6 +1,6 @@
 from simkit.rand import Exponential
-from examples.arrivalprocess import ArrivalProcess
-from examples.arrivalprocess import EntityCreator
+from simkit.examples.arrivalprocess import ArrivalProcess
+from simkit.examples.arrivalprocess import EntityCreator
 from simkit.simkit import EventList
 from simkit.simutil import SimpleStateChangeDumper
 

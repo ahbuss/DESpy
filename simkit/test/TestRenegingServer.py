@@ -1,10 +1,9 @@
-from examples.serverwithreneges import CustomerCreator
-from examples.serverwithreneges import ServerWithReneges
+from simkit.examples.serverwithreneges import CustomerCreator
+from simkit.examples.serverwithreneges import ServerWithReneges
 from simkit.rand import RandomVariate
 from simkit.simkit import EventList
 from simkit.stats import SimpleStatsTally
 from simkit.stats import CollectionSizeTimeVarying
-from simkit.simutil import SimpleStateChangeDumper
 
 interarrival_generator = RandomVariate.instance('Exponential', mean=1.5)
 renege_generator = RandomVariate.instance('Uniform', min=2.0, max=6.0)

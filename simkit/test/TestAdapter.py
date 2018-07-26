@@ -1,10 +1,8 @@
-from examples.arrivalprocess import EntityCreator
-from examples.entityserver import EntityServer
+from simkit.examples.arrivalprocess import EntityCreator
+from simkit.examples.entityserver import EntityServer
 from simkit.simkit import EventList
 from simkit.rand import RandomVariate
 from simkit.simkit import Adapter
-from simkit.simkit import Priority
-from simkit.simkit import Entity
 
 entity_creator = EntityCreator(RandomVariate.instance('Constant', value=2.3))
 entity_server = EntityServer(1, RandomVariate.instance('Constant', value=2.2))

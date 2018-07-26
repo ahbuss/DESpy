@@ -5,8 +5,8 @@ from simkit.stats import IndexedSimpleStatsTimeVarying
 from simkit.stats import IndexedSimpleStatsTally
 from simkit.stats import SimpleStatsTally
 from simkit.stats import IndexedCollectionSizeTimeVaryingStat
-from examples.transferline import TransferLine
-from examples.transferline import JobCreator
+from simkit.examples.transferline import TransferLine
+from simkit.examples.transferline import JobCreator
 from time import time
 
 job_creator = JobCreator(RandomVariate.instance('Exponential', mean=1.7))

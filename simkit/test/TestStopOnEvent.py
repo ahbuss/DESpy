@@ -1,8 +1,6 @@
-from examples.arrivalprocess import ArrivalProcess
-from simkit.rand import RandomVariate
 from simkit.simkit import EventList
 from simkit.simkit import SimEntityBase
-from simkit.simkit import Priority
+
 
 class Test(SimEntityBase):
 

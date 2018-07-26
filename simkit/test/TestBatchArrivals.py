@@ -1,10 +1,9 @@
 from simkit.rand import RandomVariate
 from simkit.simkit import EventList
-from simkit.simkit import SimEntityBase
 from simkit.simkit import Adapter
 from simkit.simutil import SimpleStateChangeDumper
-from examples.arrivalprocess import BatchArrivalProcess
-from examples.simpleserver import SimpleServer
+from simkit.examples.arrivalprocess import BatchArrivalProcess
+from simkit.examples.simpleserver import SimpleServer
 
 interarrival_time_generator = RandomVariate.instance('Exponential', mean=2.5)
 batch_generator = RandomVariate.instance('Discrete', values=[1, 2, 3, 4, 5], \

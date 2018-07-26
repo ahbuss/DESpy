@@ -7,12 +7,11 @@ Parameters Used:
     SimpleServer: 2 servers, Gamma(1.7, 1.8) service times
     Run length: 100,000 time units
 """
-from examples.arrivalprocess import ArrivalProcess
-from examples.simpleserver import SimpleServer
+from simkit.examples.arrivalprocess import ArrivalProcess
+from simkit.examples.simpleserver import SimpleServer
 from simkit.rand import RandomVariate
 from simkit.simkit import EventList
 from simkit.stats import SimpleStatsTimeVarying
-from simkit.simutil import SimpleStateChangeDumper
 from time import time
 
 interarrival_time_generator = RandomVariate.instance('Exponential', mean=1.7)
