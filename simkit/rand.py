@@ -23,7 +23,7 @@ class RandomVariate(ABC):
         clazz = getattr(modules[module],name)
         instance = clazz()
         if kwds.keys().__contains__('params'):
-            params = kwds.get('params').get('params')
+            params = kwds.get('params')
         else:
             params = kwds
         for keyword in params.keys():
