@@ -5,4 +5,3 @@
     - Event arguments not tested
     - Priority enum with int values
     - Using None as default when scheduling SimEvents
-    - TODO: investigate Python's vararg support

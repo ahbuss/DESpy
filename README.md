@@ -140,4 +140,25 @@ objects, which are StateChanegListsners.
 
 ### Defining Events
 
+An Event is defined in a subclass of `SimEntityBase` as simply an ordinary method. Within an event method,
+there should only be (in order):
+
+1. State transitions (followed by state change notifications)
+2. Canceling events (if needed) by a call to `self.cancel()`
+3. Scheduling events (if needed) by a call to `self.sechedule()`
+
 ### RandomVariate Instantiation
+
+By convention, a `RandomVariate` class specifies its parameters as named ones in the 
+constructor. 
+
+There are several ways to instantiate a `RandomVariate`. 
+
+* Direct instantiation, e.g. `Exponential(mean=2.3)`
+* Using the `RandomVariate` factory method with keywords: `RandomVariate.instance('Exponential', mean=2.3)`
+* Using the RandomVariate factory method with a dictionary (using the `params` keyword):
+```
+params_map={mean:2.3}
+RandomVariate.instance('Exponential', params=params_map)
+```
+
