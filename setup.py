@@ -8,6 +8,5 @@ setup(
     license='Apache 2.0 License',
     author='Arnold Buss',
     author_email='abuss@nps.edu',
-    description='Support for DES Modeling using Event Graphs',
-    install_requires=['sortedcontainers']
+    description='Support for DES Modeling using Event Graphs'
 )
