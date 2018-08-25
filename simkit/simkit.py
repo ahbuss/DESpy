@@ -71,10 +71,13 @@ class SimEvent:
     def __gt__(self, other):
         return other.__lt__(self)
 
+    def __hash__(self):
+        return hash((self.event_name, self.scheduled_time, self.arguments, self.priority))
+
 class EventList:
     event_list = []
     sim_entities = []
-    ignoreOnDump = []
+    ignore_on_dump = []
     simtime = 0.0
     stop_time = 0.0
     verbose = False
@@ -117,21 +120,21 @@ class EventList:
         """
         EventList.simtime = 0.0
         EventList.event_list.clear()
-        for simEntity in EventList.sim_entities:
-            if simEntity.persistent:
-                simEntity.reset()
-                if hasattr(simEntity, 'run'):
-                    simEntity.schedule('run', 0.0, priority=Priority.HIGHEST)
+        for sim_entity in EventList.sim_entities:
+            if sim_entity.persistent:
+                sim_entity.reset()
+                if hasattr(sim_entity, 'run'):
+                    sim_entity.schedule('run', 0.0, priority=Priority.HIGHEST)
             else:
-                EventList.sim_entities.remove(simEntity)
+                EventList.sim_entities.remove(sim_entity)
         if EventList.stop_on_event:
             EventList.stop_event_count = 0
             EventList.event_counts.clear()
             EventList.event_counts[EventList.stop_event_name] = 0
 
     @staticmethod
-    def schedule(simEvent):
-        heappush(EventList.event_list, simEvent)
+    def schedule(sim_event):
+        heappush(EventList.event_list, sim_event)
 
     @staticmethod
     def cancel(event_name, *args):
@@ -149,7 +152,7 @@ class EventList:
         if not queue_copy:
             dump_string += '    <Empty>\n'
         for event in queue_copy:
-            if not event.cancelled and not EventList.ignoreOnDump.__contains__(event.event_name):
+            if not event.cancelled and not EventList.ignore_on_dump.__contains__(event.event_name):
                 dump_string += str(event) + '\n'
         return dump_string
 
@@ -169,7 +172,7 @@ class EventList:
                 EventList.event_counts[EventList.current_event.event_name] = 1
             else:
                 EventList.event_counts[EventList.current_event.event_name] +=  1
-            if EventList.verbose and not EventList.ignoreOnDump.__contains__(EventList.current_event.event_name):
+            if EventList.verbose and not EventList.ignore_on_dump.__contains__(EventList.current_event.event_name):
                 print('CurrentEvent: ' + str(EventList.current_event) + ' [' + str(EventList.event_counts[EventList.current_event.event_name]) + ']')
                 print(EventList.dump())
             if EventList.stop_on_event:
@@ -368,6 +371,9 @@ class Entity:
 
     def __gt__(self, other):
         return not self.lt(self, other)
+
+    def __hash__(self):
+        return hash((self.name, self.creation_time, self.id))
 
     def __repr__(self):
         return self.name + '.' + str(self.id) + ' [' + str(round(self.creation_time, 4)) + ', ' + str(round(self.time_stamp, 4)) + ']'
