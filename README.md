@@ -4,7 +4,7 @@ __DESpy__ is an implementation in Python 3.7 of Schruben's Event Graph Methodolo
 ## Installation
 
 * Install Python 3.7 or greater
-* Install __DESpy__ module [link forthcoming]
+* Install __DESpy__ module: ``pip install DESpy``
 
 ## Running Example Scenarios
 The sample components are in the ``examples`` package, with the 
