@@ -1,12 +1,17 @@
 from setuptools import setup
 
+with open('README.md') as file:
+    long_description = file.read()
+
 setup(
     name='DESpy',
-    version='0.1.1',
-    packages=['simkit'],
+    version='0.1.4',
+    packages=['simkit', 'simkit.examples'],
     url='https://github.com/ahbuss/SimPyKit',
     license='Apache 2.0 License',
     author='Arnold Buss',
     author_email='abuss@nps.edu',
-    description='Support for DES Modeling using Event Graphs'
+    description='Support for DES Modeling using Event Graphs',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
 )

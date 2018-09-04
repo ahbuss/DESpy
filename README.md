@@ -1,10 +1,13 @@
 # DESpy
-__DESpy__ is an implementation in Python 3.7 of Schruben's Event Graph Methodology, loosely based on the Java Simkit package.
+**DESpy** is a Python implementation of Discrete Event Simulation 
+(DES) methodology based on Schruben's Event Graphs (see [Simulation Modeling with Event Graphs](http://delivery.acm.org/10.1145/360000/358460/p957-schruben.pdf)).
+It also suports the LEGO component framework (see [Building Complex Models with LEGOs](https://www.informs-sim.org/wsc02papers/094.pdf) and [Component Based Simulation Modeling with Simkit](https://www.informs-sim.org/wsc02papers/031.pdf)).
+
 
 ## Installation
 
-* Install Python 3.7 or greater
-* Install __DESpy__ module [link forthcoming]
+* Python 3.7 or greater installed
+* `pip install DESpy`
 
 ## Running Example Scenarios
 The sample components are in the ``examples`` package, with the 

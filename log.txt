@@ -1,7 +1,20 @@
-2018-07-04
+0.0.1
     - Basic functionality
     - Tested on simple "Pinger" class
     - No random variate (yet)
     - Event arguments not tested
     - Priority enum with int values
     - Using None as default when scheduling SimEvents
+
+0.0.2
+    - Some standard random variates
+    - Uses keyword arguments or keyword map for instantiation
+    - Event arguments implemented
+    - SimEventListener implemented
+    - StateChangeListener implemented
+    - Simple Stats Tally & Time-varying
+    - Multiple Simple Stats Tally & Time-varying
+    - A number of standard Event Graph models implemented in simkit.examples
+
+0.0.3
+    - Include simkit.examples in distribution
