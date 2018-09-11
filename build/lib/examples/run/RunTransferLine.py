@@ -5,8 +5,8 @@ from simkit.stats import IndexedSimpleStatsTimeVarying
 from simkit.stats import IndexedSimpleStatsTally
 from simkit.stats import SimpleStatsTally
 from simkit.stats import IndexedCollectionSizeTimeVaryingStat
-from simkit.examples.transferline import TransferLine
-from simkit.examples.transferline import JobCreator
+from simkit.examples import TransferLine
+from simkit.examples import JobCreator
 from time import time
 
 job_creator = JobCreator(RandomVariate.instance('Exponential', mean=1.7))
@@ -59,7 +59,7 @@ print('Number of Arrivals:\t{num:,d}'.format(num=job_creator.number_arrivals))
 print('Number completed:  \t{num:,d}'.format(num=time_in_system_stat.count))
 
 print('\nUsing Direct Estimation:')
-print('Station\tAvg Util\tAvg # in Q\tAvg Delay in Q\tAvg Time at Station')
+print('Station\tAvg Util\tAvg # in Q\tAvg Delay in Q\tAvg time at station')
 for station in range(transfer_line.number_stations):
     utilization = 1.0 - number_available_machines_stat.mean(station) / transfer_line.number_machines[station]
     print('   {station:d}\t{util:.3f}\t\t  {numinq:.3f}\t\t  {delay:.3f}\t\t\t{timeas:.3f}'.\
@@ -69,12 +69,12 @@ for station in range(transfer_line.number_stations):
 arrival_rate = job_creator.number_arrivals / EventList.simtime
 
 print('\nUsing Little\'s Formula:')
-print('Station\tAvg Delay in Q\tAvg Time at Station')
+print('Station\tAvg Delay\tAvg Time at station')
 for station in range(transfer_line.number_stations):
     number_arrivals_to_station = delay_in_queue_stat.count(station) + len(transfer_line.queue[station]) + \
             transfer_line.number_machines[station] - transfer_line.number_available_machines[station]
     arrival_rate_to_station = number_arrivals_to_station / EventList.simtime
-    print('   {station:d}\t   {delay:,.3f}\t         {time:,.3f}'.format(station=station,\
+    print('   {station:d}\t   {delay:,.3f}\t   {time:,.3f}'.format(station=station,\
                         delay=(number_in_queue_stat.mean(station)/arrival_rate),\
                         time = ((number_in_queue_stat.mean(station) + transfer_line.number_machines[station] - \
                                 number_available_machines_stat.mean(station))/arrival_rate)))
