@@ -72,22 +72,26 @@ class TwoCranesBerth(SimEntityBase):
         self.notify_state_change('delay_in_queue', self.delay_in_queue)
 
         ship.stamp_time()
-        heappush(self.berths, ship)
+        # heappush(self.berths, ship)
+        self.berths.append(ship)
         self.notify_state_change('berths', self.berths)
 
         self.schedule('end_unloading_two_cranes', ship.remaining_unloading_time / 2)
 
     def end_unloading_two_cranes(self):
-        ship = heappop(self.berths)
+        # ship = heappop(self.berths)
+        ship = self.berths.pop()
         self.notify_state_change('berths', self.berths)
 
         self.time_in_System = ship.age()
         self.notify_state_change('time_in_system', self.time_in_System)
 
     def switch_to_one_crane(self):
+        # ship = heappop(self.berths)
         ship = self.berths[0]
         ship.work(2)
         ship.stamp_time()
+        # heappush(self.berths, ship)
 
         self.cancel('end_unloading_two_cranes')
 
@@ -104,7 +108,8 @@ class TwoCranesBerth(SimEntityBase):
 
         ship.stamp_time()
 
-        heappush(self.berths, ship)
+        # heappush(self.berths, ship)
+        self.berths.append(ship)
         self.notify_state_change('berths', self.berths)
 
         self.schedule('end_unloading_one_crane', ship.remaining_unloading_time, ship)
@@ -123,13 +128,13 @@ class TwoCranesBerth(SimEntityBase):
             self.schedule('start_unloading_one_crane', 0.0, priority=Priority.HIGH)
 
     def switch_to_two_cranes(self):
-        ship = heappop(self.berths)
-
+        # ship = heappop(self.berths)
+        ship = self.berths[0]
         ship.work(1)
         ship.stamp_time()
-        heappush(self.berths, ship)
+        # heappush(self.berths, ship)
 
-        self.notify_state_change('in_berth', self.berths[0])
+        self.notify_state_change('in_berth', ship)
 
         self.cancel('end_unloading_one_crane', ship)
 

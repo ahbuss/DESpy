@@ -115,8 +115,10 @@ class EventList:
     def reset():
         """
         Sets simtime to 0.0
-
-
+        Clears event_list
+        Calls reset() on all (persistent) SimEntityBase's
+        Schedules run event on all that have them
+        Clears event counts if stop_on_event
         """
         EventList.simtime = 0.0
         EventList.event_list.clear()
