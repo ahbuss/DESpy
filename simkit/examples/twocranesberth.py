@@ -1,6 +1,6 @@
-from simkit.simkit import SimEntityBase
-from simkit.simkit import Entity
-from simkit.simkit import Priority
+from simkit.base import SimEntityBase
+from simkit.base import Entity
+from simkit.base import Priority
 from simkit.examples.arrivalprocess import ArrivalProcess
 from math import nan
 from heapq import heappush
@@ -12,10 +12,10 @@ class Ship (Entity):
         self.remaining_unloading_time = unloading_time
         self.name = 'Ship'
 
-    def work(self, rate):
+    def credit_work(self, rate):
         """
         Decrement remaining_unloading_time by the elapsed time * the rate
-        :param rate: Rate at which work was performed; must be > 0.0.
+        :param rate: Rate at which credit_work was performed; must be > 0.0.
         """
         if rate <= 0.0:
             raise ValueError('rate must be > 0.0: {rate}'.format(rate=rate))
@@ -72,26 +72,25 @@ class TwoCranesBerth(SimEntityBase):
         self.notify_state_change('delay_in_queue', self.delay_in_queue)
 
         ship.stamp_time()
-        # heappush(self.berths, ship)
-        self.berths.append(ship)
+        heappush(self.berths, ship)
         self.notify_state_change('berths', self.berths)
 
         self.schedule('end_unloading_two_cranes', ship.remaining_unloading_time / 2)
 
     def end_unloading_two_cranes(self):
-        # ship = heappop(self.berths)
-        ship = self.berths.pop()
+        ship = heappop(self.berths)
+        # ship = self.berths.pop()
         self.notify_state_change('berths', self.berths)
 
         self.time_in_System = ship.age()
         self.notify_state_change('time_in_system', self.time_in_System)
 
     def switch_to_one_crane(self):
-        # ship = heappop(self.berths)
-        ship = self.berths[0]
-        ship.work(2)
+        ship = heappop(self.berths)
+        # ship = self.berths[0]
+        ship.credit_work(2)
         ship.stamp_time()
-        # heappush(self.berths, ship)
+        heappush(self.berths, ship)
 
         self.cancel('end_unloading_two_cranes')
 
@@ -108,8 +107,8 @@ class TwoCranesBerth(SimEntityBase):
 
         ship.stamp_time()
 
-        # heappush(self.berths, ship)
-        self.berths.append(ship)
+        heappush(self.berths, ship)
+        # self.berths.append(ship)
         self.notify_state_change('berths', self.berths)
 
         self.schedule('end_unloading_one_crane', ship.remaining_unloading_time, ship)
@@ -128,11 +127,10 @@ class TwoCranesBerth(SimEntityBase):
             self.schedule('start_unloading_one_crane', 0.0, priority=Priority.HIGH)
 
     def switch_to_two_cranes(self):
-        # ship = heappop(self.berths)
-        ship = self.berths[0]
-        ship.work(1)
+        ship = heappop(self.berths)
+        ship.credit_work(1)
         ship.stamp_time()
-        # heappush(self.berths, ship)
+        heappush(self.berths, ship)
 
         self.notify_state_change('in_berth', ship)
 

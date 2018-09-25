@@ -1,6 +1,6 @@
 from simkit.examples.arrivalprocess import StoppedArrivalProcess
 from simkit.rand import RandomVariate
-from simkit.simkit import EventList
+from simkit.base import EventList
 
 interarrival_time_generator = RandomVariate.instance('Gamma', alpha=2.1, beta=1.8)
 stop_time = 30.0

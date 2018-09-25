@@ -1,7 +1,7 @@
 from time import time
 
-from simkit.simkit import SimEntityBase
-from simkit.simkit import EventList
+from simkit.base import SimEntityBase
+from simkit.base import EventList
 from math import sqrt
 from math import pow
 from math import nan

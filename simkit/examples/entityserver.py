@@ -1,5 +1,5 @@
-from simkit.simkit import SimEntityBase
-from simkit.simkit import Priority
+from simkit.base import SimEntityBase
+from simkit.base import Priority
 from math import nan
 from heapq import heappush
 from heapq import heappop

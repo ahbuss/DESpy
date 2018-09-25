@@ -1,6 +1,6 @@
 from simkit.examples.ggkqueue import GGkQueue
 from simkit.rand import Uniform, Gamma
-from simkit.simkit import EventList
+from simkit.base import EventList
 from simkit.simutil import SimpleStateChangeDumper
 from simkit.stats import SimpleStatsTimeVarying
 from time import time

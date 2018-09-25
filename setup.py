@@ -7,7 +7,7 @@ setup(
     name='DESpy',
     version='0.1.4',
     packages=['simkit', 'simkit.examples'],
-    url='https://github.com/ahbuss/SimPyKit',
+    url='https://github.com/ahbuss/DESpy',
     license='Apache 2.0 License',
     author='Arnold Buss',
     author_email='abuss@nps.edu',

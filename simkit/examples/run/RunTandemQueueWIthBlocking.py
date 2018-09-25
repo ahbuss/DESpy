@@ -1,5 +1,5 @@
 from simkit.examples.tandem_queue_with_blocking import TandmQueueWithBlocking
-from simkit.simkit import EventList
+from simkit.base import EventList
 from simkit.rand import RandomVariate
 from simkit.simutil import SimpleStateChangeDumper
 from simkit.stats import IndexedSimpleStatsTimeVarying

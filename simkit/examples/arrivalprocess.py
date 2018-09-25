@@ -1,5 +1,5 @@
-from simkit.simkit import SimEntityBase     # (1)
-from simkit.simkit import Entity
+from simkit.base import SimEntityBase     # (1)
+from simkit.base import Entity
 from math import nan
 
 class ArrivalProcess(SimEntityBase):        # (2)

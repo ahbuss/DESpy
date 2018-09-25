@@ -3,7 +3,7 @@ from simkit.examples import EntityServer
 from simkit.stats import SimpleStatsTally
 from simkit.stats import CollectionSizeTimeVarying
 from simkit.rand import RandomVariate
-from simkit.simkit import EventList
+from simkit.base import EventList
 from time import time
 
 interarrival_time_generator = RandomVariate.instance('Uniform', min=0.9, max=2.2)

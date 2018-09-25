@@ -10,7 +10,7 @@ Parameters Used:
 from simkit.examples.arrivalprocess import ArrivalProcess
 from simkit.examples.simpleserver import SimpleServer
 from simkit.rand import RandomVariate
-from simkit.simkit import EventList
+from simkit.base import EventList
 from simkit.stats import SimpleStatsTimeVarying
 from time import time
 

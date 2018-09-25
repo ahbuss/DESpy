@@ -1,7 +1,7 @@
 from simkit.examples.mover.simplemover import SimpleMover
 from simkit.examples.mover.simplemover import Point
 from simkit.examples.mover.simplemover import SimplePathMoverManager
-from simkit.simkit import EventList
+from simkit.base import EventList
 from simkit.simutil import SimpleStateChangeDumper
 
 start_loc = Point(20.0, 30.0)
