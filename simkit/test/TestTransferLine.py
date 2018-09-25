@@ -1,7 +1,7 @@
-from simkit.simkit import EventList
+from simkit.base import EventList
 from simkit.rand import RandomVariate
 from simkit.simutil import SimpleStateChangeDumper
-from simkit.simkit import Adapter
+from simkit.base import Adapter
 from simkit.examples.transferline import TransferLine
 from simkit.examples.transferline import JobCreator
 

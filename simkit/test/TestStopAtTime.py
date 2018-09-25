@@ -1,4 +1,4 @@
-from simkit.simkit import EventList
+from simkit.base import EventList
 
 EventList.verbose = True
 EventList.stop_at_time(20.0)

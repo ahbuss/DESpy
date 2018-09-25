@@ -1,6 +1,6 @@
 from simkit.stats import IndexedSimpleStatsTally
-from simkit.simkit import IndexedStateChangeEvent
-from simkit.simkit import SimEntityBase
+from simkit.base import IndexedStateChangeEvent
+from simkit.base import SimEntityBase
 from simkit.rand import RandomVariate
 
 source = SimEntityBase()

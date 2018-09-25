@@ -2,9 +2,9 @@ from abc import abstractmethod
 from math import inf
 from math import nan
 from math import sqrt
-from simkit.simkit import StateChangeListener, SimEntityBase
-from simkit.simkit import EventList
-from simkit.simkit import IndexedStateChangeEvent
+from simkit.base import StateChangeListener, SimEntityBase
+from simkit.base import EventList
+from simkit.base import IndexedStateChangeEvent
 from simkit.quantiles import student_t
 
 class SimpleStatsBase(StateChangeListener):

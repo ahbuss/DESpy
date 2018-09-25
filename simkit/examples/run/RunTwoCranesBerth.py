@@ -2,7 +2,7 @@ from pydoc import describe
 
 from simkit.examples import twocranesberth
 from simkit.rand import RandomVariate
-from simkit.simkit import EventList
+from simkit.base import EventList
 from simkit.simutil import SimpleStateChangeDumper
 from simkit.examples.twocranesberth import ShipArrivalProcess
 from simkit.examples.twocranesberth import TwoCranesBerth

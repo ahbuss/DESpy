@@ -1,7 +1,7 @@
 from simkit.rand import Exponential
 from simkit.examples.arrivalprocess import ArrivalProcess
 from simkit.examples.arrivalprocess import EntityCreator
-from simkit.simkit import EventList
+from simkit.base import EventList
 from simkit.simutil import SimpleStateChangeDumper
 
 if __name__=="__main__":

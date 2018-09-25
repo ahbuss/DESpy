@@ -1,6 +1,6 @@
-from simkit.simkit import SimEntityBase
-from simkit.simkit import EventList
-from simkit.simkit import Priority
+from simkit.base import SimEntityBase
+from simkit.base import EventList
+from simkit.base import Priority
 from simkit.simutil import SimpleStateChangeDumper
 
 class Pinger(SimEntityBase):

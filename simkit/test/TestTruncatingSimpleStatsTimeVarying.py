@@ -2,7 +2,7 @@ from simkit.examples.arrivalprocess import ArrivalProcess
 from simkit.examples.simpleserver import SimpleServer
 from simkit.rand import RandomVariate
 from simkit.stats import TruncatingSimpleStatsTimeVarying
-from simkit.simkit import EventList
+from simkit.base import EventList
 
 interarrival_time_generator = RandomVariate.instance('Uniform', min=0.9, max=2.2)
 arrival_process = ArrivalProcess(interarrival_time_generator)

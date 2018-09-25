@@ -1,5 +1,5 @@
-from simkit.simkit import EventList
-from simkit.simkit import SimEntityBase
+from simkit.base import EventList
+from simkit.base import SimEntityBase
 
 
 class Test(SimEntityBase):
