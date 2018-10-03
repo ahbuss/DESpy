@@ -1,8 +1,8 @@
 Metadata-Version: 2.1
 Name: DESpy
-Version: 0.1.3
+Version: 0.1.4
 Summary: Support for DES Modeling using Event Graphs
-Home-page: https://github.com/ahbuss/SimPyKit
+Home-page: https://github.com/ahbuss/DESpy
 Author: Arnold Buss
 Author-email: abuss@nps.edu
 License: Apache 2.0 License

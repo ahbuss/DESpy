@@ -20,11 +20,18 @@ class CustomerCreator(SimEntityBase):
         SimEntityBase.__init__(self)
         self.interarrivaltimeGenerator = interarrivaltimeGenerator
         self.renegeTimeGenerator = renegeTimeGenerator
+        self.number_arrivals = nan
+
+    def reset(self):
+        SimEntityBase.reset(self)
+        self.number_arrivals = 0
 
     def run(self):
         self.schedule('create', self.interarrivaltimeGenerator.generate())
 
     def create(self):
+        self.number_arrivals += 1
+        self.notify_state_change('number_arrivals', self.number_arrivals)
         customer = RenegingCustomer(self.renegeTimeGenerator.generate())
         self.schedule('arrival', 0.0, customer)
         self.schedule('create', self.interarrivaltimeGenerator.generate())

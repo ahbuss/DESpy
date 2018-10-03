@@ -5,9 +5,9 @@ DESpy.egg-info/SOURCES.txt
 DESpy.egg-info/dependency_links.txt
 DESpy.egg-info/top_level.txt
 simkit/__init__.py
+simkit/base.py
 simkit/quantiles.py
 simkit/rand.py
-simkit/simkit.py
 simkit/simutil.py
 simkit/stats.py
 simkit/examples/__init__.py
@@ -18,4 +18,6 @@ simkit/examples/finitecapacityqueue.py
 simkit/examples/ggkqueue.py
 simkit/examples/serverwithreneges.py
 simkit/examples/simpleserver.py
+simkit/examples/tandem_queue_with_blocking.py
 simkit/examples/transferline.py
+simkit/examples/twocranesberth.py

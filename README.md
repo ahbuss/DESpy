@@ -17,7 +17,6 @@ sample scenarios in the ``examples.run`` package
 * EntityServer
 * ServerWithReneges
 * TransferLine
-* TwoCranesBerth
 * Confidence Interval Example: terminating case
 * Confidence Interval Example: steady-state case
 
