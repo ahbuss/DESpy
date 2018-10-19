@@ -5,7 +5,7 @@ with open('README.md') as file:
 
 setup(
     name='DESpy',
-    version='0.1.5',
+    version='0.1.7',
     packages=['simkit', 'simkit.examples'],
     url='https://github.com/ahbuss/DESpy',
     license='Apache 2.0 License',
