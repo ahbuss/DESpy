@@ -98,6 +98,11 @@ class SimpleStatsTimeVarying(SimpleStatsBase):
         self.last_time = 0.0
         self.last_value = nan
 
+    def __repr__(self):
+        self.new_observation(self.last_value)
+        return '{name}: {count:,d} {min:,.4f} {max:,.4f} {mean:,.4f} {var:,.4f} {stdev:,.4f}'.\
+            format(name=self.name, count=self.count, min=self.min, max=self.max, mean=self.mean,var=self.variance, stdev=self.stdev)
+
 class CollectionSizeTimeVarying(SimpleStatsTimeVarying):
 
     def __init__(self, name='default'):

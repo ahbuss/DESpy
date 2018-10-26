@@ -250,3 +250,100 @@ class ReworkModel(SimEntityBase):
 
         if self.number_available_resources > 0:
             self.schedule('start', 0.0)
+
+class TandemQueueWithBlocking(SimEntityBase):
+
+    def __init__(self, interarrival_time_generator, number_server1, number_server2, \
+                 service_time1_generator, service_time2_generator, buffer_size):
+        SimEntityBase.__init__(self)
+        # Parameters
+        self.interarrival_time_generator = interarrival_time_generator
+        self.number_server1 = number_server1
+        self.number_server2 = number_server2
+        self.service_time1_generator = service_time1_generator
+        self.service_time2_generator = service_time2_generator
+        self.buffer_size = buffer_size
+         # State variables
+        self.number_in_queue1 = nan
+        self.number_in_queue2 = nan
+        self.number_available_server1 = nan
+        self.number_available_server2 = nan
+        self.number_blocked = nan
+
+    def reset(self):
+        SimEntityBase.reset(self)
+        self.number_in_queue1 = 0
+        self.number_in_queue2 = 0
+        self.number_available_server1 = self.number_server1
+        self.number_available_server2 = self.number_server2
+        self.number_blocked = 0
+
+    def run(self):
+        self.notify_state_change('number_in_queue1', self.number_in_queue1)
+        self.notify_state_change('number_in_queue2', self.number_in_queue2)
+        self.notify_state_change('number_available_server1', self.number_available_server1)
+        self.notify_state_change('number_available_server2', self.number_available_server2)
+        self.notify_state_change('number_blocked', self.number_blocked)
+
+        self.schedule('enter1', 0.0)
+
+    def enter1(self):
+        self.number_in_queue1 += 1
+        self.notify_state_change('number_in_queue1', self.number_in_queue1)
+
+        if self.number_available_server1 > 0:
+            self.schedule('start1', 0.0)
+
+        self.schedule('enter1', self.interarrival_time_generator.generate())
+
+    def start1(self):
+        self.number_in_queue1 -= 1
+        self.notify_state_change('number_in_queue1', self.number_in_queue1)
+
+        self.number_available_server1 -= 1
+        self.notify_state_change('number_available_server1', self.number_available_server1)
+
+        self.schedule('leave1', self.service_time1_generator.generate())
+
+    def leave1(self):
+        self.number_blocked += 1
+        self.notify_state_change('number_blocked', self.number_blocked)
+
+        if self.number_in_queue2 < self.buffer_size:
+            self.schedule('enter2', 0.0)
+
+    def enter2(self):
+        self.number_available_server1 += 1
+        self.notify_state_change('number_available_server1', self.number_available_server1)
+
+        self.number_blocked -= 1
+        self.notify_state_change('number_blocked', self.number_blocked)
+
+        self.number_in_queue2 += 1;
+        self.notify_state_change('number_in_queue2', self.number_in_queue2)
+
+        if self.number_available_server2 > 0:
+            self.schedule('start2', 0.0)
+
+        if self.number_in_queue1 > 0:
+            self.schedule('start1', 0.0)
+
+    def start2(self):
+        self.number_in_queue2 -= 1;
+        self.notify_state_change('number_in_queue2', self.number_in_queue2)
+
+        self.number_available_server2 -= 1
+        self.notify_state_change('number_available_server2', self.number_available_server2)
+
+        self.schedule('leave2', self.service_time2_generator.generate())
+
+        if self.number_blocked > 0:
+            self.schedule('enter2', 0.0)
+
+    def leave2(self):
+        self.number_available_server2 += 1
+        self.notify_state_change('number_available_server2', self.number_available_server2)
+
+        if self.number_in_queue2 > 0:
+            self.schedule('start2', 0.0)
+

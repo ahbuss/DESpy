@@ -1,38 +1,60 @@
-from simkit.examples.tandem_queue_with_blocking import TandmQueueWithBlocking
-from simkit.base import EventList
 from simkit.rand import RandomVariate
+from simkit.base import EventList
 from simkit.simutil import SimpleStateChangeDumper
-from simkit.stats import IndexedSimpleStatsTimeVarying
+from simkit.examples.basic import TandemQueueWithBlocking
 from simkit.stats import SimpleStatsTimeVarying
+from simkit.rand import RandomVariate
+from random import Random
 
-interarrival_time_generator = RandomVariate.instance('Exponential', mean=2.7)
-service_time_generator = [RandomVariate.instance('Uniform', min=1.2, max=2.4),
-                          RandomVariate.instance('Gamma', alpha=2.1, beta=2.2)]
-number_servers = [4, 2]
-buffer_size = 2
+# Uncomment to seed with computer clock time
+# RandomVariate.baseRNG = Random()
+interarrval_time_generator = RandomVariate.instance('Exponential', mean=1.8)
+service_time_generator = [RandomVariate.instance('Gamma', alpha=2.5, beta=1.6), RandomVariate.instance('Uniform', min=2.2, max=4.4)]
+number_servers = [3, 2]
+buffer_size = 1
 
-queue = TandmQueueWithBlocking(interarrival_time_generator, number_servers, service_time_generator, buffer_size)
-print(queue.describe())
+print(interarrval_time_generator)
+print(service_time_generator)
 
-number_in_queue_stat = IndexedSimpleStatsTimeVarying('number_in_queue')
-queue.add_state_change_listener(number_in_queue_stat)
-
-number_blocked_stat = SimpleStatsTimeVarying('number_blocked')
-queue.add_state_change_listener(number_blocked_stat)
+tandem_queue_with_blocking = TandemQueueWithBlocking(interarrval_time_generator, number_servers[0], number_servers[1],
+                                                    service_time_generator[0],
+                                                     service_time_generator[1],
+                                                     buffer_size)
+print(tandem_queue_with_blocking.describe())
 
 simple_state_change_dumper = SimpleStateChangeDumper()
-# queue.add_state_change_listener(simple_state_change_dumper)
+# tandem_queue_with_blocking.add_state_change_listener(simple_state_change_dumper)
 
-stop_time = 100000.0;
+number_in_queue1_stat = SimpleStatsTimeVarying('number_in_queue1')
+number_in_queue2_stat = SimpleStatsTimeVarying('number_in_queue2')
+number_available_server1_stat = SimpleStatsTimeVarying('number_available_server1')
+number_available_server2_stat = SimpleStatsTimeVarying('number_available_server2')
+tandem_queue_with_blocking.add_state_change_listener(number_in_queue1_stat)
+tandem_queue_with_blocking.add_state_change_listener(number_in_queue2_stat)
+tandem_queue_with_blocking.add_state_change_listener(number_available_server1_stat)
+tandem_queue_with_blocking.add_state_change_listener(number_available_server2_stat)
+
+stop_time = 24 * 8 * 365.0
+# stop_time = 1000
+# EventList.verbose = True
 EventList.stop_at_time(stop_time)
-EventList.verbose = False
 
-EventList.reset()
-EventList.start_simulation()
+print('Simulation will run for {time:,.2f} time units'.format(time=EventList.stop_time))
 
+for buffer_size in range(1, 11):
+    tandem_queue_with_blocking.buffer_size = buffer_size
 
-print('Simulation ended at time {time:,.2f}'.format(time=EventList.simtime))
+    EventList.reset()
 
-print('Avg. # in Queue0: {queue:,.4f}'.format(queue=number_in_queue_stat.mean(0)))
-print('Avg. # in Queue1: {queue:,.4f}'.format(queue=number_in_queue_stat.mean(1)))
-print('Avg, # blocked:   {blocked:,.4f}'.format(blocked=number_blocked_stat.mean))
+    number_in_queue1_stat.reset()
+    number_in_queue2_stat.reset()
+    number_available_server1_stat.reset()
+    number_available_server2_stat.reset()
+
+    EventList.start_simulation()
+
+    print('buffer size: {buffer:d} avg # in queue1: {avg:,.4f}'.format(buffer=buffer_size, avg=number_in_queue1_stat.mean))
+    # print(number_in_queue1_stat)
+    # print(number_in_queue2_stat)
+    # print(number_available_server1_stat)
+    # print(number_available_server2_stat)
