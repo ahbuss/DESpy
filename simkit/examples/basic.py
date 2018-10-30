@@ -1,8 +1,13 @@
+from math import nan
+from random import Random
+from heapq import heappush
+from heapq import heappop
+
 from simkit.base import SimEntityBase
 from simkit.base import EventList
 from simkit.base import Priority
-from math import nan
-from random import Random
+from simkit.base import Entity
+
 
 rng = Random(12345)
 
@@ -347,3 +352,73 @@ class TandemQueueWithBlocking(SimEntityBase):
         if self.number_in_queue2 > 0:
             self.schedule('start2', 0.0)
 
+class MultipleServerQueue(SimEntityBase):
+
+    def __init__(self, interarrival_time_generator, number_servers, service_time_generator):
+        SimEntityBase.__init__(self)
+        self.interarrival_time_generator = interarrival_time_generator
+        self.number_servers = number_servers
+        self.service_time_generator = service_time_generator
+        self.number_arrivals = nan
+        self.number_available_servers = nan
+        self.queue = []
+        self.number_in_queue = nan
+        self.delay_in_queue = nan
+        self.time_in_system = nan
+
+    def reset(self):
+        SimEntityBase.reset(self)
+        self.number_arrivals = 0
+        self.number_available_servers = self.number_servers
+        self.queue = []
+        self.number_in_queue = 0
+
+    def run(self):
+        self.notify_state_change('number_arrivals', self.number_arrivals)
+        self.notify_state_change('number_available_servers', self.number_available_servers)
+        self.notify_state_change('queue', self.queue)
+        self.notify_state_change('number_in_queue', self.number_in_queue)
+
+        self.schedule('enter', 0.0)
+
+    def enter(self):
+        customer = Entity()
+        customer.stamp_time()
+        heappush(self.queue, customer);
+        self.notify_state_change('queue', self.queue)
+
+        self.number_in_queue = len(self.queue)
+        self.notify_state_change('number_in_queue', self.number_in_queue)
+
+        self.number_arrivals += 1;
+        self.notify_state_change('number_arrivals', self.number_arrivals)
+
+        if self.number_available_servers > 0:
+            self.schedule('start', 0.0)
+
+        self.schedule('enter', self.interarrival_time_generator.generate())
+
+    def start(self):
+        customer = heappop(self.queue)
+        self.notify_state_change('queue', self.queue)
+
+        self.number_in_queue = len(self.queue)
+        self.notify_state_change('number_in_queue', self.number_in_queue)
+
+        self.delay_in_queue = customer.elapsed_time()
+        self.notify_state_change('delay_in_queue', self.delay_in_queue)
+
+        self.number_available_servers -= 1
+        self.notify_state_change('number_available_servers', self.number_available_servers)
+
+        self.schedule('leave', self.service_time_generator.generate(), customer)
+
+    def leave(self, customer):
+        self.time_in_system = customer.elapsed_time()
+        self.notify_state_change('time_in_system', self.time_in_system)
+
+        self.number_available_servers += 1
+        self.notify_state_change('number_available_servers', self.number_available_servers)
+
+        if len(self.queue) > 0:
+            self.schedule('start', 0.0)

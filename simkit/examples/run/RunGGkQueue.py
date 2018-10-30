@@ -35,8 +35,8 @@ end = time()
 elapsed = end - start
 
 
-print('avg # in queue: {avg:,.4f}'.format(avg=number_in_queue_stat.mean))
-print('avg # avail servers: {avg:,.4f}'.format(avg=number_available_servers_stat.mean))
+print('avg # in queue: {avg:,.4f}'.format(avg=number_in_queue_stat.time_varying_mean()))
+print('avg # avail servers: {avg:,.4f}'.format(avg=number_available_servers_stat.time_varying_mean()))
 
 utilization = 1.0 - number_available_servers_stat.mean / ggk_queue.number_servers
 print('avg utilization: {avg:,.4f}'.format(avg=utilization))

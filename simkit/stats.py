@@ -36,6 +36,9 @@ class SimpleStatsBase(StateChangeListener):
         if x > self.max:
             self.max = x
 
+    def mean(self):
+        return self.mean()
+
     def __repr__(self):
         return '{name}: {count:,d} {min:,.4f} {max:,.4f} {mean:,.4f} {var:,.4f} {stdev:,.4f}'.\
             format(name=self.name, count=self.count, min=self.min, max=self.max, mean=self.mean,var=self.variance, stdev=self.stdev)
@@ -98,6 +101,17 @@ class SimpleStatsTimeVarying(SimpleStatsBase):
         self.last_time = 0.0
         self.last_value = nan
 
+    def time_varying_mean(self):
+        self.new_observation(self.last_value)
+        return self.mean
+
+    def time_varying_variance(self):
+        self.new_observation(self.last_value)
+        return self.variance
+
+    def time_varying_stdev(self):
+        return sqrt(self.time_varying_variance())
+
     def __repr__(self):
         self.new_observation(self.last_value)
         return '{name}: {count:,d} {min:,.4f} {max:,.4f} {mean:,.4f} {var:,.4f} {stdev:,.4f}'.\
@@ -107,6 +121,7 @@ class CollectionSizeTimeVarying(SimpleStatsTimeVarying):
 
     def __init__(self, name='default'):
         SimpleStatsTimeVarying.__init__(self, name)
+        self.last_value = []
 
     def new_observation(self, q):
         SimpleStatsTimeVarying.new_observation(self, q.__len__())

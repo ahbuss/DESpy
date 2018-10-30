@@ -41,7 +41,7 @@ EventList.stop_at_time(stop_time)
 
 print('Simulation will run for {time:,.2f} time units'.format(time=EventList.stop_time))
 
-for buffer_size in range(1, 11):
+for buffer_size in range(1, 21):
     tandem_queue_with_blocking.buffer_size = buffer_size
 
     EventList.reset()
@@ -53,7 +53,7 @@ for buffer_size in range(1, 11):
 
     EventList.start_simulation()
 
-    print('buffer size: {buffer:d} avg # in queue1: {avg:,.4f}'.format(buffer=buffer_size, avg=number_in_queue1_stat.mean))
+    print('buffer size: {buffer:d} avg # in queue1: {avg:,.4f}'.format(buffer=buffer_size, avg=number_in_queue1_stat.time_varying_mean()))
     # print(number_in_queue1_stat)
     # print(number_in_queue2_stat)
     # print(number_available_server1_stat)

@@ -7,14 +7,15 @@ Parameters Used:
     SimpleServer: 2 servers, Gamma(1.7, 1.8) service times
     Run length: 100,000 time units
 """
-from simkit.examples.arrivalprocess import ArrivalProcess
-from simkit.examples.simpleserver import SimpleServer
+from time import time
+
 from simkit.rand import RandomVariate
 from simkit.base import EventList
 from simkit.stats import SimpleStatsTimeVarying
-from time import time
+from simkit.examples.arrivalprocess import ArrivalProcess
+from simkit.examples.simpleserver import SimpleServer
 
-interarrival_time_generator = RandomVariate.instance('Exponential', mean=1.7)
+interarrival_time_generator = RandomVariate.instance('Uniform', min=0.9, max=2.3)
 arrival_process = ArrivalProcess(interarrival_time_generator)
 
 number_servers = 2;
@@ -34,7 +35,7 @@ print(simple_server.describe())
 print()
 
 
-stopTime = 100000;
+stopTime = 10000;
 EventList.stop_at_time(stopTime)
 
 start = time()
@@ -45,6 +46,6 @@ end = time()
 elapsed = end - start
 print('Simulation took {time:.3f} sec'.format(time=elapsed))
 print('Simulation ended at simtime {time:,.0f}'.format(time=EventList.simtime))
-utilization = 1.0 - number_available_servers_stat.mean / simple_server.total_number_servers
-print('Avg # in queue = \t{avg:.4f}'.format(avg=number_in_queue_stat.mean))
+utilization = 1.0 - number_available_servers_stat.time_varying_mean() / simple_server.total_number_servers
+print('Avg # in queue = \t{avg:.4f}'.format(avg=number_in_queue_stat.time_varying_mean()))
 print('Avg # utilization = {avg:.4f}'.format(avg=utilization))
