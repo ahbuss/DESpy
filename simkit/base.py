@@ -96,6 +96,9 @@ class EventList:
         EventList.stop_time = time
         if not EventList.stopper:
             EventList.stopper = Stopper()
+        else:
+            EventList.sim_entities.remove(EventList.stopper)
+            EventList.stopper = Stopper()
 
     @staticmethod
     def stop_on_event(number_events, stop_event_name, *args):
