@@ -37,9 +37,12 @@ tandem_queue_with_blocking.add_state_change_listener(number_available_server2_st
 stop_time = 24 * 8 * 365.0
 # stop_time = 1000
 # EventList.verbose = True
-EventList.stop_at_time(stop_time)
+# EventList.stop_at_time(stop_time)
 
-print('Simulation will run for {time:,.2f} time units'.format(time=EventList.stop_time))
+number_leaves = 100000
+EventList.stop_on_event(number_leaves, 'leave2')
+# print('Simulation will run for {time:,.2f} time units'.format(time=EventList.stop_time))
+print('Simulation will run for {num:,d} leave2 events'.format(num=number_leaves))
 
 for buffer_size in range(1, 21):
     tandem_queue_with_blocking.buffer_size = buffer_size

@@ -85,7 +85,7 @@ class EventList:
     current_event = None
     event_counts = {}
     stopper = None
-    stop_on_event = False
+    is_stop_on_event = False
     stop_event_name = None
     stop_event_number = inf
     stop_event_count = nan
@@ -94,11 +94,9 @@ class EventList:
     def stop_at_time(time):
         """:param time: Given time to stop simulation and clear event list """
         EventList.stop_time = time
-        if not EventList.stopper:
-            EventList.stopper = Stopper()
-        else:
+        if EventList.sim_entities.__contains__(EventList.stopper):
             EventList.sim_entities.remove(EventList.stopper)
-            EventList.stopper = Stopper()
+        EventList.stopper = Stopper()
 
     @staticmethod
     def stop_on_event(number_events, stop_event_name, *args):
@@ -108,7 +106,7 @@ class EventList:
         :param stop_event_name: Given event to stop after
         :param args: unused
         """
-        EventList.stop_on_event = True
+        EventList.is_stop_on_event = True
         EventList.stop_event_number = number_events
         EventList.stop_event_name = stop_event_name
         if EventList.sim_entities.__contains__(EventList.stopper):
@@ -121,7 +119,7 @@ class EventList:
         Clears event_list
         Calls reset() on all (persistent) SimEntityBase's
         Schedules run event on all that have them
-        Clears event counts if stop_on_event
+        Clears event counts if is_stop_on_event
         """
         EventList.simtime = 0.0
         EventList.event_list.clear()
@@ -132,7 +130,7 @@ class EventList:
                     sim_entity.schedule('run', 0.0, priority=Priority.HIGHEST)
             else:
                 EventList.sim_entities.remove(sim_entity)
-        if EventList.stop_on_event:
+        if EventList.is_stop_on_event:
             EventList.stop_event_count = 0
             EventList.event_counts.clear()
             EventList.event_counts[EventList.stop_event_name] = 0
@@ -180,7 +178,7 @@ class EventList:
             if EventList.verbose and not EventList.ignore_on_dump.__contains__(EventList.current_event.event_name):
                 print('CurrentEvent: ' + str(EventList.current_event) + ' [' + str(EventList.event_counts[EventList.current_event.event_name]) + ']')
                 print(EventList.dump())
-            if EventList.stop_on_event:
+            if EventList.is_stop_on_event:
                 if EventList.event_counts[EventList.stop_event_name] == EventList.stop_event_number:
                     EventList.stop_simulation()
 
@@ -193,7 +191,7 @@ class EventList:
         EventList.reset()
         EventList.sim_entities.clear()
         SimEntityBase.NEXT_ID = 1
-        if not EventList.stop_on_event:
+        if not EventList.is_stop_on_event:
             EventList.stop_at_time(EventList.stop_time)
 
 class Adapter:
