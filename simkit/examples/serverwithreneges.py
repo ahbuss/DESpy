@@ -16,10 +16,10 @@ class RenegingCustomer(Entity):
 
 class CustomerCreator(SimEntityBase):
 
-    def __init__(self, interarrivaltimeGenerator, renegeTimeGenerator):
+    def __init__(self, interarrival_time_generator, renege_time_generator):
         SimEntityBase.__init__(self)
-        self.interarrivaltimeGenerator = interarrivaltimeGenerator
-        self.renegeTimeGenerator = renegeTimeGenerator
+        self.interarrival_time_generator = interarrival_time_generator
+        self.renege_time_generator = renege_time_generator
         self.number_arrivals = nan
 
     def reset(self):
@@ -27,17 +27,17 @@ class CustomerCreator(SimEntityBase):
         self.number_arrivals = 0
 
     def run(self):
-        self.schedule('create', self.interarrivaltimeGenerator.generate())
+        self.schedule('create', self.interarrival_time_generator.generate())
 
     def create(self):
         self.number_arrivals += 1
         self.notify_state_change('number_arrivals', self.number_arrivals)
-        customer = RenegingCustomer(self.renegeTimeGenerator.generate())
+        customer = RenegingCustomer(self.renege_time_generator.generate())
         self.schedule('arrival', 0.0, customer)
-        self.schedule('create', self.interarrivaltimeGenerator.generate())
+        self.schedule('create', self.interarrival_time_generator.generate())
 
     def __repr__(self):
-        return SimEntityBase.__repr__(self) + ' (' + str(self.interarrivaltimeGenerator) +', ' + str(self.renegeTimeGenerator) + ')'
+        return SimEntityBase.__repr__(self) + ' (' + str(self.interarrival_time_generator) + ', ' + str(self.renege_time_generator) + ')'
 
 class ServerWithReneges(SimEntityBase):
 

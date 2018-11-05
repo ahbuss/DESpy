@@ -4,9 +4,9 @@ from math import nan
 
 class ArrivalProcess(SimEntityBase):        # (2)
 
-    def __init__(self, generator):          # (3)
+    def __init__(self, interarrival_time_generator):          # (3)
         SimEntityBase.__init__(self)
-        self.generator=generator
+        self.interarrival_time_generator=interarrival_time_generator
         self.number_arrivals = nan
 
     def reset(self):                        # (4)
@@ -16,13 +16,13 @@ class ArrivalProcess(SimEntityBase):        # (2)
     def run(self):                          # (5)
         self.notify_state_change("number_arrivals", self.number_arrivals)
 
-        self.schedule('arrival', self.generator.generate())
+        self.schedule('arrival', self.interarrival_time_generator.generate())
 
     def arrival(self):                      # (6)
         self.number_arrivals += 1
         self.notify_state_change("number_arrivals", self.number_arrivals)
 
-        self.schedule('arrival', self.generator.generate())
+        self.schedule('arrival', self.interarrival_time_generator.generate())
 
 class EntityCreator(ArrivalProcess):
 
@@ -35,8 +35,8 @@ class EntityCreator(ArrivalProcess):
 
 class BatchArrivalProcess(ArrivalProcess):
 
-    def __init__(self, generator, batchGenerator):
-        ArrivalProcess.__init__(self, generator)
+    def __init__(self, interarrival_time_generator, batchGenerator):
+        ArrivalProcess.__init__(self, interarrival_time_generator)
         self.batchGenerator = batchGenerator
         self.totalIndividualArrivals = nan
         self.numberInBatch = nan

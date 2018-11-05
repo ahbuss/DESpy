@@ -17,7 +17,7 @@ interarrivalMean = 2.0
 interarrival = Exponential(interarrivalMean)
 entityCreator = EntityCreator(interarrival)
 print (entityCreator)
-print (entityCreator.generator)
+print (entityCreator.interarrival_time_generator)
 
 entityCreator.add_sim_event_listener(entityServer)
 

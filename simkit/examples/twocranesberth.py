@@ -7,9 +7,9 @@ from heapq import heappush
 from heapq import heappop
 
 class Ship (Entity):
-    def __init__(self, unloading_time):
+    def __init__(self, unloading_time_generator):
         Entity.__init__(self)
-        self.remaining_unloading_time = unloading_time
+        self.remaining_unloading_time = unloading_time_generator
         self.name = 'Ship'
 
     def credit_work(self, rate):
@@ -25,8 +25,8 @@ class Ship (Entity):
         return '{super} {remain:.4f}'.format(super=Entity.__repr__(self), remain=self.remaining_unloading_time)
 
 class ShipArrivalProcess(ArrivalProcess):
-    def __init__(self, interarrival_generator, unloading_time_generator):
-        ArrivalProcess.__init__(self, interarrival_generator)
+    def __init__(self, interarrival_time_generator, unloading_time_generator):
+        ArrivalProcess.__init__(self, interarrival_time_generator)
         self.unloading_time_generator = unloading_time_generator
 
     def arrival(self):

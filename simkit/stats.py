@@ -2,6 +2,7 @@ from abc import abstractmethod
 from math import inf
 from math import nan
 from math import sqrt
+
 from simkit.base import StateChangeListener, SimEntityBase
 from simkit.base import EventList
 from simkit.base import IndexedStateChangeEvent
@@ -207,6 +208,12 @@ class IndexedSimpleStatsTimeVarying(IndexedSimpleStats):
             self.stats[index] = SimpleStatsTimeVarying('{name}[{index:d}]'.format(name=self.name, index=index))
         self.stats[index].new_observation(x)
 
+    def time_varying_mean(self, index):
+        if index in self.stats:
+            return self.stats[index].time_varying_mean()
+        else:
+            return nan
+
 class IndexedCollectionSizeTimeVaryingStat(IndexedSimpleStats):
 
     def __int__(self,name='default'):
@@ -216,6 +223,12 @@ class IndexedCollectionSizeTimeVaryingStat(IndexedSimpleStats):
         if not index in self.stats:
             self.stats[index] = CollectionSizeTimeVarying('{name}[{index:d}]'.format(name=self.name, index=index))
         self.stats[index].new_observation(x)
+
+    def time_varying_mean(self, index):
+        if index in self.stats:
+            return self.stats[index].time_varying_mean()
+        else:
+            return nan
 
 class TruncatingSimpleStatsTally(SimpleStatsTally):
 

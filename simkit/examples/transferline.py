@@ -24,21 +24,21 @@ class JobCreator(ArrivalProcess):
         self.schedule('job_arrival', 0.0, Job(), 0)
 
 class TransferLine(SimEntityBase):
-    def __init__(self, number_stations, number_machines, service_times):
+    def __init__(self, number_stations, number_machines, service_time_generators):
         SimEntityBase.__init__(self)
         self.number_stations = number_stations
-        self.service_times = service_times
+        self.service_time_generators = service_time_generators
         self.number_machines = number_machines
         self.queue = []
         self.number_available_machines = []
         self.validate()
 
     def validate(self):
-        service_times_ok = len(self.service_times) == self.number_stations
+        service_times_ok = len(self.service_time_generators) == self.number_stations
         number_machines_ok = len(self.number_machines) == self.number_stations
         if not service_times_ok or not number_machines_ok:
             raise ValueError('{ns:d} stations specified but {st:d} service times and {nm:d} machines'. \
-                             format(ns=self.number_stations, st=len(self.service_times), nm=len(self.number_machines)))
+                             format(ns=self.number_stations, st=len(self.service_time_generators), nm=len(self.number_machines)))
 
     def reset(self):
         self.queue.clear()
@@ -75,7 +75,7 @@ class TransferLine(SimEntityBase):
         self.number_available_machines[station] -= 1
         self.notify_indexed_state_change(station, 'number_available_machines', self.number_available_machines[station])
 
-        self.schedule('end_processing', self.service_times[station].generate(), job, station)
+        self.schedule('end_processing', self.service_time_generators[station].generate(), job, station)
 
     def end_processing(self, job, station):
         self.number_available_machines[station] += 1

@@ -6,10 +6,10 @@ from heapq import heappop
 
 class EntityServer(SimEntityBase):
 
-    def __init__(self, number_servers, generator):
+    def __init__(self, number_servers, service_time_generator):
         SimEntityBase.__init__(self)
         self.number_servers = number_servers
-        self.generator = generator
+        self.service_time_generator = service_time_generator
         self.number_available_servers = nan
         self.queue = []
         self.delay_in_queue = nan
@@ -53,7 +53,7 @@ class EntityServer(SimEntityBase):
         self.number_available_servers -= 1
         self.notify_state_change('number_available_servers', self.number_available_servers)
 
-        self.schedule('end_service', self.generator.generate(), entity)
+        self.schedule('end_service', self.service_time_generator.generate(), entity)
 
     def end_service(self, entity):
         self.number_available_servers += 1

@@ -61,9 +61,9 @@ print('Number completed:  \t{num:,d}'.format(num=time_in_system_stat.count))
 print('\nUsing Direct Estimation:')
 print('Station\tAvg Util\tAvg # in Q\tAvg Delay in Q\tAvg Time at Station')
 for station in range(transfer_line.number_stations):
-    utilization = 1.0 - number_available_machines_stat.mean(station) / transfer_line.number_machines[station]
+    utilization = 1.0 - number_available_machines_stat.time_varying_mean(station) / transfer_line.number_machines[station]
     print('   {station:d}\t{util:.3f}\t\t  {numinq:.3f}\t\t  {delay:.3f}\t\t\t{timeas:.3f}'.\
-          format(station=station, numinq=number_in_queue_stat.mean(station), util=utilization, delay=delay_in_queue_stat.mean(station),\
+          format(station=station, numinq=number_in_queue_stat.time_varying_mean(station), util=utilization, delay=delay_in_queue_stat.mean(station),\
                  timeas=time_at_station_stat.mean(station)))
 
 arrival_rate = job_creator.number_arrivals / EventList.simtime
@@ -77,7 +77,7 @@ for station in range(transfer_line.number_stations):
     print('   {station:d}\t   {delay:,.3f}\t         {time:,.3f}'.format(station=station,\
                         delay=(number_in_queue_stat.mean(station)/arrival_rate),\
                         time = ((number_in_queue_stat.mean(station) + transfer_line.number_machines[station] - \
-                                number_available_machines_stat.mean(station))/arrival_rate)))
+                                number_available_machines_stat.time_varying_mean(station))/arrival_rate)))
 
 print('\nAvg total delay in queue\t{delay:,.3f}'.format(delay=total_delay_in_queue_stat.mean))
 print('Avg total time in system\t{time:,.3f}'.format(time=time_in_system_stat.mean))

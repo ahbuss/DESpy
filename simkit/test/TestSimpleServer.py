@@ -24,7 +24,7 @@ simple_server.add_state_change_listener(number_available_servers_stat)
 # simple_server.add_state_change_listener(SimpleStateChangeDumper())
 
 service_mean = simple_server.service_time_generator.alpha * simple_server.service_time_generator.beta
-arrival_mean = (arrival_process.generator.min + arrival_process.generator.max) * 0.5
+arrival_mean = (arrival_process.interarrival_time_generator.min + arrival_process.interarrival_time_generator.max) * 0.5
 intensity = service_mean / (simple_server.total_number_servers * arrival_mean)
 
 print('traffic intensity = {rho:.4f}'.format(rho = intensity))
