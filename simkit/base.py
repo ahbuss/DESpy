@@ -190,8 +190,9 @@ class EventList:
     def cold_reset():
         EventList.reset()
         EventList.sim_entities.clear()
+        EventList.event_counts.clear()
         SimEntityBase.NEXT_ID = 1
-        if not EventList.is_stop_on_event:
+        if not EventList.is_stop_on_event and EventList.stop_time > 0.0:
             EventList.stop_at_time(EventList.stop_time)
 
 class Adapter:
