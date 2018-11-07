@@ -124,6 +124,10 @@ class CollectionSizeTimeVarying(SimpleStatsTimeVarying):
         SimpleStatsTimeVarying.__init__(self, name)
         self.last_value = []
 
+    def reset(self):
+        SimpleStatsTimeVarying.reset(self)
+        self.last_value = []
+
     def new_observation(self, q):
         SimpleStatsTimeVarying.new_observation(self, q.__len__())
 
