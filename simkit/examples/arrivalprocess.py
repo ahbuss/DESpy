@@ -16,13 +16,13 @@ class ArrivalProcess(SimEntityBase):        # (2)
     def run(self):                          # (5)
         self.notify_state_change("number_arrivals", self.number_arrivals)
 
-        self.schedule('arrival', self.interarrival_time_generator.generate())
+        self.schedule('arrival', self.interarrival_time_generator.generate)
 
     def arrival(self):                      # (6)
         self.number_arrivals += 1
         self.notify_state_change("number_arrivals", self.number_arrivals)
 
-        self.schedule('arrival', self.interarrival_time_generator.generate())
+        self.schedule('arrival', self.interarrival_time_generator.generate)
 
 class EntityCreator(ArrivalProcess):
 
@@ -49,7 +49,7 @@ class BatchArrivalProcess(ArrivalProcess):
     def arrival(self):
         ArrivalProcess.arrival(self)
 
-        self.numberInBatch = round(self.batchGenerator.generate())
+        self.numberInBatch = round(self.batchGenerator.generate)
         self.notify_state_change('number_in_batch', self.numberInBatch)
 
         for i in range(self.numberInBatch):

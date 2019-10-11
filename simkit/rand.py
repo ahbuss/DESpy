@@ -187,6 +187,33 @@ class Normal(RandomVariate):
     def __repr__(self):
         return 'Normal ({mean:.3f}, {stdev:.3f})'.format(mean=self.mean, stdev=self.stdev)
 
+class TruncatedNormal(Normal):
+    def __init__(self, mean=0.0, stdev=1.0, trunc=0.0):
+        Normal.__init__(self, mean, stdev)
+        self.trunc = trunc
+
+    def generate(self):
+        x = Normal.generate(self)
+        return max(x, self.trunc)
+
+    def __repr__(self):
+        return 'Truncated Normal ({mean:.3f}, {stdev:.3f} {trunc:.3f})'.format(mean=self.mean, stdev=self.stdev, trunc=self.trunc)
+
+class ResampledNormal(Normal):
+    def __init__(self, mean=0.0, stdev=1.0, trunc=0.0):
+        Normal.__init__(self, mean, stdev)
+        self.trunc = trunc
+
+    def generate(self):
+        x = Normal.generate(self)
+        while x < self.trunc:
+            x = Normal.generate(self)
+        return x
+
+    def __repr__(self):
+        return 'Resampled Normal ({mean:.3f}, {stdev:.3f} {trunc:.3f})'.format(mean=self.mean, stdev=self.stdev, trunc=self.trunc)
+
+
 class Weibull(RandomVariate):
     def __init__(self, shape=1, scale=1):
         RandomVariate.__init__(self)

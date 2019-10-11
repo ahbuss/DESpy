@@ -9,7 +9,7 @@ counts={}
 
 number = 1000000
 for i in range(number):
-    x = rv.generate()
+    x = rv.generate
     if counts.keys().__contains__(x):
         counts[x] = counts[x] + 1
     else:
@@ -24,7 +24,7 @@ for x in sorted(counts.keys()):
 counts.clear()
 rv = RandomVariate.instance('Discrete', values=['one', 'two', 'three', 'four', 'fiver'], frequencies=[20, 30, 40, 50, 60])
 for i in range(number):
-    x = rv.generate()
+    x = rv.generate
     if counts.keys().__contains__(x):
         counts[x] = counts[x] + 1
     else:
@@ -40,7 +40,7 @@ counts.clear()
 rv = RandomVariate.instance('DiscreteUniform', min=-3, max=5)
 print(rv)
 for i in range(number):
-    x = rv.generate()
+    x = rv.generate
     if counts.keys().__contains__(x):
         counts[x] = counts[x] + 1
     else:

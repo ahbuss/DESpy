@@ -15,7 +15,7 @@ if __name__ == '__main__':
     print()
     rv.seed(2468)
     for i in range(1, 5):
-        print(rv.generate())
+        print(rv.generate)
 
         rv2 = RandomVariate.instance('Exponential', 'simkit.rand', mean=1.0 + i / 10)
         rv2.mean = 1.0 + i / 10
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     rv3 = RandomVariate.instance('Constant', 'simkit.rand', value=5.4);
     print(rv3)
     for i in range(4):
-        print(rv3.generate())
+        print(rv3.generate)
 
     rv4 = RandomVariate.instance('Beta', alpha=2, beta=3)
     print(rv4)
@@ -69,7 +69,7 @@ if __name__ == '__main__':
     rv4.reset()
     first = []
     for i in range(10):
-        first.append(rv4.generate())
+        first.append(rv4.generate)
 
     second=[]
     rv4.reset()
@@ -94,3 +94,14 @@ if __name__ == '__main__':
         sst10.new_observation(rv10.generate())
     print(sst10)
 
+    rv11 = RandomVariate.instance("TruncatedNormal", mean=1.2, stdev=0.75, trunc = 1.2)
+    sst11 = SimpleStatsTally(str(rv11))
+    for i in range(10000):
+        sst11.new_observation(rv11.generate())
+    print(sst11)
+
+    rv12 = RandomVariate.instance("ResampledNormal", mean=1.2, stdev=0.75, trunc = 1.2)
+    sst12 = SimpleStatsTally(str(rv12))
+    for i in range(10000):
+        sst12.new_observation(rv12.generate())
+    print(sst12)

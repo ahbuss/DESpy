@@ -38,7 +38,7 @@ class SingleResourceModel(SimEntityBase):
         if (self.number_available_resources > 0):
             self.schedule('start', 0.0)
 
-        self.schedule('enter', self.interarrival_time_generator.generate())
+        self.schedule('enter', self.interarrival_time_generator.generate)
 
     def start(self):
         self.number_in_queue -= 1
@@ -47,7 +47,7 @@ class SingleResourceModel(SimEntityBase):
         self.number_available_resources -= 1
         self.notify_state_change('number_available_resources', self.number_available_resources)
 
-        self.schedule('leave', self.service_time_generator.generate())
+        self.schedule('leave', self.service_time_generator.generate)
 
     def leave(self):
         self.number_available_resources += 1
@@ -79,7 +79,7 @@ class ClosingTimes(SimEntityBase):
         if EventList.simtime < self.closing_time:
             self.schedule('enter', 0.0)
 
-        self.schedule('arrive', self.interarrival_time_generator.generate())
+        self.schedule('arrive', self.interarrival_time_generator.generate)
 
     def enter(self):
         self.number_in_queue += 1
@@ -96,7 +96,7 @@ class ClosingTimes(SimEntityBase):
         self.number_available_resources -= 1
         self.notify_state_change('number_available_resources', self.number_available_resources)
 
-        self.schedule('leave', self.service_time_generator.generate())
+        self.schedule('leave', self.service_time_generator.generate)
 
     def leave(self):
         self.number_available_resources += 1
@@ -133,7 +133,7 @@ class MultipleResourceModel(SimEntityBase):
         if self.number_available_resources > 0:
             self.schedule('start', 0.0)
 
-        self.schedule('enter', self.interarrival_time_generator.generate())
+        self.schedule('enter', self.interarrival_time_generator.generate)
 
     def start(self):
         self.number_in_queue -= 1
@@ -142,7 +142,7 @@ class MultipleResourceModel(SimEntityBase):
         self.number_available_resources -= 1
         self.notify_state_change('number_available_resources', self.number_available_resources)
 
-        self.schedule('leave', self.service_time_generator.generate())
+        self.schedule('leave', self.service_time_generator.generate)
 
     def leave(self):
         self.number_available_resources += 1
@@ -180,7 +180,7 @@ class BatchedServiceModel(SimEntityBase):
         if self.number_available_resources > 0 & self.number_in_queue >= self.batch_size:
             self.schedule('start', 0.0)
 
-        self.schedule('enter', self.interarrival_time_generator.generate())
+        self.schedule('enter', self.interarrival_time_generator.generate)
 
     def start(self):
         self.number_in_queue -= 1
@@ -189,7 +189,7 @@ class BatchedServiceModel(SimEntityBase):
         self.number_available_resources -= 1
         self.notify_state_change('number_available_resources', self.number_available_resources)
 
-        self.schedule('leave', self.service_time_generator.generate())
+        self.schedule('leave', self.service_time_generator.generate)
 
     def leave(self):
         self.number_available_resources += 1
@@ -226,7 +226,7 @@ class ReworkModel(SimEntityBase):
         if self.number_available_resources > 0:
             self.schedule('start', 0.0)
 
-        self.schedule('enter', self.interarrival_time_generator.generate())
+        self.schedule('enter', self.interarrival_time_generator.generate)
 
     def start(self):
         self.number_in_queue -= 1
@@ -235,7 +235,7 @@ class ReworkModel(SimEntityBase):
         self.number_available_resources -= 1
         self.notify_state_change('number_available_resources', self.number_available_resources)
 
-        self.schedule('leave', self.service_time_generator.generate())
+        self.schedule('leave', self.service_time_generator.generate)
 
     def leave(self):
         self.number_available_resources += 1
@@ -299,7 +299,7 @@ class TandemQueueWithBlocking(SimEntityBase):
         if self.number_available_server1 > 0:
             self.schedule('start1', 0.0)
 
-        self.schedule('enter1', self.interarrival_time_generator.generate())
+        self.schedule('enter1', self.interarrival_time_generator.generate)
 
     def start1(self):
         self.number_in_queue1 -= 1
@@ -308,7 +308,7 @@ class TandemQueueWithBlocking(SimEntityBase):
         self.number_available_server1 -= 1
         self.notify_state_change('number_available_server1', self.number_available_server1)
 
-        self.schedule('leave1', self.service_time1_generator.generate())
+        self.schedule('leave1', self.service_time1_generator.generate)
 
     def leave1(self):
         self.number_blocked += 1
@@ -340,7 +340,7 @@ class TandemQueueWithBlocking(SimEntityBase):
         self.number_available_server2 -= 1
         self.notify_state_change('number_available_server2', self.number_available_server2)
 
-        self.schedule('leave2', self.service_time2_generator.generate())
+        self.schedule('leave2', self.service_time2_generator.generate)
 
         if self.number_blocked > 0:
             self.schedule('enter2', 0.0)
@@ -396,7 +396,7 @@ class MultipleServerQueue(SimEntityBase):
         if self.number_available_servers > 0:
             self.schedule('start', 0.0)
 
-        self.schedule('enter', self.interarrival_time_generator.generate())
+        self.schedule('enter', self.interarrival_time_generator.generate)
 
     def start(self):
         customer = heappop(self.queue)
@@ -411,7 +411,7 @@ class MultipleServerQueue(SimEntityBase):
         self.number_available_servers -= 1
         self.notify_state_change('number_available_servers', self.number_available_servers)
 
-        self.schedule('leave', self.service_time_generator.generate(), customer)
+        self.schedule('leave', self.service_time_generator.generate, customer)
 
     def leave(self, customer):
         self.time_in_system = customer.elapsed_time()

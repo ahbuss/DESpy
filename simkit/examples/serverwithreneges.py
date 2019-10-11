@@ -27,14 +27,14 @@ class CustomerCreator(SimEntityBase):
         self.number_arrivals = 0
 
     def run(self):
-        self.schedule('create', self.interarrival_time_generator.generate())
+        self.schedule('create', self.interarrival_time_generator.generate)
 
     def create(self):
         self.number_arrivals += 1
         self.notify_state_change('number_arrivals', self.number_arrivals)
-        customer = RenegingCustomer(self.renege_time_generator.generate())
+        customer = RenegingCustomer(self.renege_time_generator.generate)
         self.schedule('arrival', 0.0, customer)
-        self.schedule('create', self.interarrival_time_generator.generate())
+        self.schedule('create', self.interarrival_time_generator.generate)
 
     def __repr__(self):
         return SimEntityBase.__repr__(self) + ' (' + str(self.interarrival_time_generator) + ', ' + str(self.renege_time_generator) + ')'
@@ -83,7 +83,7 @@ class ServerWithReneges(SimEntityBase):
         self.number_available_servers -= 1
         self.notify_state_change('number_available_servers', self.number_available_servers)
 
-        self.schedule('end_service', self.service_time_generator.generate(), customer)
+        self.schedule('end_service', self.service_time_generator.generate, customer)
 
     def renege(self, customer):
         self.number_reneges += 1;

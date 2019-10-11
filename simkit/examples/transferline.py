@@ -75,7 +75,7 @@ class TransferLine(SimEntityBase):
         self.number_available_machines[station] -= 1
         self.notify_indexed_state_change(station, 'number_available_machines', self.number_available_machines[station])
 
-        self.schedule('end_processing', self.service_time_generators[station].generate(), job, station)
+        self.schedule('end_processing', self.service_time_generators[station].generate, job, station)
 
     def end_processing(self, job, station):
         self.number_available_machines[station] += 1
