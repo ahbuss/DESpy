@@ -187,6 +187,18 @@ class Normal(RandomVariate):
     def __repr__(self):
         return 'Normal ({mean:.3f}, {stdev:.3f})'.format(mean=self.mean, stdev=self.stdev)
 
+class Weibull(RandomVariate):
+    def __init__(self, shape=1, scale=1):
+        RandomVariate.__init__(self)
+        self.shape=shape
+        self.scale = scale
+
+    def generate(self):
+        return self.scale * (-log(self.rng.random()))**self.shape
+
+    def __repr__(self):
+        return "Weibull ({shape:.3f}, {scale:.3f})".format(shape=self.shape, scale=self.scale)
+
 class DiscreteUniform(RandomVariate):
 
     def __init__(self, min=nan, max=nan):

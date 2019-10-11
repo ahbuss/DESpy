@@ -5,12 +5,12 @@ if __name__ == '__main__':
     rv = RandomVariate.instance('Exponential', mean=1)
     print(rv)
 
-    sum = 0.0
+    total = 0.0
     n = 1000000
     for i in range(n):
-        sum += rv.generate()
+        total += rv.generate()
     # print(rv.generate())
-    print(sum / n)
+    print(total / n)
 
     print()
     rv.seed(2468)
@@ -81,5 +81,24 @@ if __name__ == '__main__':
     rv9 = RandomVariate.instance('Normal', mean=-2, stdev=4.5)
     print(rv9)
 
+    total = 0.0
+    count = 0
+    for i in range(10000):
+        x = rv9.generate()
+        count += 1
+        total += x
+    print(total / count)
+
+    rv10 = RandomVariate.instance("Weibull", shape=3, scale=2)
+    print(rv10)
+
     for i in range(10):
-        print(rv9.generate())
+        print(rv10.generate())
+
+    total = 0.0
+    count = 0
+    for i in range(10000):
+        x = rv10.generate()
+        count += 1
+        total += x
+    print(total / count)
