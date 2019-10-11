@@ -79,26 +79,18 @@ if __name__ == '__main__':
     print(first == second)
 
     rv9 = RandomVariate.instance('Normal', mean=-2, stdev=4.5)
-    print(rv9)
+    sst9 = SimpleStatsTally(str(rv9))
 
-    total = 0.0
-    count = 0
     for i in range(10000):
         x = rv9.generate()
-        count += 1
-        total += x
-    print(total / count)
+        sst9.new_observation(x)
+    print(sst9)
 
-    rv10 = RandomVariate.instance("Weibull", shape=3, scale=2)
-    print(rv10)
 
-    for i in range(10):
-        print(rv10.generate())
+    rv10 = RandomVariate.instance("Weibull", shape=4, scale=2)
+    sst10 = SimpleStatsTally(str(rv10))
 
-    total = 0.0
-    count = 0
     for i in range(10000):
-        x = rv10.generate()
-        count += 1
-        total += x
-    print(total / count)
+        sst10.new_observation(rv10.generate())
+    print(sst10)
+

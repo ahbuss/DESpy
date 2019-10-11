@@ -194,7 +194,7 @@ class Weibull(RandomVariate):
         self.scale = scale
 
     def generate(self):
-        return self.scale * (-log(self.rng.random()))**self.shape
+        return self.scale * (-log(self.rng.random()))**(1.0 / self.shape)
 
     def __repr__(self):
         return "Weibull ({shape:.3f}, {scale:.3f})".format(shape=self.shape, scale=self.scale)
