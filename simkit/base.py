@@ -142,6 +142,8 @@ class EventList:
     @staticmethod
     def cancel(event_name, *args):
         for sim_event in EventList.event_list:
+            if sim_event.cancelled:
+                continue
             if  event_name == sim_event.event_name and args == sim_event.arguments:
                 sim_event.cancelled = True
                 break
