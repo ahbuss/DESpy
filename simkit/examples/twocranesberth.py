@@ -31,7 +31,7 @@ class ShipArrivalProcess(ArrivalProcess):
 
     def arrival(self):
         ArrivalProcess.arrival(self)
-        ship = Ship(self.unloading_time_generator.generate)
+        ship = Ship(self.unloading_time_generator.generate())
         self.schedule('ship_arrival', 0.0, ship)
 
 class TwoCranesBerth(SimEntityBase):

@@ -53,7 +53,7 @@ class EntityServer(SimEntityBase):
         self.number_available_servers -= 1
         self.notify_state_change('number_available_servers', self.number_available_servers)
 
-        self.schedule('end_service', self.service_time_generator.generate, entity)
+        self.schedule('end_service', self.service_time_generator.generate(), entity)
 
     def end_service(self, entity):
         self.number_available_servers += 1
