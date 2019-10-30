@@ -2,6 +2,7 @@ from abc import abstractmethod
 from math import inf
 from math import nan
 from math import sqrt
+from math import isnan
 
 from simkit.base import StateChangeListener, SimEntityBase
 from simkit.base import EventList
@@ -62,6 +63,8 @@ class SimpleStatsTally(SimpleStatsBase):
         self.reset()
 
     def new_observation(self, x):
+        if isnan(x):
+            return
         SimpleStatsBase.new_observation(self, x)
         self.diff = x - self.mean
         self.mean += self.diff / self.count
@@ -84,6 +87,8 @@ class SimpleStatsTimeVarying(SimpleStatsBase):
         self.last_value = nan
 
     def new_observation(self, x):
+        if isnan(x):
+            return;
         SimpleStatsBase.new_observation(self, x)
         if self.count == 1:
             self.mean = self.diff
@@ -198,6 +203,8 @@ class IndexedSimpleStatsTally(IndexedSimpleStats):
         IndexedSimpleStats.__init__(self, name)
 
     def new_observation(self, index, x):
+        if isnan(x):
+            return
         if not index in self.stats:
             self.stats[index] = SimpleStatsTally('{name}[{index:d}]'.format(name=self.name, index=index))
         self.stats[index].new_observation(x)
@@ -208,6 +215,8 @@ class IndexedSimpleStatsTimeVarying(IndexedSimpleStats):
         IndexedSimpleStats.__init__(self, name)
 
     def new_observation(self, index, x):
+        if isnan(x):
+            return
         if not index in self.stats:
             self.stats[index] = SimpleStatsTimeVarying('{name}[{index:d}]'.format(name=self.name, index=index))
         self.stats[index].new_observation(x)
@@ -248,6 +257,8 @@ class TruncatingSimpleStatsTally(SimpleStatsTally):
         self.truncated = False
 
     def new_observation(self, x):
+        if isnan(x):
+            return
         SimpleStatsTally.new_observation(self, x)
         if not self.truncated and self.count >= self.truncation_point:
             self.reset()
@@ -277,6 +288,8 @@ class TruncatingSimpleStatsTimeVarying(SimpleStatsTimeVarying):
         self.last_value = last_value
 
     def new_observation(self, x):
+        if isnan(x):
+            return
         SimpleStatsTimeVarying.new_observation(self, x)
 
     class Truncate(SimEntityBase):
