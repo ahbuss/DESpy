@@ -39,7 +39,7 @@ class SimpleStatsBase(StateChangeListener):
             self.max = x
 
     def mean(self):
-        return self.mean()
+        return self.mean
 
     def __repr__(self):
         return '{name}: {count:,d} {min:,.4f} {max:,.4f} {mean:,.4f} {var:,.4f} {stdev:,.4f}'.\
