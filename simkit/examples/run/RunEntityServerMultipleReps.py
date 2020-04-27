@@ -48,7 +48,7 @@ number_replications = 100
 print('There will be {reps:,d} replications for {time:,.1f} time units each'.
       format(reps=number_replications, time=stop_time))
 
-for replication in [1, number_replications]:
+for replication in [1, number_replications + 1]:
     EventList.reset()
     delay_in_queue_stat.reset()
     number_in_queue_stat.reset()
@@ -60,7 +60,7 @@ alpha = 0.05;
 t_value = student_t(1-alpha/2, number_replications - 1)
 
 delay_halfwidth = outer_delay_in_queue_stat.stdev * t_value / sqrt(number_replications)
-number_in_queue_halfwidth = outer_delay_in_queue_stat.stdev * t_value / sqrt(number_replications)
+number_in_queue_halfwidth = outer_number_in_queue_stat.stdev * t_value / sqrt(number_replications)
 
 print('{conf:.0f}% CI for delay in queue: {avg:,.4f} ± {half:,.4f}'.format(\
      conf=100*(1-alpha),avg=outer_delay_in_queue_stat.mean, half = delay_halfwidth))
