@@ -6,6 +6,7 @@ from abc import ABC
 from abc import abstractmethod
 from math import nan
 from math import inf
+from inspect import signature
 
 
 __author__ = "Arnold Buss"
@@ -244,7 +245,8 @@ class SimEntityBase:
         method_name = sim_event.event_name
         if hasattr(self, method_name):
             method = getattr(self, method_name)
-            if (sim_event.arguments.__len__() > 0):
+            method_sig = signature(method)
+            if (sim_event.arguments.__len__() > 0 and sim_event.arguments.__len__()  == len(method_sig.parameters)):
                 method(*sim_event.arguments)
             else:
                 method()

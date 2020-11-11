@@ -47,4 +47,4 @@ print('Simulation ended at simtime {time:,.0f}\n'.format(time=EventList.simtime)
 
 print('Avg time in system = {avg:,.4f}'.format(avg=time_in_system_stat.mean))
 print('Avg delay in queue = {avg:,.4f}'.format(avg=delay_in_queue_stat.mean))
-print('Avg number in queue = {avg:,.4f}'.format(avg=number_in_queue_stat.mean))
+print('Avg number in queue = {avg:,.4f}'.format(avg=number_in_queue_stat.mean()))

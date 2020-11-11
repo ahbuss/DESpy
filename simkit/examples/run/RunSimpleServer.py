@@ -3,7 +3,7 @@ This example executes the Simple Server component for one replication, estimatin
 queue and utilization of servers. Arrivals are using the ArrivalProcess component
 
 Parameters Used:
-    ArrivalProcess: Exponential(1.7) interarrival times
+    ArrivalProcess: Uniform(0.9, 2.2) interarrival times
     SimpleServer: 2 servers, Gamma(1.7, 1.8) service times
     Run length: 100,000 time units
 """
@@ -15,7 +15,7 @@ from simkit.stats import SimpleStatsTimeVarying
 from simkit.examples.arrivalprocess import ArrivalProcess
 from simkit.examples.simpleserver import SimpleServer
 
-interarrival_time_generator = RandomVariate.instance('Uniform', min=0.9, max=2.3)
+interarrival_time_generator = RandomVariate.instance('Uniform', min=0.9, max=2.2)
 arrival_process = ArrivalProcess(interarrival_time_generator)
 
 number_servers = 2;
