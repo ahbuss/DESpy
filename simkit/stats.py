@@ -3,6 +3,7 @@ from math import inf
 from math import nan
 from math import sqrt
 from math import isnan
+from math import isnan
 
 from simkit.base import StateChangeListener, SimEntityBase
 from simkit.base import EventList
@@ -37,9 +38,6 @@ class SimpleStatsBase(StateChangeListener):
             self.min = x
         if x > self.max:
             self.max = x
-
-    def mean(self):
-        return self.mean
 
     def __repr__(self):
         return '{name}: {count:,d} {min:,.4f} {max:,.4f} {mean:,.4f} {var:,.4f} {stdev:,.4f}'.\
@@ -304,6 +302,19 @@ class TruncatingSimpleStatsTimeVarying(SimpleStatsTimeVarying):
 
         def truncate(self):
             self.outer.truncation_reset()
+
+class SimpleStatsTallyRawData (SimpleStatsTally):
+    def __init__(self, name='default'):
+        SimpleStatsTally.__init__(self, name)
+        self.raw_data = []
+
+    def reset(self):
+        SimpleStatsTally.reset(self)
+        # self.raw_data.clear()
+
+    def new_observation(self, x):
+        SimpleStatsTally.new_observation(self, x)
+        self.raw_data.append(x)
 
 
 
