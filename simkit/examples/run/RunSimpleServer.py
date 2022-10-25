@@ -18,7 +18,7 @@ from simkit.examples.simpleserver import SimpleServer
 interarrival_time_generator = RandomVariate.instance('Uniform', min=0.9, max=2.2)
 arrival_process = ArrivalProcess(interarrival_time_generator)
 
-number_servers = 2;
+number_servers = 2
 service_time_generator = RandomVariate.instance('Gamma', alpha=1.7, beta=1.8)
 simple_server = SimpleServer(number_servers, service_time_generator)
 
@@ -35,7 +35,7 @@ print(simple_server.describe())
 print()
 
 
-stopTime = 10000;
+stopTime = 10000
 EventList.stop_at_time(stopTime)
 
 start = time()
