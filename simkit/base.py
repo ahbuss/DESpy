@@ -8,7 +8,6 @@ from math import nan
 from math import inf
 from inspect import signature
 
-
 __author__ = "Arnold Buss"
 
 @unique
@@ -90,6 +89,7 @@ class EventList:
     stop_event_name = None
     stop_event_number = inf
     stop_event_count = nan
+    simple_state_change_dumper = None
 
     @staticmethod
     def stop_at_time(time):
@@ -197,6 +197,22 @@ class EventList:
         SimEntityBase.NEXT_ID = 1
         if not EventList.is_stop_on_event and EventList.stop_time > 0.0:
             EventList.stop_at_time(EventList.stop_time)
+
+    @staticmethod
+    def set_verbose(verbosity):
+        from simkit.simutil import SimpleStateChangeDumper
+        if EventList.simple_state_change_dumper == None:
+            EventList.simple_state_change_dumper = SimpleStateChangeDumper()
+        EventList.verbose = verbosity
+        if EventList.verbose:
+            for sim_entity in EventList.sim_entities:
+                sim_entity.add_state_change_listener(EventList.simple_state_change_dumper)
+        else:
+            for sim_entity in EventList.sim_entities:
+                if sim_entity.state_change_listeners.__contains__(EventList.simple_state_change_dumper):
+                    sim_entity.remove_state_change_listener(EventList.simple_state_change_dumper)
+
+
 
 class Adapter:
 
