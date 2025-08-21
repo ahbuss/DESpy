@@ -7,11 +7,14 @@ class ArrivalProcess(SimEntityBase):        # (2)
     def __init__(self, interarrival_time_generator):          # (3)
         SimEntityBase.__init__(self)
         self.interarrival_time_generator=interarrival_time_generator
-        self.number_arrivals = nan
+
+    @property
+    def number_arrivals(self):
+       return  self._number_arrivals
 
     def reset(self):                        # (4)
         SimEntityBase.reset(self)
-        self.number_arrivals = 0
+        self._number_arrivals = 0
 
     def run(self):                          # (5)
         self.notify_state_change("number_arrivals", self.number_arrivals)
@@ -19,7 +22,7 @@ class ArrivalProcess(SimEntityBase):        # (2)
         self.schedule('arrival', self.interarrival_time_generator.generate())
 
     def arrival(self):                      # (6)
-        self.number_arrivals += 1
+        self._number_arrivals += 1
         self.notify_state_change("number_arrivals", self.number_arrivals)
 
         self.schedule('arrival', self.interarrival_time_generator.generate())

@@ -11,7 +11,8 @@ print()
 # arrival_process.add_state_change_listener(SimpleStateChangeDumper())
 
 EventList.set_verbose(True)
-EventList.stop_at_time(15.0)
+# EventList.stop_at_time(15.0)
+EventList.stop_on_event(5, "arrival")
 
 EventList.reset()
 EventList.start_simulation()
